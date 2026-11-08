@@ -68,6 +68,14 @@ Hack the Highway reads each event, uses a **small local LLM** to understand it, 
 
 <sub>"Calls" also counts `crm.loaner_availability` checks made before each loaner assignment. Source: `runs/run1/action_log.jsonl` and `runs/run1/report.json`.</sub>
 
+## 🗂️ Design card
+
+The one-page design card covers the architecture, agents, LLM vs. code split, guardrails, ontology paths, evaluation, and next steps. Each section is explained in detail below.
+
+<p align="center"><a href="solution/design_card.pdf"><img src="solution/design_card.png" alt="One-page design card: architecture, agents, LLM vs code, guardrails, ontology paths, evaluation, improvements" width="900" /></a></p>
+
+<p align="center">📄 <a href="solution/design_card.pdf"><b>Download the design card (PDF)</b></a></p>
+
 ## Architecture
 
 Each message passes through six gates. There is one ontology, and within an event there is one shared slot board and one shared loaner pool, so a compound message can never double-book anything.
@@ -141,6 +149,19 @@ In the official run, Llama agreed with the ontology reader on **12 of 15** event
 - ✅ **Check, then send** → the whole plan is rehearsed on a private copy of the enterprise first. A rejected call is logged and not blindly retried. Loaner responses cap assignments.
 - 🧮 **One board per event** → compound messages share slots and loaner pools, so nothing is booked twice.
 - 🎯 **Precision** → one `dealer.notify` per dealer, listing only that dealer's affected orders. Standard-tier customers get no loaner. Unaffected orders never move.
+
+## Evaluation
+
+`solution/run.py` replays the full plan on a private copy of the `Enterprise` **before** the tool server starts. It checks:
+
+- production order locations and plant capacity
+- dealer notices (one per dealer, only affected orders)
+- loaner assignments against pool limits and priority
+- held lots, stopped VINs, and owner contacts
+- escalation for unconfirmed reports
+- that **unaffected orders did not move**
+
+Only after the rehearsal passes is the plan sent to the real server. The scored file is [`runs/run1/action_log.jsonl`](runs/run1/action_log.jsonl): 909 lines, 0 failures.
 
 ## The control tower UI
 
@@ -216,12 +237,6 @@ The Atlas mirror is read-only with respect to the run. It never calls enterprise
 ├── enterprise_server.py    # local tool server (provided, unchanged)
 └── submission/             # Devpost write-up and article drafts
 ```
-
-## Design card
-
-<img src="solution/design_card.png" alt="One-page design card: architecture, agents, LLM vs code, guardrails, ontology paths, evaluation, improvements" width="900" />
-
-Download: [`solution/design_card.pdf`](solution/design_card.pdf)
 
 ## Submission checklist
 
