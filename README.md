@@ -217,6 +217,22 @@ The Atlas mirror is read-only with respect to the run. It never calls enterprise
 └── submission/             # Devpost write-up and article drafts
 ```
 
+## Submission checklist
+
+Every deliverable from the challenge brief, and where to find it:
+
+| Requirement | Where |
+|---|---|
+| `action_log.jsonl` from the run on all 15 events | [`runs/run1/action_log.jsonl`](runs/run1/action_log.jsonl) — 909 calls, 0 failed |
+| Source code | [`solution/`](solution/) |
+| Ontology / graph export or diagram | [`runs/run1/ontology.json`](runs/run1/ontology.json) · [ontology screenshot](runs/run1/demo/tower-ontology.png) · [graph paths above](#the-knowledge-graph) |
+| A trace for each event | [`runs/run1/traces/E-01.json` … `E-15.json`](runs/run1/traces/) |
+| Graph path per incident (one per incident for compound E-01) | `paths` field in each trace; E-01 has two |
+| Summary + reason for every event, including what it did **not** do | `summary` and `reasoning` fields in each trace (noise and rumors cite the handbook rule) |
+| Demo screenshots: events arriving, graph path, agents acting, audit trail | [`runs/run1/demo/`](runs/run1/demo/) |
+| One-page design card (architecture, LLM vs code, guardrails, evaluation, improvements) | [`solution/DESIGN.md`](solution/DESIGN.md) |
+| Model cited | Llama 3.2 3B — see below |
+
 ## Model citation
 
 **Llama 3.2 3B** (`llama3.2:3b`), Meta, run locally through **Ollama** on a Mac. No API key and no cloud inference were used for the official run.
