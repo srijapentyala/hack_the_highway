@@ -1,0 +1,1121 @@
+{
+  "event_id": "E-09",
+  "received_at": "2027-03-08T09:33:00",
+  "source": "supplier email",
+  "text": "Quick heads up from Orbit: the surround-view cameras run for Huntsville can't make it Monday Mar 29. Carrier says Thursday Apr 1 now (a customs inspection).",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": false,
+    "proposal": {
+      "disposition": "act",
+      "incidents": [
+        {
+          "kind": "supplier_delay",
+          "plant": "",
+          "part": "",
+          "supplier": "Carrier",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "Thursday Apr 1"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "ontology reader kept; model reading did not bind to the same incidents"
+  },
+  "incidents": [
+    {
+      "kind": "supplier_delay",
+      "plant_id": "P_AL",
+      "part_id": "CAM-360",
+      "supplier_id": "SUP-11",
+      "shipment_id": "SH-0256",
+      "start_date": "2027-03-29",
+      "end_date": "2027-04-01",
+      "old_idx": 15,
+      "new_idx": 18,
+      "ready_idx": 18,
+      "evidence": [
+        "SH-0256",
+        "CAM-360",
+        "2027-03-29",
+        "2027-04-01"
+      ],
+      "span": "Quick heads up from Orbit: the surround-view cameras run for Huntsville can't make it Monday Mar 29. Carrier says Thursday Apr 1 now (a customs inspection)."
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Supplier delay"
+  ],
+  "summary": "E-09 is Supplier delay. 6 production orders move (4 rescheduled, 2 transferred). 26 dealer notice(s) and 10 loaner assignment(s).",
+  "reasoning": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Placed 4 at the same plant and transferred 2. Rule 4: 26 dealer notice(s), one each, listing only affected customer orders. Rule 5: 10 loaner(s) for Platinum and Gold in priority order; 2 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 1 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "did": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Placed 4 at the same plant and transferred 2."
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "did": "Rule 4: 26 dealer notice(s), one each, listing only affected customer orders. Rule 5: 10 loaner(s) for Platinum and Gold in priority order; 2 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.assign_loaner, dealer.notify, mes.reschedule, mes.transfer."
+  ],
+  "paths": [
+    {
+      "incident": "Supplier delay",
+      "pattern": "Shipment \u2192 Part \u2192 Model (BOM) \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+      "walk": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Placed 4 at the same plant and transferred 2.",
+      "chains": [
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02567 \u2192 D25 / C1467",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02568 \u2192 D25 / C0740",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02569 \u2192 D45 / C5203",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02570 \u2192 D25 / C5790",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02571 \u2192 D35 / C1703",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02572 \u2192 D02 / C1001",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02573 \u2192 D46 / C5789",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0436 \u2192 CO-02574 \u2192 D47 / C4375",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02584 \u2192 D21 / C1513",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02585 \u2192 D38 / C1011",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02586 \u2192 D35 / C6543",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02587 \u2192 D31 / C6144",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02588 \u2192 D36 / C6413",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02589 \u2192 D08 / C4525",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02590 \u2192 D08 / C1928",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02591 \u2192 D25 / C6457",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0438 \u2192 CO-02592 \u2192 D24 / C1939",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02593 \u2192 D26 / C3575",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02594 \u2192 D23 / C2559",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02595 \u2192 D44 / C5324",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02596 \u2192 D03 / C2859",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02597 \u2192 D08 / C0709",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02598 \u2192 D44 / C4530",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02599 \u2192 D47 / C0527",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02600 \u2192 D25 / C6205",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02601 \u2192 D20 / C0458",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0439 \u2192 CO-02602 \u2192 D16 / C4699",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02613 \u2192 D46 / C3192",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02614 \u2192 D26 / C3356",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02615 \u2192 D27 / C1676",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02616 \u2192 D44 / C2641",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02617 \u2192 D34 / C1223",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02618 \u2192 D25 / C4679",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02619 \u2192 D20 / C5355",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0441 \u2192 CO-02620 \u2192 D06 / C4959",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02621 \u2192 D50 / C2028",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02622 \u2192 D06 / C0792",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02623 \u2192 D08 / C0997",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02624 \u2192 D15 / C0918",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02625 \u2192 D08 / C4317",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02626 \u2192 D46 / C0448",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02627 \u2192 D47 / C5928",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02628 \u2192 D04 / C6557",
+        "SH-0256 \u2192 CAM-360 \u2192 SUMMIT (BOM) \u2192 PO-0442 \u2192 CO-02629 \u2192 D12 / C5629",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02640 \u2192 D16 / C3035",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02641 \u2192 D34 / C5173",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02642 \u2192 D23 / C0378",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02643 \u2192 D04 / C6843",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02644 \u2192 D25 / C5679",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02645 \u2192 D44 / C5310",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02646 \u2192 D12 / C2019",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02647 \u2192 D30 / C6616",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02648 \u2192 D50 / C4305",
+        "SH-0256 \u2192 CAM-360 \u2192 VOYAGER (BOM) \u2192 PO-0444 \u2192 CO-02649 \u2192 D08 / C5335"
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "production_order_id": "PO-0436",
+      "model": "SUMMIT",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-29",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0436",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0438",
+      "model": "VOYAGER",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-29",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0438",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0439",
+      "model": "SUMMIT",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-30",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0439",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0441",
+      "model": "VOYAGER",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-30",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0441",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0442",
+      "model": "SUMMIT",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-31",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0442",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_TX"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. No free slot remains at P_AL on or after 2027-04-01. Transferred to P_TX on 2027-03-08, the earliest open day in the planning window at a plant that builds SUMMIT. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0444",
+      "model": "VOYAGER",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-31",
+      "to_plant": "P_KY",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0444",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. No free slot remains at P_AL on or after 2027-04-01. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds VOYAGER. Tied plants follow the handbook order."
+    }
+  ],
+  "actions": [
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0436",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0436",
+        "plant_id": "P_AL",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0438",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0438",
+        "plant_id": "P_AL",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0439",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0439",
+        "plant_id": "P_AL",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0441",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0441",
+        "plant_id": "P_AL",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0442",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_TX"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. No free slot remains at P_AL on or after 2027-04-01. Transferred to P_TX on 2027-03-08, the earliest open day in the planning window at a plant that builds SUMMIT. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0442",
+        "plant_id": "P_TX",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0444",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "why": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. No free slot remains at P_AL on or after 2027-04-01. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds VOYAGER. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0444",
+        "plant_id": "P_KY",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-02572"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D02 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D03",
+        "customer_order_ids": [
+          "CO-02596"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D03 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D04",
+        "customer_order_ids": [
+          "CO-02628",
+          "CO-02643"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D04 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D06",
+        "customer_order_ids": [
+          "CO-02620",
+          "CO-02622"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D06 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-02589",
+          "CO-02590",
+          "CO-02597",
+          "CO-02623",
+          "CO-02625",
+          "CO-02649"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D08 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D12",
+        "customer_order_ids": [
+          "CO-02629",
+          "CO-02646"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D12 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D15",
+        "customer_order_ids": [
+          "CO-02624"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D15 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D16",
+        "customer_order_ids": [
+          "CO-02602",
+          "CO-02640"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D16 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-02601",
+          "CO-02619"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D20 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-02584"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D21 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D23",
+        "customer_order_ids": [
+          "CO-02594",
+          "CO-02642"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D23 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D24",
+        "customer_order_ids": [
+          "CO-02592"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D24 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-02567",
+          "CO-02568",
+          "CO-02570",
+          "CO-02591",
+          "CO-02600",
+          "CO-02618",
+          "CO-02644"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D25 for 7 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D26",
+        "customer_order_ids": [
+          "CO-02593",
+          "CO-02614"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D26 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D27",
+        "customer_order_ids": [
+          "CO-02615"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D27 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D30",
+        "customer_order_ids": [
+          "CO-02647"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D30 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-02587"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D31 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D34",
+        "customer_order_ids": [
+          "CO-02617",
+          "CO-02641"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D34 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D35",
+        "customer_order_ids": [
+          "CO-02571",
+          "CO-02586"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D35 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D36",
+        "customer_order_ids": [
+          "CO-02588"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D36 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D38",
+        "customer_order_ids": [
+          "CO-02585"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D38 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-02595",
+          "CO-02598",
+          "CO-02616",
+          "CO-02645"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D44 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-02569"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D45 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D46",
+        "customer_order_ids": [
+          "CO-02573",
+          "CO-02613",
+          "CO-02626"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D46 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D47",
+        "customer_order_ids": [
+          "CO-02574",
+          "CO-02599",
+          "CO-02627"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D47 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D50",
+        "customer_order_ids": [
+          "CO-02621",
+          "CO-02648"
+        ],
+        "message": "E-09: timing changed for the listed customer orders (delay of surround-view camera kit (SH-0256) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D50 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D04"
+      },
+      "why": "Pool check before assigning loaners at D04 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D04",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02628"
+      },
+      "why": "Gold order CO-02628 (promised 2027-04-03) is inside D04's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D04"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D08"
+      },
+      "why": "Pool check before assigning loaners at D08 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D08",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02590"
+      },
+      "why": "Gold order CO-02590 (promised 2027-04-01) is inside D08's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D16"
+      },
+      "why": "Pool check before assigning loaners at D16 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D16",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02640"
+      },
+      "why": "Platinum order CO-02640 (promised 2027-04-04) is inside D16's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D16"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D25"
+      },
+      "why": "Pool check before assigning loaners at D25 (1 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D25",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02570"
+      },
+      "why": "Platinum order CO-02570 (promised 2027-04-01) is inside D25's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D25"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D26"
+      },
+      "why": "Pool check before assigning loaners at D26 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D26",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02593"
+      },
+      "why": "Platinum order CO-02593 (promised 2027-04-02) is inside D26's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D26"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D27"
+      },
+      "why": "Pool check before assigning loaners at D27 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D27",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02615"
+      },
+      "why": "Gold order CO-02615 (promised 2027-04-04) is inside D27's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D27"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D31"
+      },
+      "why": "Pool check before assigning loaners at D31 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D31",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02587"
+      },
+      "why": "Gold order CO-02587 (promised 2027-04-02) is inside D31's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D31"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D34"
+      },
+      "why": "Pool check before assigning loaners at D34 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D34",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02641"
+      },
+      "why": "Gold order CO-02641 (promised 2027-04-04) is inside D34's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D34"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D44"
+      },
+      "why": "Pool check before assigning loaners at D44 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D44",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02645"
+      },
+      "why": "Platinum order CO-02645 (promised 2027-04-05) is inside D44's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D44"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02598"
+      },
+      "why": "Gold order CO-02598 (promised 2027-04-04) is inside D44's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D44"
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "supplier_delay",
+      "label": "Supplier delay",
+      "plant_id": "P_AL",
+      "part_id": "CAM-360",
+      "shipment_id": "SH-0256",
+      "lot_id": null,
+      "start_date": "2027-03-29",
+      "end_date": "2027-04-01",
+      "orders": [
+        "PO-0436",
+        "PO-0438",
+        "PO-0439",
+        "PO-0441",
+        "PO-0442",
+        "PO-0444"
+      ],
+      "models": [
+        "SUMMIT",
+        "VOYAGER"
+      ],
+      "narrative": "Walked SH-0256 \u2192 CAM-360 \u2192 SUMMIT, VOYAGER (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 6 orders need the delayed part. Rule 1 and rule 3. Placed 4 at the same plant and transferred 2."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Supplier delay"
+    ],
+    "tool_calls": 51,
+    "reschedules": 4,
+    "transfers": 2,
+    "dealer_notices": 26,
+    "loaner_checks": 9,
+    "loaners": 10,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.assign_loaner",
+      "dealer.notify",
+      "mes.reschedule",
+      "mes.transfer"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "event_id": "E-07",
+  "received_at": "2027-03-08T08:59:00",
+  "source": "news wire",
+  "text": "Dealer Pensacola, FL asks where to find the new brochure PDF.",
+  "disposition": "noise",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": true,
+    "proposal": {
+      "disposition": "noise",
+      "incidents": [
+        {
+          "kind": "",
+          "plant": "",
+          "part": "",
+          "supplier": "",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": []
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "model and ontology reader agree"
+  },
+  "incidents": [],
+  "incomplete": [],
+  "categories": [
+    "Noise"
+  ],
+  "summary": "E-07 is noise. It does not describe a shipment, an outage, a quality lot, or any other factory incident, so no tool is called.",
+  "reasoning": "Rule 7: unrelated messages get no operational action. Source is news wire. The text asks about something outside the control tower (\"Dealer Pensacola, FL asks where to find the new brochure PDF.\"). Specialists were not dispatched. Nothing was written.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Classified the message as noise and stood the specialists down."
+    }
+  ],
+  "guardrails": [
+    "No write tools called.",
+    "escalate was not used; the message is irrelevant, not an unclear operations report."
+  ],
+  "paths": [],
+  "moves": [],
+  "actions": [],
+  "stats": {
+    "categories": [
+      "Noise"
+    ],
+    "tool_calls": 0,
+    "reschedules": 0,
+    "transfers": 0,
+    "dealer_notices": 0,
+    "loaner_checks": 0,
+    "loaners": 0,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 0,
+    "write_kinds": []
+  }
+}

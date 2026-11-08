@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+*.code-workspace
+~$*
+
+# Secrets
+.env
+.env.*
+
+# Not part of this project
+msc-navigator/
+WhatsApp Image *.jpeg
+HackTheHighway_Datathon_Challenge.pdf
+/index.html
+
+# Scratch runs (the official run is runs/run1)
+runs/dev/

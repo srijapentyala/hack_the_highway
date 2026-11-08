@@ -1,0 +1,80 @@
+{
+  "event_id": "E-13",
+  "received_at": "2027-03-08T10:41:00",
+  "source": "ops chat",
+  "text": "Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.",
+  "disposition": "unconfirmed",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": true,
+    "proposal": {
+      "disposition": "unconfirmed",
+      "incidents": [
+        {
+          "kind": "unconfirmed",
+          "plant": "",
+          "part": "",
+          "supplier": "",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "soon"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "model and ontology reader agree"
+  },
+  "incidents": [],
+  "incomplete": [],
+  "categories": [
+    "Unconfirmed report"
+  ],
+  "summary": "E-13 is an unconfirmed or incomplete report (\"Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.\"). No plant window, shipment, or lot is specific enough to act on. Escalated to a human. No operational change.",
+  "reasoning": "Rule 8: if a report is not specific or confirmed, escalate and do not change production, dealers, loaners, lots, or customers. E-13 is an unconfirmed or incomplete report (\"Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.\"). No plant window, shipment, or lot is specific enough to act on.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Judged the report not actionable and escalated. Specialists made no changes."
+    }
+  ],
+  "guardrails": [
+    "Only escalate is called.",
+    "No reschedule, transfer, dealer, loaner, lot, or customer write."
+  ],
+  "paths": [],
+  "moves": [],
+  "actions": [
+    {
+      "agent": "Coordinator",
+      "tool": "escalate",
+      "args": {
+        "reason": "E-13 is an unconfirmed or incomplete report (\"Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.\"). No plant window, shipment, or lot is specific enough to act on."
+      },
+      "why": "Human-in-the-loop. The handbook forbids a guess.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Unconfirmed report"
+    ],
+    "tool_calls": 1,
+    "reschedules": 0,
+    "transfers": 0,
+    "dealer_notices": 0,
+    "loaner_checks": 0,
+    "loaners": 0,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 1,
+    "write_kinds": []
+  }
+}

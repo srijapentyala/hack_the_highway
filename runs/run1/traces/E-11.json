@@ -1,0 +1,1584 @@
+{
+  "event_id": "E-11",
+  "received_at": "2027-03-08T10:07:00",
+  "source": "ops chat",
+  "text": "Jackson update: a power failure. We're dark from Friday Mar 26 through Tuesday Mar 30; the line restarts the following working day.",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": true,
+    "proposal": {
+      "disposition": "act",
+      "incidents": [
+        {
+          "kind": "plant_outage",
+          "plant": "Jackson",
+          "part": "",
+          "supplier": "",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "Friday Mar 26",
+            "Tuesday Mar 30"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "model and ontology reader agree"
+  },
+  "incidents": [
+    {
+      "kind": "plant_outage",
+      "plant_id": "P_MS",
+      "start_date": "2027-03-26",
+      "end_date": "2027-03-30",
+      "start_idx": 14,
+      "end_idx": 16,
+      "ready_idx": 17,
+      "evidence": [
+        "plant P_MS",
+        "Friday Mar 26",
+        "Tuesday Mar 30"
+      ],
+      "span": "Jackson     Friday Mar 26 Tuesday Mar 30"
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Plant outage"
+  ],
+  "summary": "E-11 is Plant outage. 9 production orders move (6 rescheduled, 3 transferred). 36 dealer notice(s) and 17 loaner assignment(s).",
+  "reasoning": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Placed 6 at the same plant and transferred 3. Rule 4: 36 dealer notice(s), one each, listing only affected customer orders. Rule 5: 17 loaner(s) for Platinum and Gold in priority order; 1 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 1 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "did": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Placed 6 at the same plant and transferred 3."
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "did": "Rule 4: 36 dealer notice(s), one each, listing only affected customer orders. Rule 5: 17 loaner(s) for Platinum and Gold in priority order; 1 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.assign_loaner, dealer.notify, mes.reschedule, mes.transfer."
+  ],
+  "paths": [
+    {
+      "incident": "Plant outage",
+      "pattern": "Plant \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+      "walk": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Placed 6 at the same plant and transferred 3.",
+      "chains": [
+        "P_MS \u2192 PO-0253 \u2192 CO-01460 \u2192 D02 / C5325",
+        "P_MS \u2192 PO-0253 \u2192 CO-01461 \u2192 D10 / C5868",
+        "P_MS \u2192 PO-0253 \u2192 CO-01462 \u2192 D13 / C2775",
+        "P_MS \u2192 PO-0253 \u2192 CO-01463 \u2192 D25 / C5423",
+        "P_MS \u2192 PO-0253 \u2192 CO-01464 \u2192 D45 / C2201",
+        "P_MS \u2192 PO-0253 \u2192 CO-01465 \u2192 D16 / C2363",
+        "P_MS \u2192 PO-0253 \u2192 CO-01466 \u2192 D29 / C6871",
+        "P_MS \u2192 PO-0253 \u2192 CO-01467 \u2192 D38 / C5243",
+        "P_MS \u2192 PO-0254 \u2192 CO-01468 \u2192 D03 / C3401",
+        "P_MS \u2192 PO-0254 \u2192 CO-01469 \u2192 D02 / C1220",
+        "P_MS \u2192 PO-0254 \u2192 CO-01470 \u2192 D06 / C3749",
+        "P_MS \u2192 PO-0254 \u2192 CO-01471 \u2192 D02 / C4106",
+        "P_MS \u2192 PO-0254 \u2192 CO-01472 \u2192 D03 / C1038",
+        "P_MS \u2192 PO-0254 \u2192 CO-01473 \u2192 D20 / C2571",
+        "P_MS \u2192 PO-0254 \u2192 CO-01474 \u2192 D06 / C6777",
+        "P_MS \u2192 PO-0254 \u2192 CO-01475 \u2192 D08 / C0475",
+        "P_MS \u2192 PO-0254 \u2192 CO-01476 \u2192 D45 / C4612",
+        "P_MS \u2192 PO-0255 \u2192 CO-01477 \u2192 D22 / C3094",
+        "P_MS \u2192 PO-0255 \u2192 CO-01478 \u2192 D44 / C4867",
+        "P_MS \u2192 PO-0255 \u2192 CO-01479 \u2192 D22 / C3037",
+        "P_MS \u2192 PO-0255 \u2192 CO-01480 \u2192 D06 / C2535",
+        "P_MS \u2192 PO-0255 \u2192 CO-01481 \u2192 D45 / C1431",
+        "P_MS \u2192 PO-0255 \u2192 CO-01482 \u2192 D06 / C3113",
+        "P_MS \u2192 PO-0255 \u2192 CO-01483 \u2192 D08 / C3070",
+        "P_MS \u2192 PO-0255 \u2192 CO-01484 \u2192 D24 / C0249",
+        "P_MS \u2192 PO-0256 \u2192 CO-01485 \u2192 D08 / C0590",
+        "P_MS \u2192 PO-0256 \u2192 CO-01486 \u2192 D08 / C3477",
+        "P_MS \u2192 PO-0256 \u2192 CO-01487 \u2192 D12 / C4340",
+        "P_MS \u2192 PO-0256 \u2192 CO-01488 \u2192 D25 / C0626",
+        "P_MS \u2192 PO-0256 \u2192 CO-01489 \u2192 D30 / C1077",
+        "P_MS \u2192 PO-0256 \u2192 CO-01490 \u2192 D06 / C4861",
+        "P_MS \u2192 PO-0256 \u2192 CO-01491 \u2192 D24 / C6518",
+        "P_MS \u2192 PO-0256 \u2192 CO-01492 \u2192 D16 / C4864",
+        "P_MS \u2192 PO-0257 \u2192 CO-01493 \u2192 D06 / C1441",
+        "P_MS \u2192 PO-0257 \u2192 CO-01494 \u2192 D28 / C3791",
+        "P_MS \u2192 PO-0257 \u2192 CO-01495 \u2192 D05 / C0203",
+        "P_MS \u2192 PO-0257 \u2192 CO-01496 \u2192 D26 / C1533",
+        "P_MS \u2192 PO-0257 \u2192 CO-01497 \u2192 D39 / C5917",
+        "P_MS \u2192 PO-0257 \u2192 CO-01498 \u2192 D48 / C6442",
+        "P_MS \u2192 PO-0257 \u2192 CO-01499 \u2192 D22 / C3934",
+        "P_MS \u2192 PO-0257 \u2192 CO-01500 \u2192 D26 / C6981",
+        "P_MS \u2192 PO-0258 \u2192 CO-01501 \u2192 D31 / C3270",
+        "P_MS \u2192 PO-0258 \u2192 CO-01502 \u2192 D06 / C2615",
+        "P_MS \u2192 PO-0258 \u2192 CO-01503 \u2192 D35 / C1768",
+        "P_MS \u2192 PO-0258 \u2192 CO-01504 \u2192 D43 / C5303",
+        "P_MS \u2192 PO-0258 \u2192 CO-01505 \u2192 D24 / C6158",
+        "P_MS \u2192 PO-0258 \u2192 CO-01506 \u2192 D11 / C0708",
+        "P_MS \u2192 PO-0258 \u2192 CO-01507 \u2192 D23 / C4285",
+        "P_MS \u2192 PO-0258 \u2192 CO-01508 \u2192 D02 / C0359",
+        "P_MS \u2192 PO-0258 \u2192 CO-01509 \u2192 D27 / C0340",
+        "P_MS \u2192 PO-0259 \u2192 CO-01510 \u2192 D31 / C6379",
+        "P_MS \u2192 PO-0259 \u2192 CO-01511 \u2192 D45 / C5483",
+        "P_MS \u2192 PO-0259 \u2192 CO-01512 \u2192 D08 / C1073",
+        "P_MS \u2192 PO-0259 \u2192 CO-01513 \u2192 D06 / C0332",
+        "P_MS \u2192 PO-0259 \u2192 CO-01514 \u2192 D21 / C6263",
+        "P_MS \u2192 PO-0259 \u2192 CO-01515 \u2192 D18 / C1182",
+        "P_MS \u2192 PO-0259 \u2192 CO-01516 \u2192 D23 / C0606",
+        "P_MS \u2192 PO-0259 \u2192 CO-01517 \u2192 D02 / C6504",
+        "P_MS \u2192 PO-0259 \u2192 CO-01518 \u2192 D08 / C3951",
+        "P_MS \u2192 PO-0259 \u2192 CO-01519 \u2192 D02 / C0209",
+        "P_MS \u2192 PO-0260 \u2192 CO-01520 \u2192 D31 / C3178",
+        "P_MS \u2192 PO-0260 \u2192 CO-01521 \u2192 D25 / C4081",
+        "P_MS \u2192 PO-0260 \u2192 CO-01522 \u2192 D08 / C4339",
+        "P_MS \u2192 PO-0260 \u2192 CO-01523 \u2192 D16 / C5098",
+        "P_MS \u2192 PO-0260 \u2192 CO-01524 \u2192 D46 / C0382",
+        "P_MS \u2192 PO-0260 \u2192 CO-01525 \u2192 D20 / C5807",
+        "P_MS \u2192 PO-0260 \u2192 CO-01526 \u2192 D38 / C5295",
+        "P_MS \u2192 PO-0260 \u2192 CO-01527 \u2192 D33 / C6982",
+        "P_MS \u2192 PO-0261 \u2192 CO-01528 \u2192 D25 / C4755",
+        "P_MS \u2192 PO-0261 \u2192 CO-01529 \u2192 D25 / C1363",
+        "P_MS \u2192 PO-0261 \u2192 CO-01530 \u2192 D32 / C3767",
+        "P_MS \u2192 PO-0261 \u2192 CO-01531 \u2192 D25 / C2011",
+        "P_MS \u2192 PO-0261 \u2192 CO-01532 \u2192 D03 / C1291",
+        "P_MS \u2192 PO-0261 \u2192 CO-01533 \u2192 D41 / C4902",
+        "P_MS \u2192 PO-0261 \u2192 CO-01534 \u2192 D04 / C6565",
+        "P_MS \u2192 PO-0261 \u2192 CO-01535 \u2192 D03 / C2164",
+        "P_MS \u2192 PO-0261 \u2192 CO-01536 \u2192 D20 / C4087",
+        "P_MS \u2192 PO-0261 \u2192 CO-01537 \u2192 D45 / C6336",
+        "P_MS \u2192 PO-0261 \u2192 CO-01538 \u2192 D01 / C0244"
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "production_order_id": "PO-0253",
+      "model": "PIONEER",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-26",
+      "to_plant": "P_MS",
+      "to_date": "2027-03-31",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0253",
+        "new_date": "2027-03-31"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0254",
+      "model": "NOVA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-26",
+      "to_plant": "P_MS",
+      "to_date": "2027-03-31",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0254",
+        "new_date": "2027-03-31"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0255",
+      "model": "TERRA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-26",
+      "to_plant": "P_MS",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0255",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0256",
+      "model": "PIONEER",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-29",
+      "to_plant": "P_MS",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0256",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0257",
+      "model": "NOVA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-29",
+      "to_plant": "P_MS",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0257",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0258",
+      "model": "TERRA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-29",
+      "to_plant": "P_MS",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0258",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0259",
+      "model": "PIONEER",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-30",
+      "to_plant": "P_KY",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0259",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds PIONEER. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0260",
+      "model": "NOVA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-30",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0260",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_IN"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_IN on 2027-03-08, the earliest open day in the planning window at a plant that builds NOVA. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0261",
+      "model": "TERRA",
+      "from_plant": "P_MS",
+      "from_date": "2027-03-30",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0261",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_TX"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_TX on 2027-03-08, the earliest open day in the planning window at a plant that builds TERRA. Tied plants follow the handbook order."
+    }
+  ],
+  "actions": [
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0253",
+        "new_date": "2027-03-31"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0253",
+        "plant_id": "P_MS",
+        "date": "2027-03-31"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0254",
+        "new_date": "2027-03-31"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0254",
+        "plant_id": "P_MS",
+        "date": "2027-03-31"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0255",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0255",
+        "plant_id": "P_MS",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0256",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0256",
+        "plant_id": "P_MS",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0257",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0257",
+        "plant_id": "P_MS",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0258",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-31 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0258",
+        "plant_id": "P_MS",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0259",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds PIONEER. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0259",
+        "plant_id": "P_KY",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0260",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_IN"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_IN on 2027-03-08, the earliest open day in the planning window at a plant that builds NOVA. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0260",
+        "plant_id": "P_IN",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0261",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_TX"
+      },
+      "why": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. No free slot remains at P_MS on or after 2027-03-31. Transferred to P_TX on 2027-03-08, the earliest open day in the planning window at a plant that builds TERRA. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0261",
+        "plant_id": "P_TX",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D01",
+        "customer_order_ids": [
+          "CO-01538"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D01 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-01460",
+          "CO-01469",
+          "CO-01471",
+          "CO-01508",
+          "CO-01517",
+          "CO-01519"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D02 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D03",
+        "customer_order_ids": [
+          "CO-01468",
+          "CO-01472",
+          "CO-01532",
+          "CO-01535"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D03 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D04",
+        "customer_order_ids": [
+          "CO-01534"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D04 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D05",
+        "customer_order_ids": [
+          "CO-01495"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D05 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D06",
+        "customer_order_ids": [
+          "CO-01470",
+          "CO-01474",
+          "CO-01480",
+          "CO-01482",
+          "CO-01490",
+          "CO-01493",
+          "CO-01502",
+          "CO-01513"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D06 for 8 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-01475",
+          "CO-01483",
+          "CO-01485",
+          "CO-01486",
+          "CO-01512",
+          "CO-01518",
+          "CO-01522"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D08 for 7 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D10",
+        "customer_order_ids": [
+          "CO-01461"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D10 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D11",
+        "customer_order_ids": [
+          "CO-01506"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D11 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D12",
+        "customer_order_ids": [
+          "CO-01487"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D12 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D13",
+        "customer_order_ids": [
+          "CO-01462"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D13 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D16",
+        "customer_order_ids": [
+          "CO-01465",
+          "CO-01492",
+          "CO-01523"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D16 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D18",
+        "customer_order_ids": [
+          "CO-01515"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D18 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-01473",
+          "CO-01525",
+          "CO-01536"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D20 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-01514"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D21 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D22",
+        "customer_order_ids": [
+          "CO-01477",
+          "CO-01479",
+          "CO-01499"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D22 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D23",
+        "customer_order_ids": [
+          "CO-01507",
+          "CO-01516"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D23 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D24",
+        "customer_order_ids": [
+          "CO-01484",
+          "CO-01491",
+          "CO-01505"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D24 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-01463",
+          "CO-01488",
+          "CO-01521",
+          "CO-01528",
+          "CO-01529",
+          "CO-01531"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D25 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D26",
+        "customer_order_ids": [
+          "CO-01496",
+          "CO-01500"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D26 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D27",
+        "customer_order_ids": [
+          "CO-01509"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D27 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D28",
+        "customer_order_ids": [
+          "CO-01494"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D28 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D29",
+        "customer_order_ids": [
+          "CO-01466"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D29 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D30",
+        "customer_order_ids": [
+          "CO-01489"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D30 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-01501",
+          "CO-01510",
+          "CO-01520"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D31 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D32",
+        "customer_order_ids": [
+          "CO-01530"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D32 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D33",
+        "customer_order_ids": [
+          "CO-01527"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D33 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D35",
+        "customer_order_ids": [
+          "CO-01503"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D35 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D38",
+        "customer_order_ids": [
+          "CO-01467",
+          "CO-01526"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D38 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D39",
+        "customer_order_ids": [
+          "CO-01497"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D39 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D41",
+        "customer_order_ids": [
+          "CO-01533"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D41 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D43",
+        "customer_order_ids": [
+          "CO-01504"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D43 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-01478"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D44 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-01464",
+          "CO-01476",
+          "CO-01481",
+          "CO-01511",
+          "CO-01537"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D45 for 5 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D46",
+        "customer_order_ids": [
+          "CO-01524"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D46 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D48",
+        "customer_order_ids": [
+          "CO-01498"
+        ],
+        "message": "E-11: timing changed for the listed customer orders (outage at P_MS 2027-03-26 through 2027-03-30). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D48 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D02"
+      },
+      "why": "Pool check before assigning loaners at D02 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D02",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01471"
+      },
+      "why": "Gold order CO-01471 (promised 2027-03-30) is inside D02's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01508"
+      },
+      "why": "Gold order CO-01508 (promised 2027-04-02) is inside D02's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D03"
+      },
+      "why": "Pool check before assigning loaners at D03 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D03",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01468"
+      },
+      "why": "Platinum order CO-01468 (promised 2027-03-29) is inside D03's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D03"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D06"
+      },
+      "why": "Pool check before assigning loaners at D06 (3 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D06",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01490"
+      },
+      "why": "Platinum order CO-01490 (promised 2027-04-02) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01493"
+      },
+      "why": "Gold order CO-01493 (promised 2027-04-02) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01502"
+      },
+      "why": "Gold order CO-01502 (promised 2027-04-02) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D08"
+      },
+      "why": "Pool check before assigning loaners at D08 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D08",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01518"
+      },
+      "why": "Gold order CO-01518 (promised 2027-04-02) is inside D08's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D16"
+      },
+      "why": "Pool check before assigning loaners at D16 (3 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D16",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01523"
+      },
+      "why": "Platinum order CO-01523 (promised 2027-04-03) is inside D16's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D16"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01492"
+      },
+      "why": "Gold order CO-01492 (promised 2027-04-02) is inside D16's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D16"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D24"
+      },
+      "why": "Pool check before assigning loaners at D24 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D24",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01491"
+      },
+      "why": "Gold order CO-01491 (promised 2027-04-02) is inside D24's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D24"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D25"
+      },
+      "why": "Pool check before assigning loaners at D25 (1 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D25",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01488"
+      },
+      "why": "Gold order CO-01488 (promised 2027-04-01) is inside D25's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D25"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D26"
+      },
+      "why": "Pool check before assigning loaners at D26 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D26",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01496"
+      },
+      "why": "Gold order CO-01496 (promised 2027-04-01) is inside D26's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D26"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D30"
+      },
+      "why": "Pool check before assigning loaners at D30 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D30",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01489"
+      },
+      "why": "Gold order CO-01489 (promised 2027-04-03) is inside D30's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D30"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D31"
+      },
+      "why": "Pool check before assigning loaners at D31 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D31",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01501"
+      },
+      "why": "Gold order CO-01501 (promised 2027-04-02) is inside D31's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D31"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D33"
+      },
+      "why": "Pool check before assigning loaners at D33 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D33",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01527"
+      },
+      "why": "Gold order CO-01527 (promised 2027-04-04) is inside D33's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D33"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D41"
+      },
+      "why": "Pool check before assigning loaners at D41 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D41",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01533"
+      },
+      "why": "Platinum order CO-01533 (promised 2027-04-04) is inside D41's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D41"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D45"
+      },
+      "why": "Pool check before assigning loaners at D45 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D45",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01464"
+      },
+      "why": "Platinum order CO-01464 (promised 2027-03-31) is inside D45's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D45"
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "plant_outage",
+      "label": "Plant outage",
+      "plant_id": "P_MS",
+      "part_id": null,
+      "shipment_id": null,
+      "lot_id": null,
+      "start_date": "2027-03-26",
+      "end_date": "2027-03-30",
+      "orders": [
+        "PO-0253",
+        "PO-0254",
+        "PO-0255",
+        "PO-0256",
+        "PO-0257",
+        "PO-0258",
+        "PO-0259",
+        "PO-0260",
+        "PO-0261"
+      ],
+      "models": [
+        "NOVA",
+        "PIONEER",
+        "TERRA"
+      ],
+      "narrative": "Walked Plant P_MS \u2192 production orders scheduled 2027-03-26 through 2027-03-30 inclusive. 9 orders cannot build during the outage. The line restarts 2027-03-31. Rule 2 and rule 3. Placed 6 at the same plant and transferred 3."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Plant outage"
+    ],
+    "tool_calls": 75,
+    "reschedules": 6,
+    "transfers": 3,
+    "dealer_notices": 36,
+    "loaner_checks": 13,
+    "loaners": 17,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.assign_loaner",
+      "dealer.notify",
+      "mes.reschedule",
+      "mes.transfer"
+    ]
+  }
+}

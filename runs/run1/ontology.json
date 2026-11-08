@@ -1,0 +1,176 @@
+{
+  "today": "2027-03-08",
+  "entities": [
+    {
+      "type": "Plant",
+      "count": 6
+    },
+    {
+      "type": "Model",
+      "count": 6
+    },
+    {
+      "type": "Part",
+      "count": 20
+    },
+    {
+      "type": "Supplier",
+      "count": 18
+    },
+    {
+      "type": "Shipment",
+      "count": 364
+    },
+    {
+      "type": "Lot",
+      "count": 364
+    },
+    {
+      "type": "ProductionOrder",
+      "count": 540
+    },
+    {
+      "type": "CustomerOrder",
+      "count": 3263
+    },
+    {
+      "type": "Customer",
+      "count": 7000
+    },
+    {
+      "type": "Dealer",
+      "count": 50
+    },
+    {
+      "type": "Vehicle",
+      "count": 5348
+    },
+    {
+      "type": "Alias",
+      "count": 158
+    },
+    {
+      "type": "WorkingDay",
+      "count": 30
+    }
+  ],
+  "relations": [
+    {
+      "from": "CustomerOrder",
+      "edge": "AT_DEALER",
+      "to": "Dealer",
+      "count": 3263,
+      "meaning": "The dealer who owns the customer relationship."
+    },
+    {
+      "from": "CustomerOrder",
+      "edge": "FOR_CUSTOMER",
+      "to": "Customer",
+      "count": 3263,
+      "meaning": "The buyer, with a service tier."
+    },
+    {
+      "from": "CustomerOrder",
+      "edge": "FROM_BUILD",
+      "to": "ProductionOrder",
+      "count": 3263,
+      "meaning": "A promised customer order is filled by one production order."
+    },
+    {
+      "from": "Lot",
+      "edge": "AT_PLANT",
+      "to": "Plant",
+      "count": 364,
+      "meaning": "Where the lot was installed."
+    },
+    {
+      "from": "Lot",
+      "edge": "FROM_SUPPLIER",
+      "to": "Supplier",
+      "count": 364,
+      "meaning": "Who made the lot."
+    },
+    {
+      "from": "Lot",
+      "edge": "OF_PART",
+      "to": "Part",
+      "count": 364,
+      "meaning": "Quality lot of one part."
+    },
+    {
+      "from": "Model",
+      "edge": "CAN_BUILD_AT",
+      "to": "Plant",
+      "count": 18,
+      "meaning": "plant_models.csv. Transfers may only go to one of these plants."
+    },
+    {
+      "from": "Part",
+      "edge": "USED_IN",
+      "to": "Model",
+      "count": 47,
+      "meaning": "Bill of materials. A build needs the part when its model lists it."
+    },
+    {
+      "from": "ProductionOrder",
+      "edge": "BUILT_AT",
+      "to": "Plant",
+      "count": 540,
+      "meaning": "Where the order is scheduled."
+    },
+    {
+      "from": "ProductionOrder",
+      "edge": "OF_MODEL",
+      "to": "Model",
+      "count": 540,
+      "meaning": "Which model the order builds."
+    },
+    {
+      "from": "Shipment",
+      "edge": "CONTAINS",
+      "to": "Part",
+      "count": 364,
+      "meaning": "Shipment is one part number."
+    },
+    {
+      "from": "Shipment",
+      "edge": "DELIVERED_TO",
+      "to": "Plant",
+      "count": 364,
+      "meaning": "Shipment is received at one plant. Only that plant's builds wait on it."
+    },
+    {
+      "from": "Supplier",
+      "edge": "SHIPS",
+      "to": "Shipment",
+      "count": 364,
+      "meaning": "Supplier sends an inbound shipment."
+    },
+    {
+      "from": "Vehicle",
+      "edge": "AT_DEALER",
+      "to": "Dealer",
+      "count": 5348,
+      "meaning": "Where an unsold vehicle can be stopped, or where it was sold."
+    },
+    {
+      "from": "Vehicle",
+      "edge": "FROM_BUILD",
+      "to": "ProductionOrder",
+      "count": 5348,
+      "meaning": "Finished vehicle from a production order."
+    },
+    {
+      "from": "Vehicle",
+      "edge": "OWNED_BY",
+      "to": "Customer",
+      "count": 2927,
+      "meaning": "Owner of a sold vehicle."
+    }
+  ],
+  "paths": {
+    "supplier_delay": "Shipment \u2192 Part \u2192 Model (BOM) \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+    "plant_outage": "Plant \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+    "quality_hold": "Lot \u2192 ProductionOrder \u2192 Vehicle \u2192 Dealer / Customer"
+  }
+}

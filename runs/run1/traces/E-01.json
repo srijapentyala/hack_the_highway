@@ -1,0 +1,3503 @@
+ {
+  "event_id": "E-01",
+  "received_at": "2027-03-08T07:17:00",
+  "source": "daily digest",
+  "text": "Morning digest, two items. (1) San Antonio update: a software outage on the line. We're dark from next Friday through Monday Mar 22; the line restarts the following working day. (2) Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route).",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": false,
+    "proposal": {
+      "disposition": "act|act",
+      "incidents": [
+        {
+          "kind": "plant_outage",
+          "plant": "San Antonio",
+          "part": "",
+          "supplier": "",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "next Friday",
+            "Monday Mar 22"
+          ]
+        },
+        {
+          "kind": "supplier_delay",
+          "plant": "",
+          "part": "",
+          "supplier": "Quanta",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "next Monday",
+            "next Friday"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "ontology reader kept; model reading did not bind to the same incidents"
+  },
+  "incidents": [
+    {
+      "kind": "plant_outage",
+      "plant_id": "P_TX",
+      "start_date": "2027-03-12",
+      "end_date": "2027-03-22",
+      "start_idx": 4,
+      "end_idx": 10,
+      "ready_idx": 11,
+      "evidence": [
+        "plant P_TX",
+        "next Friday",
+        "Monday Mar 22"
+      ],
+      "span": "San Antonio update: a software outage on the line. We're dark from next Friday through Monday Mar 22; the line restarts the following working day."
+    },
+    {
+      "kind": "supplier_delay",
+      "plant_id": "P_IN",
+      "part_id": "CHIP-IVI",
+      "supplier_id": "SUP-12",
+      "shipment_id": "SH-0190",
+      "start_date": "2027-03-15",
+      "end_date": "2027-03-19",
+      "old_idx": 5,
+      "new_idx": 9,
+      "ready_idx": 9,
+      "evidence": [
+        "SH-0190",
+        "CHIP-IVI",
+        "2027-03-15",
+        "2027-03-19"
+      ],
+      "span": "Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route)."
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Plant outage",
+    "Supplier delay"
+  ],
+  "summary": "E-01 is Plant outage, Supplier delay. 29 production orders move (26 rescheduled, 3 transferred). 46 dealer notice(s) and 46 loaner assignment(s).",
+  "reasoning": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Placed 18 at the same plant and transferred 3. Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Placed 8 at the same plant and transferred 0. Rule 4: 46 dealer notice(s), one each, listing only affected customer orders. Rule 5: 46 loaner(s) for Platinum and Gold in priority order; 22 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 2 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "did": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Placed 18 at the same plant and transferred 3."
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "did": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Placed 8 at the same plant and transferred 0."
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "did": "Rule 4: 46 dealer notice(s), one each, listing only affected customer orders. Rule 5: 46 loaner(s) for Platinum and Gold in priority order; 22 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.assign_loaner, dealer.notify, mes.reschedule, mes.transfer."
+  ],
+  "paths": [
+    {
+      "incident": "Plant outage",
+      "pattern": "Plant \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+      "walk": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Placed 18 at the same plant and transferred 3.",
+      "chains": [
+        "P_TX \u2192 PO-0043 \u2192 CO-00107 \u2192 D44 / C2101",
+        "P_TX \u2192 PO-0043 \u2192 CO-00108 \u2192 D39 / C2521",
+        "P_TX \u2192 PO-0043 \u2192 CO-00109 \u2192 D06 / C2340",
+        "P_TX \u2192 PO-0043 \u2192 CO-00110 \u2192 D26 / C5273",
+        "P_TX \u2192 PO-0043 \u2192 CO-00111 \u2192 D35 / C3474",
+        "P_TX \u2192 PO-0043 \u2192 CO-00112 \u2192 D20 / C5250",
+        "P_TX \u2192 PO-0043 \u2192 CO-00113 \u2192 D29 / C3815",
+        "P_TX \u2192 PO-0043 \u2192 CO-00114 \u2192 D02 / C6015",
+        "P_TX \u2192 PO-0043 \u2192 CO-00115 \u2192 D35 / C3026",
+        "P_TX \u2192 PO-0043 \u2192 CO-00116 \u2192 D06 / C0963",
+        "P_TX \u2192 PO-0043 \u2192 CO-00117 \u2192 D46 / C6868",
+        "P_TX \u2192 PO-0044 \u2192 CO-00118 \u2192 D02 / C2801",
+        "P_TX \u2192 PO-0044 \u2192 CO-00119 \u2192 D35 / C3000",
+        "P_TX \u2192 PO-0044 \u2192 CO-00120 \u2192 D12 / C2472",
+        "P_TX \u2192 PO-0044 \u2192 CO-00121 \u2192 D45 / C3163",
+        "P_TX \u2192 PO-0044 \u2192 CO-00122 \u2192 D33 / C1212",
+        "P_TX \u2192 PO-0044 \u2192 CO-00123 \u2192 D20 / C3194",
+        "P_TX \u2192 PO-0044 \u2192 CO-00124 \u2192 D01 / C1927",
+        "P_TX \u2192 PO-0044 \u2192 CO-00125 \u2192 D12 / C4831",
+        "P_TX \u2192 PO-0044 \u2192 CO-00126 \u2192 D02 / C6800",
+        "P_TX \u2192 PO-0045 \u2192 CO-00127 \u2192 D38 / C1590",
+        "P_TX \u2192 PO-0045 \u2192 CO-00128 \u2192 D29 / C1644",
+        "P_TX \u2192 PO-0045 \u2192 CO-00129 \u2192 D34 / C0898",
+        "P_TX \u2192 PO-0045 \u2192 CO-00130 \u2192 D21 / C0331",
+        "P_TX \u2192 PO-0045 \u2192 CO-00131 \u2192 D20 / C4111",
+        "P_TX \u2192 PO-0045 \u2192 CO-00132 \u2192 D02 / C6376",
+        "P_TX \u2192 PO-0045 \u2192 CO-00133 \u2192 D13 / C4930",
+        "P_TX \u2192 PO-0045 \u2192 CO-00134 \u2192 D29 / C6837",
+        "P_TX \u2192 PO-0045 \u2192 CO-00135 \u2192 D02 / C0084",
+        "P_TX \u2192 PO-0046 \u2192 CO-00136 \u2192 D27 / C1638",
+        "P_TX \u2192 PO-0046 \u2192 CO-00137 \u2192 D25 / C1306",
+        "P_TX \u2192 PO-0046 \u2192 CO-00138 \u2192 D08 / C6335",
+        "P_TX \u2192 PO-0046 \u2192 CO-00139 \u2192 D23 / C6328",
+        "P_TX \u2192 PO-0046 \u2192 CO-00140 \u2192 D21 / C1507",
+        "P_TX \u2192 PO-0046 \u2192 CO-00141 \u2192 D25 / C6491",
+        "P_TX \u2192 PO-0046 \u2192 CO-00142 \u2192 D27 / C0113",
+        "P_TX \u2192 PO-0046 \u2192 CO-00143 \u2192 D45 / C4101",
+        "P_TX \u2192 PO-0046 \u2192 CO-00144 \u2192 D23 / C3075",
+        "P_TX \u2192 PO-0046 \u2192 CO-00145 \u2192 D08 / C5436",
+        "P_TX \u2192 PO-0047 \u2192 CO-00146 \u2192 D25 / C0315",
+        "P_TX \u2192 PO-0047 \u2192 CO-00147 \u2192 D25 / C4405",
+        "P_TX \u2192 PO-0047 \u2192 CO-00148 \u2192 D26 / C6851",
+        "P_TX \u2192 PO-0047 \u2192 CO-00149 \u2192 D07 / C6395",
+        "P_TX \u2192 PO-0047 \u2192 CO-00150 \u2192 D24 / C6916",
+        "P_TX \u2192 PO-0047 \u2192 CO-00151 \u2192 D07 / C3374",
+        "P_TX \u2192 PO-0047 \u2192 CO-00152 \u2192 D39 / C3801",
+        "P_TX \u2192 PO-0047 \u2192 CO-00153 \u2192 D38 / C2317",
+        "P_TX \u2192 PO-0047 \u2192 CO-00154 \u2192 D43 / C5049",
+        "P_TX \u2192 PO-0047 \u2192 CO-00155 \u2192 D32 / C2243",
+        "P_TX \u2192 PO-0047 \u2192 CO-00156 \u2192 D25 / C6460",
+        "P_TX \u2192 PO-0048 \u2192 CO-00157 \u2192 D16 / C4570",
+        "P_TX \u2192 PO-0048 \u2192 CO-00158 \u2192 D21 / C0446",
+        "P_TX \u2192 PO-0048 \u2192 CO-00159 \u2192 D08 / C0788",
+        "P_TX \u2192 PO-0048 \u2192 CO-00160 \u2192 D46 / C6117",
+        "P_TX \u2192 PO-0048 \u2192 CO-00161 \u2192 D02 / C2853",
+        "P_TX \u2192 PO-0048 \u2192 CO-00162 \u2192 D02 / C5228",
+        "P_TX \u2192 PO-0048 \u2192 CO-00163 \u2192 D27 / C3718",
+        "P_TX \u2192 PO-0048 \u2192 CO-00164 \u2192 D13 / C6766",
+        "P_TX \u2192 PO-0048 \u2192 CO-00165 \u2192 D30 / C6050",
+        "P_TX \u2192 PO-0049 \u2192 CO-00166 \u2192 D23 / C0628",
+        "P_TX \u2192 PO-0049 \u2192 CO-00167 \u2192 D38 / C4280",
+        "P_TX \u2192 PO-0049 \u2192 CO-00168 \u2192 D13 / C3669",
+        "P_TX \u2192 PO-0049 \u2192 CO-00169 \u2192 D46 / C6984",
+        "P_TX \u2192 PO-0049 \u2192 CO-00170 \u2192 D16 / C2797",
+        "P_TX \u2192 PO-0049 \u2192 CO-00171 \u2192 D19 / C4529",
+        "P_TX \u2192 PO-0049 \u2192 CO-00172 \u2192 D38 / C0610",
+        "P_TX \u2192 PO-0049 \u2192 CO-00173 \u2192 D31 / C4332",
+        "P_TX \u2192 PO-0049 \u2192 CO-00174 \u2192 D23 / C2424",
+        "P_TX \u2192 PO-0049 \u2192 CO-00175 \u2192 D03 / C3466",
+        "P_TX \u2192 PO-0050 \u2192 CO-00176 \u2192 D45 / C2526",
+        "P_TX \u2192 PO-0050 \u2192 CO-00177 \u2192 D35 / C6918",
+        "P_TX \u2192 PO-0050 \u2192 CO-00178 \u2192 D04 / C4729",
+        "P_TX \u2192 PO-0050 \u2192 CO-00179 \u2192 D42 / C2260",
+        "P_TX \u2192 PO-0050 \u2192 CO-00180 \u2192 D46 / C0976",
+        "P_TX \u2192 PO-0050 \u2192 CO-00181 \u2192 D08 / C3384",
+        "P_TX \u2192 PO-0050 \u2192 CO-00182 \u2192 D20 / C6645",
+        "P_TX \u2192 PO-0050 \u2192 CO-00183 \u2192 D07 / C4386",
+        "P_TX \u2192 PO-0051 \u2192 CO-00184 \u2192 D12 / C5414",
+        "P_TX \u2192 PO-0051 \u2192 CO-00185 \u2192 D50 / C4379",
+        "P_TX \u2192 PO-0051 \u2192 CO-00186 \u2192 D08 / C6893",
+        "P_TX \u2192 PO-0051 \u2192 CO-00187 \u2192 D46 / C2508",
+        "P_TX \u2192 PO-0051 \u2192 CO-00188 \u2192 D18 / C0142",
+        "P_TX \u2192 PO-0051 \u2192 CO-00189 \u2192 D48 / C5865",
+        "P_TX \u2192 PO-0051 \u2192 CO-00190 \u2192 D20 / C1567",
+        "P_TX \u2192 PO-0051 \u2192 CO-00191 \u2192 D06 / C4020",
+        "P_TX \u2192 PO-0051 \u2192 CO-00192 \u2192 D15 / C1741",
+        "P_TX \u2192 PO-0051 \u2192 CO-00193 \u2192 D10 / C6496",
+        "P_TX \u2192 PO-0051 \u2192 CO-00194 \u2192 D44 / C6656",
+        "P_TX \u2192 PO-0052 \u2192 CO-00195 \u2192 D32 / C3108",
+        "P_TX \u2192 PO-0052 \u2192 CO-00196 \u2192 D44 / C6841",
+        "P_TX \u2192 PO-0052 \u2192 CO-00197 \u2192 D41 / C0837",
+        "P_TX \u2192 PO-0052 \u2192 CO-00198 \u2192 D06 / C0868",
+        "P_TX \u2192 PO-0052 \u2192 CO-00199 \u2192 D25 / C3257",
+        "P_TX \u2192 PO-0052 \u2192 CO-00200 \u2192 D07 / C1830",
+        "P_TX \u2192 PO-0052 \u2192 CO-00201 \u2192 D35 / C4246",
+        "P_TX \u2192 PO-0052 \u2192 CO-00202 \u2192 D11 / C3376",
+        "P_TX \u2192 PO-0053 \u2192 CO-00203 \u2192 D39 / C5950",
+        "P_TX \u2192 PO-0053 \u2192 CO-00204 \u2192 D35 / C0930",
+        "P_TX \u2192 PO-0053 \u2192 CO-00205 \u2192 D32 / C4119",
+        "P_TX \u2192 PO-0053 \u2192 CO-00206 \u2192 D47 / C6079",
+        "P_TX \u2192 PO-0053 \u2192 CO-00207 \u2192 D39 / C1744",
+        "P_TX \u2192 PO-0053 \u2192 CO-00208 \u2192 D45 / C0317",
+        "P_TX \u2192 PO-0053 \u2192 CO-00209 \u2192 D28 / C2936",
+        "P_TX \u2192 PO-0053 \u2192 CO-00210 \u2192 D08 / C2401",
+        "P_TX \u2192 PO-0053 \u2192 CO-00211 \u2192 D02 / C0201",
+        "P_TX \u2192 PO-0053 \u2192 CO-00212 \u2192 D25 / C5842",
+        "P_TX \u2192 PO-0053 \u2192 CO-00213 \u2192 D25 / C2128",
+        "P_TX \u2192 PO-0054 \u2192 CO-00214 \u2192 D18 / C5292",
+        "P_TX \u2192 PO-0054 \u2192 CO-00215 \u2192 D27 / C0539",
+        "P_TX \u2192 PO-0054 \u2192 CO-00216 \u2192 D25 / C4229",
+        "P_TX \u2192 PO-0054 \u2192 CO-00217 \u2192 D31 / C1694",
+        "P_TX \u2192 PO-0054 \u2192 CO-00218 \u2192 D45 / C1866",
+        "P_TX \u2192 PO-0054 \u2192 CO-00219 \u2192 D23 / C3876",
+        "P_TX \u2192 PO-0054 \u2192 CO-00220 \u2192 D27 / C5824",
+        "P_TX \u2192 PO-0055 \u2192 CO-00221 \u2192 D08 / C6255",
+        "P_TX \u2192 PO-0055 \u2192 CO-00222 \u2192 D32 / C0239",
+        "P_TX \u2192 PO-0055 \u2192 CO-00223 \u2192 D46 / C0408",
+        "P_TX \u2192 PO-0055 \u2192 CO-00224 \u2192 D25 / C5754",
+        "P_TX \u2192 PO-0055 \u2192 CO-00225 \u2192 D23 / C3602",
+        "P_TX \u2192 PO-0055 \u2192 CO-00226 \u2192 D26 / C5718",
+        "P_TX \u2192 PO-0055 \u2192 CO-00227 \u2192 D26 / C3097",
+        "P_TX \u2192 PO-0055 \u2192 CO-00228 \u2192 D08 / C4914",
+        "P_TX \u2192 PO-0055 \u2192 CO-00229 \u2192 D20 / C5836",
+        "P_TX \u2192 PO-0056 \u2192 CO-00230 \u2192 D08 / C2200",
+        "P_TX \u2192 PO-0056 \u2192 CO-00231 \u2192 D04 / C4827",
+        "P_TX \u2192 PO-0056 \u2192 CO-00232 \u2192 D38 / C3287",
+        "P_TX \u2192 PO-0056 \u2192 CO-00233 \u2192 D28 / C5646",
+        "P_TX \u2192 PO-0056 \u2192 CO-00234 \u2192 D21 / C1958",
+        "P_TX \u2192 PO-0056 \u2192 CO-00235 \u2192 D27 / C5132",
+        "P_TX \u2192 PO-0056 \u2192 CO-00236 \u2192 D28 / C5319",
+        "P_TX \u2192 PO-0056 \u2192 CO-00237 \u2192 D03 / C5420",
+        "P_TX \u2192 PO-0056 \u2192 CO-00238 \u2192 D26 / C5321",
+        "P_TX \u2192 PO-0057 \u2192 CO-00239 \u2192 D25 / C0681",
+        "P_TX \u2192 PO-0057 \u2192 CO-00240 \u2192 D20 / C5904",
+        "P_TX \u2192 PO-0057 \u2192 CO-00241 \u2192 D45 / C5367",
+        "P_TX \u2192 PO-0057 \u2192 CO-00242 \u2192 D23 / C5916",
+        "P_TX \u2192 PO-0057 \u2192 CO-00243 \u2192 D26 / C2645",
+        "P_TX \u2192 PO-0057 \u2192 CO-00244 \u2192 D12 / C3559",
+        "P_TX \u2192 PO-0057 \u2192 CO-00245 \u2192 D18 / C2663",
+        "P_TX \u2192 PO-0057 \u2192 CO-00246 \u2192 D44 / C6874",
+        "P_TX \u2192 PO-0058 \u2192 CO-00247 \u2192 D18 / C6387",
+        "P_TX \u2192 PO-0058 \u2192 CO-00248 \u2192 D27 / C3046",
+        "P_TX \u2192 PO-0058 \u2192 CO-00249 \u2192 D29 / C4168",
+        "P_TX \u2192 PO-0058 \u2192 CO-00250 \u2192 D46 / C6933",
+        "P_TX \u2192 PO-0058 \u2192 CO-00251 \u2192 D27 / C4321",
+        "P_TX \u2192 PO-0058 \u2192 CO-00252 \u2192 D31 / C4725",
+        "P_TX \u2192 PO-0058 \u2192 CO-00253 \u2192 D26 / C6115",
+        "P_TX \u2192 PO-0058 \u2192 CO-00254 \u2192 D34 / C0718",
+        "P_TX \u2192 PO-0058 \u2192 CO-00255 \u2192 D25 / C1397",
+        "P_TX \u2192 PO-0058 \u2192 CO-00256 \u2192 D02 / C4990",
+        "P_TX \u2192 PO-0059 \u2192 CO-00257 \u2192 D27 / C0667",
+        "P_TX \u2192 PO-0059 \u2192 CO-00258 \u2192 D39 / C2383",
+        "P_TX \u2192 PO-0059 \u2192 CO-00259 \u2192 D23 / C2031",
+        "P_TX \u2192 PO-0059 \u2192 CO-00260 \u2192 D04 / C3246",
+        "P_TX \u2192 PO-0059 \u2192 CO-00261 \u2192 D20 / C0894",
+        "P_TX \u2192 PO-0059 \u2192 CO-00262 \u2192 D09 / C2982",
+        "P_TX \u2192 PO-0059 \u2192 CO-00263 \u2192 D26 / C5147",
+        "P_TX \u2192 PO-0059 \u2192 CO-00264 \u2192 D02 / C5390",
+        "P_TX \u2192 PO-0060 \u2192 CO-00265 \u2192 D34 / C2049",
+        "P_TX \u2192 PO-0060 \u2192 CO-00266 \u2192 D26 / C2244",
+        "P_TX \u2192 PO-0060 \u2192 CO-00267 \u2192 D34 / C5017",
+        "P_TX \u2192 PO-0060 \u2192 CO-00268 \u2192 D25 / C6661",
+        "P_TX \u2192 PO-0060 \u2192 CO-00269 \u2192 D23 / C1835",
+        "P_TX \u2192 PO-0060 \u2192 CO-00270 \u2192 D15 / C4047",
+        "P_TX \u2192 PO-0060 \u2192 CO-00271 \u2192 D20 / C3478",
+        "P_TX \u2192 PO-0060 \u2192 CO-00272 \u2192 D31 / C6529",
+        "P_TX \u2192 PO-0061 \u2192 CO-00273 \u2192 D46 / C3845",
+        "P_TX \u2192 PO-0061 \u2192 CO-00274 \u2192 D08 / C1035",
+        "P_TX \u2192 PO-0061 \u2192 CO-00275 \u2192 D16 / C2396",
+        "P_TX \u2192 PO-0061 \u2192 CO-00276 \u2192 D45 / C6045",
+        "P_TX \u2192 PO-0061 \u2192 CO-00277 \u2192 D31 / C0751",
+        "P_TX \u2192 PO-0061 \u2192 CO-00278 \u2192 D31 / C6970",
+        "P_TX \u2192 PO-0061 \u2192 CO-00279 \u2192 D02 / C0941",
+        "P_TX \u2192 PO-0061 \u2192 CO-00280 \u2192 D35 / C0825",
+        "P_TX \u2192 PO-0061 \u2192 CO-00281 \u2192 D27 / C2267",
+        "P_TX \u2192 PO-0061 \u2192 CO-00282 \u2192 D04 / C3878",
+        "P_TX \u2192 PO-0061 \u2192 CO-00283 \u2192 D26 / C2815",
+        "P_TX \u2192 PO-0062 \u2192 CO-00284 \u2192 D45 / C0980",
+        "P_TX \u2192 PO-0062 \u2192 CO-00285 \u2192 D11 / C5562",
+        "P_TX \u2192 PO-0062 \u2192 CO-00286 \u2192 D19 / C0330",
+        "P_TX \u2192 PO-0062 \u2192 CO-00287 \u2192 D31 / C3142",
+        "P_TX \u2192 PO-0062 \u2192 CO-00288 \u2192 D33 / C5226",
+        "P_TX \u2192 PO-0062 \u2192 CO-00289 \u2192 D13 / C2883",
+        "P_TX \u2192 PO-0062 \u2192 CO-00290 \u2192 D50 / C6761",
+        "P_TX \u2192 PO-0062 \u2192 CO-00291 \u2192 D08 / C2768",
+        "P_TX \u2192 PO-0062 \u2192 CO-00292 \u2192 D25 / C2399",
+        "P_TX \u2192 PO-0063 \u2192 CO-00293 \u2192 D47 / C5329",
+        "P_TX \u2192 PO-0063 \u2192 CO-00294 \u2192 D26 / C2953",
+        "P_TX \u2192 PO-0063 \u2192 CO-00295 \u2192 D26 / C4352",
+        "P_TX \u2192 PO-0063 \u2192 CO-00296 \u2192 D36 / C2312",
+        "P_TX \u2192 PO-0063 \u2192 CO-00297 \u2192 D34 / C6428",
+        "P_TX \u2192 PO-0063 \u2192 CO-00298 \u2192 D20 / C4855",
+        "P_TX \u2192 PO-0063 \u2192 CO-00299 \u2192 D06 / C4292",
+        "P_TX \u2192 PO-0063 \u2192 CO-00300 \u2192 D31 / C1054",
+        "P_TX \u2192 PO-0063 \u2192 CO-00301 \u2192 D06 / C4978"
+      ]
+    },
+    {
+      "incident": "Supplier delay",
+      "pattern": "Shipment \u2192 Part \u2192 Model (BOM) \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+      "walk": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Placed 8 at the same plant and transferred 0.",
+      "chains": [
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01756 \u2192 D07 / C4130",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01757 \u2192 D06 / C2471",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01758 \u2192 D06 / C5153",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01759 \u2192 D02 / C5947",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01760 \u2192 D45 / C1775",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01761 \u2192 D08 / C4656",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0316 \u2192 CO-01762 \u2192 D14 / C4508",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01772 \u2192 D42 / C1695",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01773 \u2192 D08 / C4976",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01774 \u2192 D17 / C0197",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01775 \u2192 D06 / C0352",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01776 \u2192 D33 / C5261",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01777 \u2192 D22 / C1281",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01778 \u2192 D26 / C2501",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0318 \u2192 CO-01779 \u2192 D24 / C3066",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01780 \u2192 D08 / C6028",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01781 \u2192 D06 / C3207",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01782 \u2192 D25 / C6031",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01783 \u2192 D21 / C5201",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01784 \u2192 D31 / C4240",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01785 \u2192 D44 / C2786",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01786 \u2192 D20 / C1134",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01787 \u2192 D44 / C0746",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01788 \u2192 D45 / C6865",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0319 \u2192 CO-01789 \u2192 D25 / C0380",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01798 \u2192 D46 / C2246",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01799 \u2192 D22 / C6615",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01800 \u2192 D42 / C4641",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01801 \u2192 D08 / C0477",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01802 \u2192 D32 / C3439",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01803 \u2192 D02 / C2282",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01804 \u2192 D45 / C6789",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0321 \u2192 CO-01805 \u2192 D41 / C0280",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01806 \u2192 D30 / C1895",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01807 \u2192 D31 / C4874",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01808 \u2192 D21 / C1818",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01809 \u2192 D44 / C1845",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01810 \u2192 D45 / C4200",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01811 \u2192 D02 / C2141",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01812 \u2192 D01 / C2879",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01813 \u2192 D42 / C6778",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0322 \u2192 CO-01814 \u2192 D44 / C1115",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01825 \u2192 D41 / C3055",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01826 \u2192 D26 / C4788",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01827 \u2192 D45 / C0465",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01828 \u2192 D24 / C1151",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01829 \u2192 D38 / C4473",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01830 \u2192 D46 / C1479",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01831 \u2192 D27 / C3555",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01832 \u2192 D02 / C3278",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0324 \u2192 CO-01833 \u2192 D08 / C6155",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01834 \u2192 D23 / C6350",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01835 \u2192 D07 / C0712",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01836 \u2192 D45 / C4489",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01837 \u2192 D15 / C3794",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01838 \u2192 D25 / C6824",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01839 \u2192 D38 / C1959",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01840 \u2192 D45 / C3219",
+        "SH-0190 \u2192 CHIP-IVI \u2192 VOYAGER (BOM) \u2192 PO-0325 \u2192 CO-01841 \u2192 D38 / C6319",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01850 \u2192 D31 / C4552",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01851 \u2192 D43 / C5298",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01852 \u2192 D08 / C5558",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01853 \u2192 D23 / C5036",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01854 \u2192 D04 / C2674",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01855 \u2192 D46 / C6654",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01856 \u2192 D35 / C5787",
+        "SH-0190 \u2192 CHIP-IVI \u2192 NOVA (BOM) \u2192 PO-0327 \u2192 CO-01857 \u2192 D08 / C2781"
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "production_order_id": "PO-0043",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-12",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-23",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0043",
+        "new_date": "2027-03-23"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0044",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-12",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-23",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0044",
+        "new_date": "2027-03-23"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0045",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-12",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-24",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0045",
+        "new_date": "2027-03-24"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0046",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-15",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-24",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0046",
+        "new_date": "2027-03-24"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0047",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-15",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-25",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0047",
+        "new_date": "2027-03-25"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0048",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-15",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-25",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0048",
+        "new_date": "2027-03-25"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0049",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-16",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-26",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0049",
+        "new_date": "2027-03-26"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0050",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-16",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-26",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0050",
+        "new_date": "2027-03-26"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0051",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-16",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-29",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0051",
+        "new_date": "2027-03-29"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0052",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-17",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-29",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0052",
+        "new_date": "2027-03-29"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0053",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-17",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-30",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0053",
+        "new_date": "2027-03-30"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0054",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-17",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-30",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0054",
+        "new_date": "2027-03-30"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0055",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-18",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-31",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0055",
+        "new_date": "2027-03-31"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0056",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-18",
+      "to_plant": "P_TX",
+      "to_date": "2027-03-31",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0056",
+        "new_date": "2027-03-31"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0057",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-18",
+      "to_plant": "P_TX",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0057",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0058",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-19",
+      "to_plant": "P_TX",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0058",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0059",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-19",
+      "to_plant": "P_TX",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0059",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0060",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-19",
+      "to_plant": "P_TX",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0060",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 1,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0061",
+      "model": "RANGER",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-22",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0061",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_IN"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_IN on 2027-03-08, the earliest open day in the planning window at a plant that builds RANGER. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0062",
+      "model": "SUMMIT",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-22",
+      "to_plant": "P_KY",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0062",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds SUMMIT. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0063",
+      "model": "TERRA",
+      "from_plant": "P_TX",
+      "from_date": "2027-03-22",
+      "to_plant": "P_MS",
+      "to_date": "2027-03-08",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0063",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_MS"
+      },
+      "free_before": 2,
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_MS on 2027-03-08, the earliest open day in the planning window at a plant that builds TERRA. Tied plants follow the handbook order."
+    },
+    {
+      "production_order_id": "PO-0316",
+      "model": "VOYAGER",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-15",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-19",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0316",
+        "new_date": "2027-03-19"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0318",
+      "model": "NOVA",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-15",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-19",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0318",
+        "new_date": "2027-03-19"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0319",
+      "model": "VOYAGER",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-16",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-22",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0319",
+        "new_date": "2027-03-22"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0321",
+      "model": "NOVA",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-16",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-22",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0321",
+        "new_date": "2027-03-22"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0322",
+      "model": "VOYAGER",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-17",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-23",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0322",
+        "new_date": "2027-03-23"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0324",
+      "model": "NOVA",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-17",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-23",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0324",
+        "new_date": "2027-03-23"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0325",
+      "model": "VOYAGER",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-18",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-24",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0325",
+        "new_date": "2027-03-24"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0327",
+      "model": "NOVA",
+      "from_plant": "P_IN",
+      "from_date": "2027-03-18",
+      "to_plant": "P_IN",
+      "to_date": "2027-03-24",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0327",
+        "new_date": "2027-03-24"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5)."
+    }
+  ],
+  "actions": [
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0043",
+        "new_date": "2027-03-23"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0043",
+        "plant_id": "P_TX",
+        "date": "2027-03-23"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0044",
+        "new_date": "2027-03-23"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0044",
+        "plant_id": "P_TX",
+        "date": "2027-03-23"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0045",
+        "new_date": "2027-03-24"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0045",
+        "plant_id": "P_TX",
+        "date": "2027-03-24"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0046",
+        "new_date": "2027-03-24"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0046",
+        "plant_id": "P_TX",
+        "date": "2027-03-24"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0047",
+        "new_date": "2027-03-25"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0047",
+        "plant_id": "P_TX",
+        "date": "2027-03-25"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0048",
+        "new_date": "2027-03-25"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0048",
+        "plant_id": "P_TX",
+        "date": "2027-03-25"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0049",
+        "new_date": "2027-03-26"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0049",
+        "plant_id": "P_TX",
+        "date": "2027-03-26"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0050",
+        "new_date": "2027-03-26"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0050",
+        "plant_id": "P_TX",
+        "date": "2027-03-26"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0051",
+        "new_date": "2027-03-29"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0051",
+        "plant_id": "P_TX",
+        "date": "2027-03-29"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0052",
+        "new_date": "2027-03-29"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0052",
+        "plant_id": "P_TX",
+        "date": "2027-03-29"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0053",
+        "new_date": "2027-03-30"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0053",
+        "plant_id": "P_TX",
+        "date": "2027-03-30"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0054",
+        "new_date": "2027-03-30"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0054",
+        "plant_id": "P_TX",
+        "date": "2027-03-30"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0055",
+        "new_date": "2027-03-31"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0055",
+        "plant_id": "P_TX",
+        "date": "2027-03-31"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0056",
+        "new_date": "2027-03-31"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0056",
+        "plant_id": "P_TX",
+        "date": "2027-03-31"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0057",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0057",
+        "plant_id": "P_TX",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0058",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0058",
+        "plant_id": "P_TX",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0059",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0059",
+        "plant_id": "P_TX",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0060",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Earliest same-plant day on or after 2027-03-23 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0060",
+        "plant_id": "P_TX",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0061",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_IN"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_IN on 2027-03-08, the earliest open day in the planning window at a plant that builds RANGER. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0061",
+        "plant_id": "P_IN",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0062",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_KY"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_KY on 2027-03-08, the earliest open day in the planning window at a plant that builds SUMMIT. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0062",
+        "plant_id": "P_KY",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.transfer",
+      "args": {
+        "production_order_id": "PO-0063",
+        "new_date": "2027-03-08",
+        "to_plant_id": "P_MS"
+      },
+      "why": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. No free slot remains at P_TX on or after 2027-03-23. Transferred to P_MS on 2027-03-08, the earliest open day in the planning window at a plant that builds TERRA. Tied plants follow the handbook order.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0063",
+        "plant_id": "P_MS",
+        "date": "2027-03-08"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0316",
+        "new_date": "2027-03-19"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0316",
+        "plant_id": "P_IN",
+        "date": "2027-03-19"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0318",
+        "new_date": "2027-03-19"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0318",
+        "plant_id": "P_IN",
+        "date": "2027-03-19"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0319",
+        "new_date": "2027-03-22"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0319",
+        "plant_id": "P_IN",
+        "date": "2027-03-22"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0321",
+        "new_date": "2027-03-22"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0321",
+        "plant_id": "P_IN",
+        "date": "2027-03-22"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0322",
+        "new_date": "2027-03-23"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0322",
+        "plant_id": "P_IN",
+        "date": "2027-03-23"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0324",
+        "new_date": "2027-03-23"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0324",
+        "plant_id": "P_IN",
+        "date": "2027-03-23"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0325",
+        "new_date": "2027-03-24"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0325",
+        "plant_id": "P_IN",
+        "date": "2027-03-24"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0327",
+        "new_date": "2027-03-24"
+      },
+      "why": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-03-19 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0327",
+        "plant_id": "P_IN",
+        "date": "2027-03-24"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D01",
+        "customer_order_ids": [
+          "CO-00124",
+          "CO-01812"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D01 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-00114",
+          "CO-00118",
+          "CO-00126",
+          "CO-00132",
+          "CO-00135",
+          "CO-00161",
+          "CO-00162",
+          "CO-00211",
+          "CO-00256",
+          "CO-00264",
+          "CO-00279",
+          "CO-01759",
+          "CO-01803",
+          "CO-01811",
+          "CO-01832"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D02 for 15 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D03",
+        "customer_order_ids": [
+          "CO-00175",
+          "CO-00237"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D03 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D04",
+        "customer_order_ids": [
+          "CO-00178",
+          "CO-00231",
+          "CO-00260",
+          "CO-00282",
+          "CO-01854"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D04 for 5 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D06",
+        "customer_order_ids": [
+          "CO-00109",
+          "CO-00116",
+          "CO-00191",
+          "CO-00198",
+          "CO-00299",
+          "CO-00301",
+          "CO-01757",
+          "CO-01758",
+          "CO-01775",
+          "CO-01781"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D06 for 10 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D07",
+        "customer_order_ids": [
+          "CO-00149",
+          "CO-00151",
+          "CO-00183",
+          "CO-00200",
+          "CO-01756",
+          "CO-01835"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D07 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-00138",
+          "CO-00145",
+          "CO-00159",
+          "CO-00181",
+          "CO-00186",
+          "CO-00210",
+          "CO-00221",
+          "CO-00228",
+          "CO-00230",
+          "CO-00274",
+          "CO-00291",
+          "CO-01761",
+          "CO-01773",
+          "CO-01780",
+          "CO-01801",
+          "CO-01833",
+          "CO-01852",
+          "CO-01857"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D08 for 18 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D09",
+        "customer_order_ids": [
+          "CO-00262"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D09 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D10",
+        "customer_order_ids": [
+          "CO-00193"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D10 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D11",
+        "customer_order_ids": [
+          "CO-00202",
+          "CO-00285"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D11 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D12",
+        "customer_order_ids": [
+          "CO-00120",
+          "CO-00125",
+          "CO-00184",
+          "CO-00244"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D12 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D13",
+        "customer_order_ids": [
+          "CO-00133",
+          "CO-00164",
+          "CO-00168",
+          "CO-00289"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D13 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D14",
+        "customer_order_ids": [
+          "CO-01762"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D14 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D15",
+        "customer_order_ids": [
+          "CO-00192",
+          "CO-00270",
+          "CO-01837"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D15 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D16",
+        "customer_order_ids": [
+          "CO-00157",
+          "CO-00170",
+          "CO-00275"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D16 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D17",
+        "customer_order_ids": [
+          "CO-01774"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D17 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D18",
+        "customer_order_ids": [
+          "CO-00188",
+          "CO-00214",
+          "CO-00245",
+          "CO-00247"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D18 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D19",
+        "customer_order_ids": [
+          "CO-00171",
+          "CO-00286"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D19 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-00112",
+          "CO-00123",
+          "CO-00131",
+          "CO-00182",
+          "CO-00190",
+          "CO-00229",
+          "CO-00240",
+          "CO-00261",
+          "CO-00271",
+          "CO-00298",
+          "CO-01786"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D20 for 11 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-00130",
+          "CO-00140",
+          "CO-00158",
+          "CO-00234",
+          "CO-01783",
+          "CO-01808"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D21 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D22",
+        "customer_order_ids": [
+          "CO-01777",
+          "CO-01799"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D22 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D23",
+        "customer_order_ids": [
+          "CO-00139",
+          "CO-00144",
+          "CO-00166",
+          "CO-00174",
+          "CO-00219",
+          "CO-00225",
+          "CO-00242",
+          "CO-00259",
+          "CO-00269",
+          "CO-01834",
+          "CO-01853"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D23 for 11 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D24",
+        "customer_order_ids": [
+          "CO-00150",
+          "CO-01779",
+          "CO-01828"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D24 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-00137",
+          "CO-00141",
+          "CO-00146",
+          "CO-00147",
+          "CO-00156",
+          "CO-00199",
+          "CO-00212",
+          "CO-00213",
+          "CO-00216",
+          "CO-00224",
+          "CO-00239",
+          "CO-00255",
+          "CO-00268",
+          "CO-00292",
+          "CO-01782",
+          "CO-01789",
+          "CO-01838"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D25 for 17 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D26",
+        "customer_order_ids": [
+          "CO-00110",
+          "CO-00148",
+          "CO-00226",
+          "CO-00227",
+          "CO-00238",
+          "CO-00243",
+          "CO-00253",
+          "CO-00263",
+          "CO-00266",
+          "CO-00283",
+          "CO-00294",
+          "CO-00295",
+          "CO-01778",
+          "CO-01826"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D26 for 14 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D27",
+        "customer_order_ids": [
+          "CO-00136",
+          "CO-00142",
+          "CO-00163",
+          "CO-00215",
+          "CO-00220",
+          "CO-00235",
+          "CO-00248",
+          "CO-00251",
+          "CO-00257",
+          "CO-00281",
+          "CO-01831"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D27 for 11 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D28",
+        "customer_order_ids": [
+          "CO-00209",
+          "CO-00233",
+          "CO-00236"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D28 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D29",
+        "customer_order_ids": [
+          "CO-00113",
+          "CO-00128",
+          "CO-00134",
+          "CO-00249"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D29 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D30",
+        "customer_order_ids": [
+          "CO-00165",
+          "CO-01806"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D30 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-00173",
+          "CO-00217",
+          "CO-00252",
+          "CO-00272",
+          "CO-00277",
+          "CO-00278",
+          "CO-00287",
+          "CO-00300",
+          "CO-01784",
+          "CO-01807",
+          "CO-01850"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D31 for 11 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D32",
+        "customer_order_ids": [
+          "CO-00155",
+          "CO-00195",
+          "CO-00205",
+          "CO-00222",
+          "CO-01802"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D32 for 5 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D33",
+        "customer_order_ids": [
+          "CO-00122",
+          "CO-00288",
+          "CO-01776"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D33 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D34",
+        "customer_order_ids": [
+          "CO-00129",
+          "CO-00254",
+          "CO-00265",
+          "CO-00267",
+          "CO-00297"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D34 for 5 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D35",
+        "customer_order_ids": [
+          "CO-00111",
+          "CO-00115",
+          "CO-00119",
+          "CO-00177",
+          "CO-00201",
+          "CO-00204",
+          "CO-00280",
+          "CO-01856"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D35 for 8 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D36",
+        "customer_order_ids": [
+          "CO-00296"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D36 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D38",
+        "customer_order_ids": [
+          "CO-00127",
+          "CO-00153",
+          "CO-00167",
+          "CO-00172",
+          "CO-00232",
+          "CO-01829",
+          "CO-01839",
+          "CO-01841"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D38 for 8 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D39",
+        "customer_order_ids": [
+          "CO-00108",
+          "CO-00152",
+          "CO-00203",
+          "CO-00207",
+          "CO-00258"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D39 for 5 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D41",
+        "customer_order_ids": [
+          "CO-00197",
+          "CO-01805",
+          "CO-01825"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D41 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D42",
+        "customer_order_ids": [
+          "CO-00179",
+          "CO-01772",
+          "CO-01800",
+          "CO-01813"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D42 for 4 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D43",
+        "customer_order_ids": [
+          "CO-00154",
+          "CO-01851"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D43 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-00107",
+          "CO-00194",
+          "CO-00196",
+          "CO-00246",
+          "CO-01785",
+          "CO-01787",
+          "CO-01809",
+          "CO-01814"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D44 for 8 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-00121",
+          "CO-00143",
+          "CO-00176",
+          "CO-00208",
+          "CO-00218",
+          "CO-00241",
+          "CO-00276",
+          "CO-00284",
+          "CO-01760",
+          "CO-01788",
+          "CO-01804",
+          "CO-01810",
+          "CO-01827",
+          "CO-01836",
+          "CO-01840"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D45 for 15 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D46",
+        "customer_order_ids": [
+          "CO-00117",
+          "CO-00160",
+          "CO-00169",
+          "CO-00180",
+          "CO-00187",
+          "CO-00223",
+          "CO-00250",
+          "CO-00273",
+          "CO-01798",
+          "CO-01830",
+          "CO-01855"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (delay of infotainment chip (SH-0190) into P_IN, now due 2027-03-19; outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D46 for 11 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D47",
+        "customer_order_ids": [
+          "CO-00206",
+          "CO-00293"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D47 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D48",
+        "customer_order_ids": [
+          "CO-00189"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D48 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D50",
+        "customer_order_ids": [
+          "CO-00185",
+          "CO-00290"
+        ],
+        "message": "E-01: timing changed for the listed customer orders (outage at P_TX 2027-03-12 through 2027-03-22). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D50 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D01"
+      },
+      "why": "Pool check before assigning loaners at D01 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D01",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01812"
+      },
+      "why": "Platinum order CO-01812 (promised 2027-03-20) is inside D01's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D01"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D02"
+      },
+      "why": "Pool check before assigning loaners at D02 (2 on the book, 4 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D02",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00126"
+      },
+      "why": "Gold order CO-00126 (promised 2027-03-16) is inside D02's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00132"
+      },
+      "why": "Gold order CO-00132 (promised 2027-03-16) is inside D02's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D06"
+      },
+      "why": "Pool check before assigning loaners at D06 (3 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D06",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00198"
+      },
+      "why": "Platinum order CO-00198 (promised 2027-03-21) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00191"
+      },
+      "why": "Gold order CO-00191 (promised 2027-03-20) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01781"
+      },
+      "why": "Gold order CO-01781 (promised 2027-03-20) is inside D06's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D06"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D08"
+      },
+      "why": "Pool check before assigning loaners at D08 (3 on the book, 4 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D08",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01761"
+      },
+      "why": "Platinum order CO-01761 (promised 2027-03-18) is inside D08's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00138"
+      },
+      "why": "Gold order CO-00138 (promised 2027-03-18) is inside D08's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01780"
+      },
+      "why": "Gold order CO-01780 (promised 2027-03-19) is inside D08's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D08"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D11"
+      },
+      "why": "Pool check before assigning loaners at D11 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D11",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00202"
+      },
+      "why": "Gold order CO-00202 (promised 2027-03-22) is inside D11's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D11"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D13"
+      },
+      "why": "Pool check before assigning loaners at D13 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D13",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00133"
+      },
+      "why": "Gold order CO-00133 (promised 2027-03-17) is inside D13's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D13"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D17"
+      },
+      "why": "Pool check before assigning loaners at D17 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D17",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01774"
+      },
+      "why": "Gold order CO-01774 (promised 2027-03-18) is inside D17's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D17"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D18"
+      },
+      "why": "Pool check before assigning loaners at D18 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D18",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00247"
+      },
+      "why": "Gold order CO-00247 (promised 2027-03-24) is inside D18's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D18"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D19"
+      },
+      "why": "Pool check before assigning loaners at D19 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D19",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00171"
+      },
+      "why": "Gold order CO-00171 (promised 2027-03-21) is inside D19's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D19"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D20"
+      },
+      "why": "Pool check before assigning loaners at D20 (1 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D20",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01786"
+      },
+      "why": "Platinum order CO-01786 (promised 2027-03-21) is inside D20's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D20"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D21"
+      },
+      "why": "Pool check before assigning loaners at D21 (3 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D21",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01783"
+      },
+      "why": "Platinum order CO-01783 (promised 2027-03-20) is inside D21's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D21"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01808"
+      },
+      "why": "Gold order CO-01808 (promised 2027-03-21) is inside D21's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D21"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D22"
+      },
+      "why": "Pool check before assigning loaners at D22 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D22",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01799"
+      },
+      "why": "Platinum order CO-01799 (promised 2027-03-21) is inside D22's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D22"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D23"
+      },
+      "why": "Pool check before assigning loaners at D23 (2 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D23",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00225"
+      },
+      "why": "Gold order CO-00225 (promised 2027-03-22) is inside D23's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D23"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00242"
+      },
+      "why": "Gold order CO-00242 (promised 2027-03-22) is inside D23's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D23"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D25"
+      },
+      "why": "Pool check before assigning loaners at D25 (1 on the book, 4 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D25",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00212"
+      },
+      "why": "Platinum order CO-00212 (promised 2027-03-20) is inside D25's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D25"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D26"
+      },
+      "why": "Pool check before assigning loaners at D26 (2 on the book, 3 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D26",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00243"
+      },
+      "why": "Gold order CO-00243 (promised 2027-03-21) is inside D26's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D26"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00263"
+      },
+      "why": "Gold order CO-00263 (promised 2027-03-22) is inside D26's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D26"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D27"
+      },
+      "why": "Pool check before assigning loaners at D27 (1 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D27",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00163"
+      },
+      "why": "Platinum order CO-00163 (promised 2027-03-20) is inside D27's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D27"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D28"
+      },
+      "why": "Pool check before assigning loaners at D28 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D28",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00236"
+      },
+      "why": "Gold order CO-00236 (promised 2027-03-23) is inside D28's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D28"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D29"
+      },
+      "why": "Pool check before assigning loaners at D29 (1 on the book, 4 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D29",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00134"
+      },
+      "why": "Platinum order CO-00134 (promised 2027-03-15) is inside D29's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D29"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D31"
+      },
+      "why": "Pool check before assigning loaners at D31 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D31",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00278"
+      },
+      "why": "Gold order CO-00278 (promised 2027-03-26) is inside D31's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D31"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D32"
+      },
+      "why": "Pool check before assigning loaners at D32 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D32",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00155"
+      },
+      "why": "Gold order CO-00155 (promised 2027-03-20) is inside D32's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D32"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01802"
+      },
+      "why": "Gold order CO-01802 (promised 2027-03-21) is inside D32's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D32"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D34"
+      },
+      "why": "Pool check before assigning loaners at D34 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D34",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00129"
+      },
+      "why": "Platinum order CO-00129 (promised 2027-03-16) is inside D34's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D34"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D35"
+      },
+      "why": "Pool check before assigning loaners at D35 (1 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D35",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00115"
+      },
+      "why": "Gold order CO-00115 (promised 2027-03-16) is inside D35's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D35"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D36"
+      },
+      "why": "Pool check before assigning loaners at D36 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D36",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00296"
+      },
+      "why": "Gold order CO-00296 (promised 2027-03-27) is inside D36's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D36"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D38"
+      },
+      "why": "Pool check before assigning loaners at D38 (1 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D38",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00127"
+      },
+      "why": "Gold order CO-00127 (promised 2027-03-15) is inside D38's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D38"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D39"
+      },
+      "why": "Pool check before assigning loaners at D39 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D39",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00152"
+      },
+      "why": "Gold order CO-00152 (promised 2027-03-19) is inside D39's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D39"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00207"
+      },
+      "why": "Gold order CO-00207 (promised 2027-03-21) is inside D39's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D39"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D42"
+      },
+      "why": "Pool check before assigning loaners at D42 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D42",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01772"
+      },
+      "why": "Gold order CO-01772 (promised 2027-03-20) is inside D42's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D42"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D43"
+      },
+      "why": "Pool check before assigning loaners at D43 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D43",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00154"
+      },
+      "why": "Platinum order CO-00154 (promised 2027-03-17) is inside D43's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D43"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01851"
+      },
+      "why": "Platinum order CO-01851 (promised 2027-03-20) is inside D43's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D43"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D44"
+      },
+      "why": "Pool check before assigning loaners at D44 (2 on the book, 2 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D44",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01785"
+      },
+      "why": "Platinum order CO-01785 (promised 2027-03-21) is inside D44's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D44"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01814"
+      },
+      "why": "Gold order CO-01814 (promised 2027-03-22) is inside D44's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D44"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D45"
+      },
+      "why": "Pool check before assigning loaners at D45 (2 on the book, 5 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D45",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01810"
+      },
+      "why": "Platinum order CO-01810 (promised 2027-03-22) is inside D45's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D45"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00218"
+      },
+      "why": "Gold order CO-00218 (promised 2027-03-22) is inside D45's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D45"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D46"
+      },
+      "why": "Pool check before assigning loaners at D46 (2 on the book, 5 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D46",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00117"
+      },
+      "why": "Platinum order CO-00117 (promised 2027-03-16) is inside D46's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D46"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00187"
+      },
+      "why": "Gold order CO-00187 (promised 2027-03-20) is inside D46's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D46"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D47"
+      },
+      "why": "Pool check before assigning loaners at D47 (3 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D47",
+        "available": 3
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00206"
+      },
+      "why": "Platinum order CO-00206 (promised 2027-03-20) is inside D47's pool of 3. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D47"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D48"
+      },
+      "why": "Pool check before assigning loaners at D48 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D48",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00189"
+      },
+      "why": "Gold order CO-00189 (promised 2027-03-20) is inside D48's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D48"
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "plant_outage",
+      "label": "Plant outage",
+      "plant_id": "P_TX",
+      "part_id": null,
+      "shipment_id": null,
+      "lot_id": null,
+      "start_date": "2027-03-12",
+      "end_date": "2027-03-22",
+      "orders": [
+        "PO-0043",
+        "PO-0044",
+        "PO-0045",
+        "PO-0046",
+        "PO-0047",
+        "PO-0048",
+        "PO-0049",
+        "PO-0050",
+        "PO-0051",
+        "PO-0052",
+        "PO-0053",
+        "PO-0054",
+        "PO-0055",
+        "PO-0056",
+        "PO-0057",
+        "PO-0058",
+        "PO-0059",
+        "PO-0060",
+        "PO-0061",
+        "PO-0062",
+        "PO-0063"
+      ],
+      "models": [
+        "RANGER",
+        "SUMMIT",
+        "TERRA"
+      ],
+      "narrative": "Walked Plant P_TX \u2192 production orders scheduled 2027-03-12 through 2027-03-22 inclusive. 21 orders cannot build during the outage. The line restarts 2027-03-23. Rule 2 and rule 3. Placed 18 at the same plant and transferred 3."
+    },
+    {
+      "kind": "supplier_delay",
+      "label": "Supplier delay",
+      "plant_id": "P_IN",
+      "part_id": "CHIP-IVI",
+      "shipment_id": "SH-0190",
+      "lot_id": null,
+      "start_date": "2027-03-15",
+      "end_date": "2027-03-19",
+      "orders": [
+        "PO-0316",
+        "PO-0318",
+        "PO-0319",
+        "PO-0321",
+        "PO-0322",
+        "PO-0324",
+        "PO-0325",
+        "PO-0327"
+      ],
+      "models": [
+        "NOVA",
+        "VOYAGER"
+      ],
+      "narrative": "Walked SH-0190 \u2192 CHIP-IVI \u2192 NOVA, PIONEER, SUMMIT, TERRA, VOYAGER (bill of materials) \u2192 production orders at P_IN from 2027-03-15 up to 2027-03-19. 8 orders need the delayed part. Rule 1 and rule 3. Placed 8 at the same plant and transferred 0."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Plant outage",
+      "Supplier delay"
+    ],
+    "tool_calls": 153,
+    "reschedules": 26,
+    "transfers": 3,
+    "dealer_notices": 46,
+    "loaner_checks": 32,
+    "loaners": 46,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.assign_loaner",
+      "dealer.notify",
+      "mes.reschedule",
+      "mes.transfer"
+    ]
+  }
+}

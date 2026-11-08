@@ -1,0 +1,2260 @@
+{
+  "event_id": "E-14",
+  "received_at": "2027-03-08T10:58:00",
+  "source": "ops chat",
+  "text": "Quality alert: Atlas says the heavy-duty wiring harness sent to the Texas plant had a moisture contamination. Anything built Monday Feb 22 through Wednesday Feb 24 is suspect.",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": true,
+    "proposal": {
+      "disposition": "act",
+      "incidents": [
+        {
+          "kind": "quality_hold",
+          "plant": "Texas",
+          "part": "heavy-duty wiring harness",
+          "supplier": "Atlas",
+          "dates": [
+            "Monday Feb 22",
+            "Wednesday Feb 24"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "model and ontology reader agree"
+  },
+  "incidents": [
+    {
+      "kind": "quality_hold",
+      "plant_id": "P_TX",
+      "part_id": "HARN-B",
+      "supplier_id": "SUP-07",
+      "lot_id": "LOT-0017",
+      "start_date": "2027-02-22",
+      "end_date": "2027-02-24",
+      "evidence": [
+        "LOT-0017",
+        "HARN-B",
+        "2027-02-22",
+        "2027-02-24"
+      ],
+      "span": "Texas heavy-duty wiring harness Atlas   Monday Feb 22 Wednesday Feb 24"
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Quality hold"
+  ],
+  "summary": "E-14 is Quality hold. 1 lot(s) held, 36 dealer stop-sale call(s), 94 owner(s) contacted.",
+  "reasoning": "Walked LOT-0017 \u2192 production orders of models that use HARN-B \u2192 vehicles built at P_TX from 2027-02-22 through 2027-02-24. 180 vehicles: 86 unsold, 94 owners. Rule 6. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 1 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Quality Sentinel",
+      "did": "Walked LOT-0017 \u2192 production orders of models that use HARN-B \u2192 vehicles built at P_TX from 2027-02-22 through 2027-02-24. 180 vehicles: 86 unsold, 94 owners. Rule 6."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.notify_customer, dealer.stop_sale, quality.hold_lot."
+  ],
+  "paths": [
+    {
+      "incident": "Quality hold",
+      "pattern": "Lot \u2192 ProductionOrder \u2192 Vehicle \u2192 Dealer / Customer",
+      "walk": "Walked LOT-0017 \u2192 production orders of models that use HARN-B \u2192 vehicles built at P_TX from 2027-02-22 through 2027-02-24. 180 vehicles: 86 unsold, 94 owners. Rule 6.",
+      "chains": [
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000001 \u2192 D23 / C1218",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000002 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000003 \u2192 D27 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000004 \u2192 D08 / C5019",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000005 \u2192 D45 / C0832",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000006 \u2192 D34 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000007 \u2192 D46 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000008 \u2192 D03 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000009 \u2192 D27 / C6447",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000010 \u2192 D23 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000011 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000012 \u2192 D45 / C2789",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000013 \u2192 D08 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000014 \u2192 D08 / C5388",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000015 \u2192 D37 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000016 \u2192 D31 / C3949",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000017 \u2192 D26 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000018 \u2192 D44 / C1751",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000019 \u2192 D34 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000020 \u2192 D07 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000021 \u2192 D49 / C0789",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000022 \u2192 D28 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000023 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000024 \u2192 D06 / unsold",
+        "LOT-0017 \u2192 PO-0001 \u2192 AUR0000025 \u2192 D39 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000026 \u2192 D48 / C3821",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000027 \u2192 D06 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000028 \u2192 D03 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000029 \u2192 D08 / C6563",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000030 \u2192 D34 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000031 \u2192 D31 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000032 \u2192 D15 / C0130",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000033 \u2192 D16 / C5353",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000034 \u2192 D29 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000035 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000036 \u2192 D23 / C1735",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000037 \u2192 D12 / C0630",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000038 \u2192 D22 / C3527",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000039 \u2192 D34 / C4064",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000040 \u2192 D23 / C3896",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000041 \u2192 D37 / C6676",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000042 \u2192 D20 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000043 \u2192 D44 / C4614",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000044 \u2192 D47 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000045 \u2192 D38 / C5603",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000046 \u2192 D12 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000047 \u2192 D13 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000048 \u2192 D31 / C1660",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000049 \u2192 D01 / C6624",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000050 \u2192 D22 / C4029",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000051 \u2192 D20 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000052 \u2192 D06 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000053 \u2192 D36 / unsold",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000054 \u2192 D45 / C6168",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000055 \u2192 D21 / C1244",
+        "LOT-0017 \u2192 PO-0002 \u2192 AUR0000056 \u2192 D26 / C4711",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000082 \u2192 D06 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000083 \u2192 D02 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000084 \u2192 D50 / C4439",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000085 \u2192 D04 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000086 \u2192 D15 / C1800",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000087 \u2192 D23 / C5654",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000088 \u2192 D21 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000089 \u2192 D21 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000090 \u2192 D03 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000091 \u2192 D32 / C5677",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000092 \u2192 D45 / C6288",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000093 \u2192 D46 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000094 \u2192 D25 / C3913",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000095 \u2192 D20 / C1233",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000096 \u2192 D26 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000097 \u2192 D07 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000098 \u2192 D21 / C3196",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000099 \u2192 D27 / C0641",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000100 \u2192 D32 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000101 \u2192 D25 / C4961",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000102 \u2192 D07 / C1516",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000103 \u2192 D32 / unsold",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000104 \u2192 D21 / C5443",
+        "LOT-0017 \u2192 PO-0004 \u2192 AUR0000105 \u2192 D19 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000106 \u2192 D27 / C4203",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000107 \u2192 D17 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000108 \u2192 D25 / C1876",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000109 \u2192 D44 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000110 \u2192 D44 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000111 \u2192 D33 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000112 \u2192 D33 / C3197",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000113 \u2192 D45 / C1508",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000114 \u2192 D30 / C0419",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000115 \u2192 D26 / C2499",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000116 \u2192 D33 / C0459",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000117 \u2192 D08 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000118 \u2192 D38 / C5701",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000119 \u2192 D20 / C2655",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000120 \u2192 D14 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000121 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000122 \u2192 D08 / C3200",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000123 \u2192 D39 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000124 \u2192 D03 / C6446",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000125 \u2192 D07 / C4248",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000126 \u2192 D43 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000127 \u2192 D21 / C1373",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000128 \u2192 D27 / C0665",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000129 \u2192 D06 / C5356",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000130 \u2192 D26 / C1367",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000131 \u2192 D08 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000132 \u2192 D31 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000133 \u2192 D03 / C1610",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000134 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000135 \u2192 D19 / C2480",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000136 \u2192 D16 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000137 \u2192 D43 / unsold",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000138 \u2192 D15 / C1808",
+        "LOT-0017 \u2192 PO-0005 \u2192 AUR0000139 \u2192 D23 / C4598",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000169 \u2192 D32 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000170 \u2192 D21 / C6561",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000171 \u2192 D08 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000172 \u2192 D36 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000173 \u2192 D23 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000174 \u2192 D38 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000175 \u2192 D38 / C3634",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000176 \u2192 D08 / C6448",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000177 \u2192 D08 / C0664",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000178 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000179 \u2192 D33 / C1006",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000180 \u2192 D27 / C6796",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000181 \u2192 D29 / C5751",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000182 \u2192 D04 / C4261",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000183 \u2192 D32 / C1380",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000184 \u2192 D45 / C5898",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000185 \u2192 D23 / C5360",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000186 \u2192 D27 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000187 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000188 \u2192 D06 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000189 \u2192 D44 / C3102",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000190 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000191 \u2192 D04 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000192 \u2192 D10 / C5125",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000193 \u2192 D25 / C6829",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000194 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000195 \u2192 D14 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000196 \u2192 D45 / C6091",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000197 \u2192 D46 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000198 \u2192 D13 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000199 \u2192 D20 / C4449",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000200 \u2192 D22 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000201 \u2192 D32 / unsold",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000202 \u2192 D25 / C5533",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000203 \u2192 D04 / C0643",
+        "LOT-0017 \u2192 PO-0007 \u2192 AUR0000204 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000205 \u2192 D04 / C6212",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000206 \u2192 D27 / C0871",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000207 \u2192 D25 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000208 \u2192 D36 / C3277",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000209 \u2192 D38 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000210 \u2192 D10 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000211 \u2192 D08 / C6847",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000212 \u2192 D27 / C0226",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000213 \u2192 D20 / C6490",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000214 \u2192 D45 / C1665",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000215 \u2192 D08 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000216 \u2192 D25 / C2919",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000217 \u2192 D43 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000218 \u2192 D25 / C3512",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000219 \u2192 D48 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000220 \u2192 D02 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000221 \u2192 D45 / C3788",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000222 \u2192 D21 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000223 \u2192 D19 / C2123",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000224 \u2192 D32 / C5077",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000225 \u2192 D22 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000226 \u2192 D03 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000227 \u2192 D22 / C0804",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000228 \u2192 D12 / C2945",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000229 \u2192 D10 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000230 \u2192 D23 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000231 \u2192 D45 / unsold",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000232 \u2192 D24 / C1848",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000233 \u2192 D38 / C1629",
+        "LOT-0017 \u2192 PO-0008 \u2192 AUR0000234 \u2192 D20 / C1799"
+      ]
+    }
+  ],
+  "moves": [],
+  "actions": [
+    {
+      "agent": "Quality Sentinel",
+      "tool": "quality.hold_lot",
+      "args": {
+        "lot_id": "LOT-0017"
+      },
+      "why": "Lot LOT-0017 (heavy-duty wiring harness, SUP-07) at P_TX covers builds 2027-02-22 through 2027-02-24. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D02",
+        "vins": [
+          "AUR0000083",
+          "AUR0000220"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D02 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D03",
+        "vins": [
+          "AUR0000008",
+          "AUR0000028",
+          "AUR0000090",
+          "AUR0000226"
+        ]
+      },
+      "why": "Stop sale of 4 unsold vehicle(s) at D03 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D04",
+        "vins": [
+          "AUR0000085",
+          "AUR0000191"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D04 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D06",
+        "vins": [
+          "AUR0000024",
+          "AUR0000027",
+          "AUR0000052",
+          "AUR0000082",
+          "AUR0000188"
+        ]
+      },
+      "why": "Stop sale of 5 unsold vehicle(s) at D06 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D07",
+        "vins": [
+          "AUR0000020",
+          "AUR0000097"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D07 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D08",
+        "vins": [
+          "AUR0000013",
+          "AUR0000117",
+          "AUR0000131",
+          "AUR0000171",
+          "AUR0000215"
+        ]
+      },
+      "why": "Stop sale of 5 unsold vehicle(s) at D08 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D10",
+        "vins": [
+          "AUR0000210",
+          "AUR0000229"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D10 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D12",
+        "vins": [
+          "AUR0000046"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D12 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D13",
+        "vins": [
+          "AUR0000047",
+          "AUR0000198"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D13 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D14",
+        "vins": [
+          "AUR0000120",
+          "AUR0000195"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D14 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D16",
+        "vins": [
+          "AUR0000136"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D16 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D17",
+        "vins": [
+          "AUR0000107"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D17 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D19",
+        "vins": [
+          "AUR0000105"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D19 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D20",
+        "vins": [
+          "AUR0000042",
+          "AUR0000051"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D20 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D21",
+        "vins": [
+          "AUR0000088",
+          "AUR0000089",
+          "AUR0000222"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D21 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D22",
+        "vins": [
+          "AUR0000200",
+          "AUR0000225"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D22 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D23",
+        "vins": [
+          "AUR0000010",
+          "AUR0000173",
+          "AUR0000230"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D23 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D25",
+        "vins": [
+          "AUR0000011",
+          "AUR0000134",
+          "AUR0000178",
+          "AUR0000187",
+          "AUR0000204",
+          "AUR0000207"
+        ]
+      },
+      "why": "Stop sale of 6 unsold vehicle(s) at D25 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D26",
+        "vins": [
+          "AUR0000017",
+          "AUR0000096"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D26 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D27",
+        "vins": [
+          "AUR0000003",
+          "AUR0000186"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D27 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D28",
+        "vins": [
+          "AUR0000022"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D28 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D29",
+        "vins": [
+          "AUR0000034"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D29 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D31",
+        "vins": [
+          "AUR0000031",
+          "AUR0000132"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D31 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D32",
+        "vins": [
+          "AUR0000100",
+          "AUR0000103",
+          "AUR0000169",
+          "AUR0000201"
+        ]
+      },
+      "why": "Stop sale of 4 unsold vehicle(s) at D32 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D33",
+        "vins": [
+          "AUR0000111"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D33 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D34",
+        "vins": [
+          "AUR0000006",
+          "AUR0000019",
+          "AUR0000030"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D34 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D36",
+        "vins": [
+          "AUR0000053",
+          "AUR0000172"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D36 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D37",
+        "vins": [
+          "AUR0000015"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D37 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D38",
+        "vins": [
+          "AUR0000174",
+          "AUR0000209"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D38 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D39",
+        "vins": [
+          "AUR0000025",
+          "AUR0000123"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D39 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D43",
+        "vins": [
+          "AUR0000126",
+          "AUR0000137",
+          "AUR0000217"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D43 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D44",
+        "vins": [
+          "AUR0000109",
+          "AUR0000110"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D44 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D45",
+        "vins": [
+          "AUR0000002",
+          "AUR0000023",
+          "AUR0000035",
+          "AUR0000121",
+          "AUR0000190",
+          "AUR0000194",
+          "AUR0000231"
+        ]
+      },
+      "why": "Stop sale of 7 unsold vehicle(s) at D45 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D46",
+        "vins": [
+          "AUR0000007",
+          "AUR0000093",
+          "AUR0000197"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D46 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D47",
+        "vins": [
+          "AUR0000044"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D47 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D48",
+        "vins": [
+          "AUR0000219"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D48 from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0130",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0130 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0226",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0226 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0419",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0419 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0459",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0459 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0630",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0630 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0641",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0641 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0643",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0643 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0664",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0664 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0665",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0665 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0789",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0789 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0804",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0804 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0832",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0832 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0871",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0871 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1006",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1006 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1218",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1218 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1233",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1233 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1244",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1244 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1367",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1367 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1373",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1373 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1380",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1380 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1508",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1508 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1516",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1516 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1610",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1610 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1629",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1629 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1660",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1660 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1665",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1665 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1735",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1735 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1751",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1751 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1799",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1799 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1800",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1800 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1808",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1808 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1848",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1848 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1876",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1876 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2123",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2123 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2480",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2480 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2499",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2499 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2655",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2655 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2789",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2789 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2919",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2919 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2945",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2945 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3102",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3102 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3196",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3196 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3197",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3197 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3200",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3200 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3277",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3277 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3512",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3512 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3527",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3527 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3634",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3634 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3788",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3788 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3821",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3821 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3896",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3896 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3913",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3913 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3949",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3949 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4029",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4029 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4064",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4064 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4203",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4203 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4248",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4248 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4261",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4261 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4439",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4439 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4449",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4449 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4598",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4598 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4614",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4614 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4711",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4711 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4961",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4961 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5019",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5019 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5077",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5077 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5125",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5125 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5353",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5353 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5356",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5356 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5360",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5360 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5388",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5388 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5443",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5443 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5533",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5533 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5603",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5603 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5654",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5654 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5677",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5677 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5701",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5701 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5751",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5751 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5898",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5898 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6091",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6091 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6168",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6168 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6212",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6212 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6288",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6288 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6446",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6446 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6447",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6447 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6448",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6448 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6490",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6490 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6561",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6561 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6563",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6563 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6624",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6624 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6676",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6676 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6796",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6796 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6829",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6829 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6847",
+        "message": "E-14: quality hold on lot LOT-0017 (heavy-duty wiring harness). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6847 has a sold vehicle from lot LOT-0017. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "quality_hold",
+      "label": "Quality hold",
+      "plant_id": "P_TX",
+      "part_id": "HARN-B",
+      "shipment_id": null,
+      "lot_id": "LOT-0017",
+      "start_date": "2027-02-22",
+      "end_date": "2027-02-24",
+      "orders": [
+        "PO-0001",
+        "PO-0002",
+        "PO-0004",
+        "PO-0005",
+        "PO-0007",
+        "PO-0008"
+      ],
+      "models": [
+        "RANGER",
+        "SUMMIT"
+      ],
+      "narrative": "Walked LOT-0017 \u2192 production orders of models that use HARN-B \u2192 vehicles built at P_TX from 2027-02-22 through 2027-02-24. 180 vehicles: 86 unsold, 94 owners. Rule 6."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Quality hold"
+    ],
+    "tool_calls": 131,
+    "reschedules": 0,
+    "transfers": 0,
+    "dealer_notices": 0,
+    "loaner_checks": 0,
+    "loaners": 0,
+    "lots": 1,
+    "stop_sales": 36,
+    "customers": 94,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.notify_customer",
+      "dealer.stop_sale",
+      "quality.hold_lot"
+    ]
+  }
+}

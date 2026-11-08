@@ -1,0 +1,3171 @@
+{
+  "event_id": "E-03",
+  "received_at": "2027-03-08T07:51:00",
+  "source": "quality bulletin",
+  "text": "Quality alert: Kestrel says the infotainment chip sent to Jackson had a faulty weld. Anything built Thursday Feb 25 through last Monday is suspect.",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": false,
+    "proposal": {
+      "disposition": "act",
+      "incidents": [
+        {
+          "kind": "quality_hold",
+          "plant": "",
+          "part": "infotainment chip",
+          "supplier": "Kestrel",
+          "shipment_id": "",
+          "lot_id": "",
+          "dates": [
+            "Thursday Feb 25",
+            "last Monday"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "ontology reader kept; model reading did not bind to the same incidents"
+  },
+  "incidents": [
+    {
+      "kind": "quality_hold",
+      "plant_id": "P_MS",
+      "part_id": "CHIP-IVI",
+      "supplier_id": "SUP-06",
+      "lot_id": "LOT-0130",
+      "start_date": "2027-02-25",
+      "end_date": "2027-03-01",
+      "evidence": [
+        "LOT-0130",
+        "CHIP-IVI",
+        "2027-02-25",
+        "2027-03-01"
+      ],
+      "span": "Quality alert: Kestrel says the infotainment chip sent to Jackson had a faulty weld. Anything built Thursday Feb 25 through last Monday is suspect."
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Quality hold"
+  ],
+  "summary": "E-03 is Quality hold. 1 lot(s) held, 37 dealer stop-sale call(s), 150 owner(s) contacted.",
+  "reasoning": "Walked LOT-0130 \u2192 production orders of models that use CHIP-IVI \u2192 vehicles built at P_MS from 2027-02-25 through 2027-03-01. 260 vehicles: 110 unsold, 150 owners. Rule 6. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 1 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Quality Sentinel",
+      "did": "Walked LOT-0130 \u2192 production orders of models that use CHIP-IVI \u2192 vehicles built at P_MS from 2027-02-25 through 2027-03-01. 260 vehicles: 110 unsold, 150 owners. Rule 6."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.notify_customer, dealer.stop_sale, quality.hold_lot."
+  ],
+  "paths": [
+    {
+      "incident": "Quality hold",
+      "pattern": "Lot \u2192 ProductionOrder \u2192 Vehicle \u2192 Dealer / Customer",
+      "walk": "Walked LOT-0130 \u2192 production orders of models that use CHIP-IVI \u2192 vehicles built at P_MS from 2027-02-25 through 2027-03-01. 260 vehicles: 110 unsold, 150 owners. Rule 6.",
+      "chains": [
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002036 \u2192 D23 / C1865",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002037 \u2192 D35 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002038 \u2192 D31 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002039 \u2192 D44 / C4865",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002040 \u2192 D25 / C1581",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002041 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002042 \u2192 D21 / C2913",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002043 \u2192 D25 / C1933",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002044 \u2192 D35 / C1677",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002045 \u2192 D29 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002046 \u2192 D05 / C5024",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002047 \u2192 D38 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002048 \u2192 D35 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002049 \u2192 D33 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002050 \u2192 D21 / C6133",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002051 \u2192 D27 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002052 \u2192 D12 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002053 \u2192 D20 / C2493",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002054 \u2192 D17 / C5238",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002055 \u2192 D32 / C0299",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002056 \u2192 D46 / C1693",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002057 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002058 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002059 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002060 \u2192 D20 / C3939",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002061 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0190 \u2192 AUR0002062 \u2192 D03 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002063 \u2192 D19 / C1087",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002064 \u2192 D26 / C1924",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002065 \u2192 D46 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002066 \u2192 D25 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002067 \u2192 D46 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002068 \u2192 D26 / C1086",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002069 \u2192 D26 / C0485",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002070 \u2192 D13 / C4245",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002071 \u2192 D15 / C4757",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002072 \u2192 D07 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002073 \u2192 D32 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002074 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002075 \u2192 D08 / C1837",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002076 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002077 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002078 \u2192 D37 / C6831",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002079 \u2192 D45 / C0633",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002080 \u2192 D06 / C3692",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002081 \u2192 D15 / C6999",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002082 \u2192 D50 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002083 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002084 \u2192 D46 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002085 \u2192 D37 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002086 \u2192 D44 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002087 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002088 \u2192 D10 / unsold",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002089 \u2192 D23 / C6297",
+        "LOT-0130 \u2192 PO-0191 \u2192 AUR0002090 \u2192 D25 / C1311",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002091 \u2192 D44 / C6683",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002092 \u2192 D13 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002093 \u2192 D45 / C4283",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002094 \u2192 D02 / C1383",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002095 \u2192 D44 / C1903",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002096 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002097 \u2192 D08 / C2510",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002098 \u2192 D27 / C0598",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002099 \u2192 D35 / C1228",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002100 \u2192 D26 / C3126",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002101 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002102 \u2192 D35 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002103 \u2192 D25 / C1668",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002104 \u2192 D31 / C5364",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002105 \u2192 D16 / C6542",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002106 \u2192 D46 / C6092",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002107 \u2192 D50 / C2777",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002108 \u2192 D37 / C4315",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002109 \u2192 D43 / C6773",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002110 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002111 \u2192 D25 / C0858",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002112 \u2192 D25 / C3597",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002113 \u2192 D24 / C6603",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002114 \u2192 D20 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002115 \u2192 D35 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002116 \u2192 D45 / C2466",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002117 \u2192 D20 / C0863",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002118 \u2192 D45 / C5564",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002119 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0192 \u2192 AUR0002120 \u2192 D27 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002121 \u2192 D04 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002122 \u2192 D10 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002123 \u2192 D46 / C0491",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002124 \u2192 D08 / C5551",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002125 \u2192 D26 / C3905",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002126 \u2192 D06 / C2213",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002127 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002128 \u2192 D26 / C5834",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002129 \u2192 D08 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002130 \u2192 D33 / C4852",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002131 \u2192 D44 / C0760",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002132 \u2192 D23 / C2464",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002133 \u2192 D24 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002134 \u2192 D27 / C1699",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002135 \u2192 D25 / C1445",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002136 \u2192 D06 / C0038",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002137 \u2192 D49 / C6340",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002138 \u2192 D12 / C0088",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002139 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002140 \u2192 D03 / C0605",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002141 \u2192 D12 / C3673",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002142 \u2192 D25 / C4427",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002143 \u2192 D41 / unsold",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002144 \u2192 D06 / C3005",
+        "LOT-0130 \u2192 PO-0193 \u2192 AUR0002145 \u2192 D16 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002146 \u2192 D15 / C4303",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002147 \u2192 D30 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002148 \u2192 D13 / C4169",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002149 \u2192 D50 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002150 \u2192 D38 / C5647",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002151 \u2192 D46 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002152 \u2192 D07 / C3485",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002153 \u2192 D44 / C4681",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002154 \u2192 D28 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002155 \u2192 D08 / C1771",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002156 \u2192 D46 / C1612",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002157 \u2192 D13 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002158 \u2192 D45 / C4050",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002159 \u2192 D24 / C1678",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002160 \u2192 D21 / C1642",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002161 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002162 \u2192 D35 / C0232",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002163 \u2192 D24 / C1950",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002164 \u2192 D12 / unsold",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002165 \u2192 D08 / C4565",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002166 \u2192 D26 / C2631",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002167 \u2192 D45 / C1240",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002168 \u2192 D38 / C6679",
+        "LOT-0130 \u2192 PO-0194 \u2192 AUR0002169 \u2192 D23 / C0796",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002170 \u2192 D08 / C2026",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002171 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002172 \u2192 D03 / C4833",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002173 \u2192 D26 / C3659",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002174 \u2192 D35 / C4189",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002175 \u2192 D31 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002176 \u2192 D26 / C5108",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002177 \u2192 D46 / C4523",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002178 \u2192 D08 / C0392",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002179 \u2192 D31 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002180 \u2192 D38 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002181 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002182 \u2192 D34 / C6248",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002183 \u2192 D08 / C2203",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002184 \u2192 D38 / C6928",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002185 \u2192 D26 / C5417",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002186 \u2192 D15 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002187 \u2192 D31 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002188 \u2192 D23 / C6614",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002189 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002190 \u2192 D25 / C6699",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002191 \u2192 D08 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002192 \u2192 D46 / C2364",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002193 \u2192 D03 / C3551",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002194 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002195 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002196 \u2192 D08 / C5271",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002197 \u2192 D44 / C6575",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002198 \u2192 D43 / C3930",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002199 \u2192 D03 / C5530",
+        "LOT-0130 \u2192 PO-0195 \u2192 AUR0002200 \u2192 D07 / C4594",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002201 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002202 \u2192 D27 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002203 \u2192 D43 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002204 \u2192 D32 / C6333",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002205 \u2192 D27 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002206 \u2192 D12 / C1341",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002207 \u2192 D39 / C2914",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002208 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002209 \u2192 D18 / C2637",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002210 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002211 \u2192 D26 / C5070",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002212 \u2192 D40 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002213 \u2192 D04 / C1040",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002214 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002215 \u2192 D22 / C1681",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002216 \u2192 D20 / C3995",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002217 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002218 \u2192 D31 / C6618",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002219 \u2192 D20 / C0278",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002220 \u2192 D08 / C1838",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002221 \u2192 D44 / C3305",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002222 \u2192 D16 / C5671",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002223 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0196 \u2192 AUR0002224 \u2192 D12 / C6076",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002225 \u2192 D43 / C2283",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002226 \u2192 D24 / C3852",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002227 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002228 \u2192 D20 / C4663",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002229 \u2192 D45 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002230 \u2192 D20 / C1884",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002231 \u2192 D04 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002232 \u2192 D06 / C6939",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002233 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002234 \u2192 D23 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002235 \u2192 D46 / C3319",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002236 \u2192 D38 / C0089",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002237 \u2192 D19 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002238 \u2192 D08 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002239 \u2192 D16 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002240 \u2192 D42 / C3086",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002241 \u2192 D21 / C0697",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002242 \u2192 D46 / C5511",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002243 \u2192 D25 / C4381",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002244 \u2192 D38 / C3563",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002245 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002246 \u2192 D25 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002247 \u2192 D38 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002248 \u2192 D02 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002249 \u2192 D38 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002250 \u2192 D15 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002251 \u2192 D16 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002252 \u2192 D04 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002253 \u2192 D10 / C1362",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002254 \u2192 D38 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002255 \u2192 D45 / C6716",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002256 \u2192 D46 / C3968",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002257 \u2192 D20 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002258 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002259 \u2192 D06 / C2070",
+        "LOT-0130 \u2192 PO-0197 \u2192 AUR0002260 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002261 \u2192 D44 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002262 \u2192 D26 / C4662",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002263 \u2192 D26 / C6190",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002264 \u2192 D11 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002265 \u2192 D23 / C6074",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002266 \u2192 D34 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002267 \u2192 D26 / C0022",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002268 \u2192 D03 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002269 \u2192 D37 / C5320",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002270 \u2192 D46 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002271 \u2192 D08 / C3589",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002272 \u2192 D24 / C4771",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002273 \u2192 D46 / C1359",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002274 \u2192 D04 / C6719",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002275 \u2192 D34 / C1898",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002276 \u2192 D21 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002277 \u2192 D27 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002278 \u2192 D13 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002279 \u2192 D34 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002280 \u2192 D23 / C4434",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002281 \u2192 D16 / C4942",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002282 \u2192 D43 / C6631",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002283 \u2192 D03 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002284 \u2192 D15 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002285 \u2192 D13 / C1701",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002286 \u2192 D02 / C6003",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002287 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002288 \u2192 D11 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002289 \u2192 D18 / C3647",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002290 \u2192 D30 / C4625",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002291 \u2192 D06 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002292 \u2192 D26 / C1141",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002293 \u2192 D32 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002294 \u2192 D26 / unsold",
+        "LOT-0130 \u2192 PO-0198 \u2192 AUR0002295 \u2192 D08 / C2224"
+      ]
+    }
+  ],
+  "moves": [],
+  "actions": [
+    {
+      "agent": "Quality Sentinel",
+      "tool": "quality.hold_lot",
+      "args": {
+        "lot_id": "LOT-0130"
+      },
+      "why": "Lot LOT-0130 (infotainment chip, SUP-06) at P_MS covers builds 2027-02-25 through 2027-03-01. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D02",
+        "vins": [
+          "AUR0002074",
+          "AUR0002077",
+          "AUR0002083",
+          "AUR0002214",
+          "AUR0002233",
+          "AUR0002248"
+        ]
+      },
+      "why": "Stop sale of 6 unsold vehicle(s) at D02 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D03",
+        "vins": [
+          "AUR0002062",
+          "AUR0002268",
+          "AUR0002283"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D03 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D04",
+        "vins": [
+          "AUR0002121",
+          "AUR0002231",
+          "AUR0002252"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D04 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D06",
+        "vins": [
+          "AUR0002041",
+          "AUR0002058",
+          "AUR0002139",
+          "AUR0002195",
+          "AUR0002260",
+          "AUR0002291"
+        ]
+      },
+      "why": "Stop sale of 6 unsold vehicle(s) at D06 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D07",
+        "vins": [
+          "AUR0002072"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D07 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D08",
+        "vins": [
+          "AUR0002129",
+          "AUR0002191",
+          "AUR0002238"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D08 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D10",
+        "vins": [
+          "AUR0002088",
+          "AUR0002122"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D10 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D11",
+        "vins": [
+          "AUR0002264",
+          "AUR0002288"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D11 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D12",
+        "vins": [
+          "AUR0002052",
+          "AUR0002164"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D12 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D13",
+        "vins": [
+          "AUR0002092",
+          "AUR0002157",
+          "AUR0002278"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D13 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D15",
+        "vins": [
+          "AUR0002186",
+          "AUR0002250",
+          "AUR0002284"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D15 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D16",
+        "vins": [
+          "AUR0002145",
+          "AUR0002239",
+          "AUR0002251"
+        ]
+      },
+      "why": "Stop sale of 3 unsold vehicle(s) at D16 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D19",
+        "vins": [
+          "AUR0002237"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D19 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D20",
+        "vins": [
+          "AUR0002114",
+          "AUR0002257"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D20 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D21",
+        "vins": [
+          "AUR0002057",
+          "AUR0002087",
+          "AUR0002171",
+          "AUR0002201",
+          "AUR0002217",
+          "AUR0002223",
+          "AUR0002245",
+          "AUR0002276"
+        ]
+      },
+      "why": "Stop sale of 8 unsold vehicle(s) at D21 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D23",
+        "vins": [
+          "AUR0002110",
+          "AUR0002119",
+          "AUR0002208",
+          "AUR0002210",
+          "AUR0002227",
+          "AUR0002234"
+        ]
+      },
+      "why": "Stop sale of 6 unsold vehicle(s) at D23 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D24",
+        "vins": [
+          "AUR0002133"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D24 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D25",
+        "vins": [
+          "AUR0002066",
+          "AUR0002246"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D25 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D26",
+        "vins": [
+          "AUR0002059",
+          "AUR0002076",
+          "AUR0002096",
+          "AUR0002161",
+          "AUR0002258",
+          "AUR0002287",
+          "AUR0002294"
+        ]
+      },
+      "why": "Stop sale of 7 unsold vehicle(s) at D26 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D27",
+        "vins": [
+          "AUR0002051",
+          "AUR0002120",
+          "AUR0002202",
+          "AUR0002205",
+          "AUR0002277"
+        ]
+      },
+      "why": "Stop sale of 5 unsold vehicle(s) at D27 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D28",
+        "vins": [
+          "AUR0002154"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D28 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D29",
+        "vins": [
+          "AUR0002045"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D29 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D30",
+        "vins": [
+          "AUR0002147"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D30 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D31",
+        "vins": [
+          "AUR0002038",
+          "AUR0002175",
+          "AUR0002179",
+          "AUR0002187"
+        ]
+      },
+      "why": "Stop sale of 4 unsold vehicle(s) at D31 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D32",
+        "vins": [
+          "AUR0002073",
+          "AUR0002293"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D32 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D33",
+        "vins": [
+          "AUR0002049"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D33 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D34",
+        "vins": [
+          "AUR0002266",
+          "AUR0002279"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D34 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D35",
+        "vins": [
+          "AUR0002037",
+          "AUR0002048",
+          "AUR0002102",
+          "AUR0002115"
+        ]
+      },
+      "why": "Stop sale of 4 unsold vehicle(s) at D35 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D37",
+        "vins": [
+          "AUR0002085"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D37 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D38",
+        "vins": [
+          "AUR0002047",
+          "AUR0002180",
+          "AUR0002247",
+          "AUR0002249",
+          "AUR0002254"
+        ]
+      },
+      "why": "Stop sale of 5 unsold vehicle(s) at D38 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D40",
+        "vins": [
+          "AUR0002212"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D40 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D41",
+        "vins": [
+          "AUR0002143"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D41 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D43",
+        "vins": [
+          "AUR0002203"
+        ]
+      },
+      "why": "Stop sale of 1 unsold vehicle(s) at D43 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D44",
+        "vins": [
+          "AUR0002086",
+          "AUR0002261"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D44 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D45",
+        "vins": [
+          "AUR0002061",
+          "AUR0002101",
+          "AUR0002127",
+          "AUR0002181",
+          "AUR0002189",
+          "AUR0002194",
+          "AUR0002229"
+        ]
+      },
+      "why": "Stop sale of 7 unsold vehicle(s) at D45 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D46",
+        "vins": [
+          "AUR0002065",
+          "AUR0002067",
+          "AUR0002084",
+          "AUR0002151",
+          "AUR0002270"
+        ]
+      },
+      "why": "Stop sale of 5 unsold vehicle(s) at D46 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D50",
+        "vins": [
+          "AUR0002082",
+          "AUR0002149"
+        ]
+      },
+      "why": "Stop sale of 2 unsold vehicle(s) at D50 from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0022",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0022 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0038",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0038 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0088",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0088 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0089",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0089 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0232",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0232 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0278",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0278 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0299",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0299 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0392",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0392 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0485",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0485 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0491",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0491 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0598",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0598 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0605",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0605 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0633",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0633 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0697",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0697 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0760",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0760 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0796",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0796 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0858",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0858 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0863",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C0863 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1040",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1040 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1086",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1086 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1087",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1087 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1141",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1141 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1228",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1228 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1240",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1240 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1311",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1311 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1341",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1341 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1359",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1359 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1362",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1362 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1383",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1383 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1445",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1445 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1581",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1581 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1612",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1612 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1642",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1642 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1668",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1668 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1677",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1677 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1678",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1678 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1681",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1681 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1693",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1693 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1699",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1699 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1701",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1701 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1771",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1771 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1837",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1837 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1838",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1838 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1865",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1865 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1884",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1884 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1898",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1898 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1903",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1903 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1924",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1924 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1933",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1933 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1950",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C1950 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2026",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2026 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2070",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2070 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2203",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2203 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2213",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2213 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2224",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2224 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2283",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2283 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2364",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2364 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2464",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2464 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2466",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2466 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2493",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2493 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2510",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2510 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2631",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2631 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2637",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2637 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2777",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2777 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2913",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2913 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2914",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C2914 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3005",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3005 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3086",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3086 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3126",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3126 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3305",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3305 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3319",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3319 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3485",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3485 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3551",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3551 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3563",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3563 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3589",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3589 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3597",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3597 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3647",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3647 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3659",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3659 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3673",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3673 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3692",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3692 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3852",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3852 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3905",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3905 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3930",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3930 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3939",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3939 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3968",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3968 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3995",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C3995 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4050",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4050 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4169",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4169 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4189",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4189 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4245",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4245 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4283",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4283 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4303",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4303 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4315",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4315 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4381",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4381 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4427",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4427 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4434",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4434 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4523",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4523 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4565",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4565 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4594",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4594 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4625",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4625 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4662",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4662 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4663",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4663 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4681",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4681 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4757",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4757 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4771",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4771 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4833",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4833 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4852",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4852 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4865",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4865 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4942",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C4942 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5024",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5024 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5070",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5070 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5108",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5108 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5238",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5238 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5271",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5271 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5320",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5320 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5364",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5364 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5417",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5417 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5511",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5511 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5530",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5530 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5551",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5551 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5564",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5564 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5647",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5647 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5671",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5671 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5834",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C5834 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6003",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6003 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6074",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6074 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6076",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6076 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6092",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6092 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6133",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6133 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6190",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6190 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6248",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6248 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6297",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6297 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6333",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6333 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6340",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6340 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6542",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6542 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6575",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6575 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6603",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6603 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6614",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6614 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6618",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6618 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6631",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6631 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6679",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6679 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6683",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6683 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6699",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6699 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6716",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6716 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6719",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6719 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6773",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6773 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6831",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6831 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6928",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6928 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6939",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6939 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Quality Sentinel",
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6999",
+        "message": "E-03: quality hold on lot LOT-0130 (infotainment chip). A vehicle you own was built with this lot. Please contact your dealer."
+      },
+      "why": "Owner C6999 has a sold vehicle from lot LOT-0130. Rule 6.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "quality_hold",
+      "label": "Quality hold",
+      "plant_id": "P_MS",
+      "part_id": "CHIP-IVI",
+      "shipment_id": null,
+      "lot_id": "LOT-0130",
+      "start_date": "2027-02-25",
+      "end_date": "2027-03-01",
+      "orders": [
+        "PO-0190",
+        "PO-0191",
+        "PO-0192",
+        "PO-0193",
+        "PO-0194",
+        "PO-0195",
+        "PO-0196",
+        "PO-0197",
+        "PO-0198"
+      ],
+      "models": [
+        "NOVA",
+        "PIONEER",
+        "SUMMIT",
+        "TERRA",
+        "VOYAGER"
+      ],
+      "narrative": "Walked LOT-0130 \u2192 production orders of models that use CHIP-IVI \u2192 vehicles built at P_MS from 2027-02-25 through 2027-03-01. 260 vehicles: 110 unsold, 150 owners. Rule 6."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Quality hold"
+    ],
+    "tool_calls": 188,
+    "reschedules": 0,
+    "transfers": 0,
+    "dealer_notices": 0,
+    "loaner_checks": 0,
+    "loaners": 0,
+    "lots": 1,
+    "stop_sales": 37,
+    "customers": 150,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.notify_customer",
+      "dealer.stop_sale",
+      "quality.hold_lot"
+    ]
+  }
+}

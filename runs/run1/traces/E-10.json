@@ -1,0 +1,767 @@
+{
+  "event_id": "E-10",
+  "received_at": "2027-03-08T09:50:00",
+  "source": "ops chat",
+  "text": "Huntsville line is waiting on 60 kWh battery packs from Lumen. Original drop was Monday Mar 29, new ETA is Thursday Apr 1 because of a truck breakdown.",
+  "disposition": "act",
+  "llm": {
+    "used": true,
+    "model": "llama3.2:3b",
+    "agrees": true,
+    "proposal": {
+      "disposition": "act",
+      "incidents": [
+        {
+          "kind": "supplier_delay",
+          "plant": "Huntsville line",
+          "part": "60 kWh battery packs",
+          "supplier": "Lumen",
+          "dates": [
+            "Monday Mar 29",
+            "Thursday Apr 1"
+          ]
+        }
+      ],
+      "model": "llama3.2:3b"
+    },
+    "note": "model and ontology reader agree"
+  },
+  "incidents": [
+    {
+      "kind": "supplier_delay",
+      "plant_id": "P_AL",
+      "part_id": "BATT-60",
+      "supplier_id": "SUP-18",
+      "shipment_id": "SH-0248",
+      "start_date": "2027-03-29",
+      "end_date": "2027-04-01",
+      "old_idx": 15,
+      "new_idx": 18,
+      "ready_idx": 18,
+      "evidence": [
+        "SH-0248",
+        "BATT-60",
+        "2027-03-29",
+        "2027-04-01"
+      ],
+      "span": "Huntsville line 60 kWh battery packs Lumen   Monday Mar 29 Thursday Apr 1"
+    }
+  ],
+  "incomplete": [],
+  "categories": [
+    "Supplier delay"
+  ],
+  "summary": "E-10 is Supplier delay. 3 production orders move (3 rescheduled, 0 transferred). 18 dealer notice(s) and 7 loaner assignment(s).",
+  "reasoning": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Placed 3 at the same plant and transferred 0. Rule 4: 18 dealer notice(s), one each, listing only affected customer orders. Rule 5: 7 loaner(s) for Platinum and Gold in priority order; 0 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only. Guardrail: only orders, vehicles, dealers, and customers reached by the walk are touched. Shared slots and loaner pools are one board for the whole event, so a compound message cannot double-book them.",
+  "handoffs": [
+    {
+      "agent": "Coordinator",
+      "did": "Split the message into 1 incident(s) and dispatched specialists."
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "did": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Placed 3 at the same plant and transferred 0."
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "did": "Rule 4: 18 dealer notice(s), one each, listing only affected customer orders. Rule 5: 7 loaner(s) for Platinum and Gold in priority order; 0 entitled order(s) left without a car because the pool ran out. Standard customers are on the dealer notice only."
+    }
+  ],
+  "guardrails": [
+    "Every id was resolved through the ontology before a tool was built.",
+    "Unaffected production orders are left on their original day.",
+    "Write tools used: crm.assign_loaner, dealer.notify, mes.reschedule."
+  ],
+  "paths": [
+    {
+      "incident": "Supplier delay",
+      "pattern": "Shipment \u2192 Part \u2192 Model (BOM) \u2192 ProductionOrder \u2192 CustomerOrder \u2192 Dealer / Customer",
+      "walk": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Placed 3 at the same plant and transferred 0.",
+      "chains": [
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02575 \u2192 D04 / C6785",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02576 \u2192 D20 / C1069",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02577 \u2192 D45 / C5954",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02578 \u2192 D20 / C3147",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02579 \u2192 D23 / C1129",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02580 \u2192 D28 / C6660",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02581 \u2192 D47 / C1608",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02582 \u2192 D45 / C1237",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0437 \u2192 CO-02583 \u2192 D31 / C6520",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02603 \u2192 D23 / C1708",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02604 \u2192 D27 / C3999",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02605 \u2192 D34 / C1094",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02606 \u2192 D45 / C0208",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02607 \u2192 D21 / C0987",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02608 \u2192 D45 / C1917",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02609 \u2192 D34 / C0990",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02610 \u2192 D44 / C4939",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02611 \u2192 D10 / C5976",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0440 \u2192 CO-02612 \u2192 D46 / C0979",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02630 \u2192 D27 / C2182",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02631 \u2192 D20 / C1565",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02632 \u2192 D45 / C0466",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02633 \u2192 D46 / C3218",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02634 \u2192 D17 / C3279",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02635 \u2192 D45 / C5474",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02636 \u2192 D25 / C3028",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02637 \u2192 D08 / C2439",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02638 \u2192 D02 / C1633",
+        "SH-0248 \u2192 BATT-60 \u2192 NOVA (BOM) \u2192 PO-0443 \u2192 CO-02639 \u2192 D48 / C6332"
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "production_order_id": "PO-0437",
+      "model": "NOVA",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-29",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0437",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0440",
+      "model": "NOVA",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-30",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-01",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0440",
+        "new_date": "2027-04-01"
+      },
+      "free_before": 1,
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5)."
+    },
+    {
+      "production_order_id": "PO-0443",
+      "model": "NOVA",
+      "from_plant": "P_AL",
+      "from_date": "2027-03-31",
+      "to_plant": "P_AL",
+      "to_date": "2027-04-02",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0443",
+        "new_date": "2027-04-02"
+      },
+      "free_before": 2,
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5)."
+    }
+  ],
+  "actions": [
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0437",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0437",
+        "plant_id": "P_AL",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0440",
+        "new_date": "2027-04-01"
+      },
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (1 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0440",
+        "plant_id": "P_AL",
+        "date": "2027-04-01"
+      }
+    },
+    {
+      "agent": "Supply Chain Planner",
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0443",
+        "new_date": "2027-04-02"
+      },
+      "why": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Earliest same-plant day on or after 2027-04-01 with a free slot (2 open of 5).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "production_order_id": "PO-0443",
+        "plant_id": "P_AL",
+        "date": "2027-04-02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-02638"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D02 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D04",
+        "customer_order_ids": [
+          "CO-02575"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D04 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-02637"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D08 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D10",
+        "customer_order_ids": [
+          "CO-02611"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D10 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D17",
+        "customer_order_ids": [
+          "CO-02634"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D17 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-02576",
+          "CO-02578",
+          "CO-02631"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D20 for 3 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-02607"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D21 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D23",
+        "customer_order_ids": [
+          "CO-02579",
+          "CO-02603"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D23 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-02636"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D25 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D27",
+        "customer_order_ids": [
+          "CO-02604",
+          "CO-02630"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D27 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D28",
+        "customer_order_ids": [
+          "CO-02580"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D28 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-02583"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D31 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D34",
+        "customer_order_ids": [
+          "CO-02605",
+          "CO-02609"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D34 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-02610"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D44 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-02577",
+          "CO-02582",
+          "CO-02606",
+          "CO-02608",
+          "CO-02632",
+          "CO-02635"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D45 for 6 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D46",
+        "customer_order_ids": [
+          "CO-02612",
+          "CO-02633"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D46 for 2 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D47",
+        "customer_order_ids": [
+          "CO-02581"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D47 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D48",
+        "customer_order_ids": [
+          "CO-02639"
+        ],
+        "message": "E-10: timing changed for the listed customer orders (delay of 60 kWh battery pack (SH-0248) into P_AL, now due 2027-04-01). Builds move to the earliest feasible slot. This notice lists only those orders."
+      },
+      "why": "One notice to D48 for 1 affected customer order(s). Rule 4.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D02"
+      },
+      "why": "Pool check before assigning loaners at D02 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D02",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02638"
+      },
+      "why": "Gold order CO-02638 (promised 2027-04-04) is inside D02's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D02"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D04"
+      },
+      "why": "Pool check before assigning loaners at D04 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D04",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02575"
+      },
+      "why": "Gold order CO-02575 (promised 2027-04-01) is inside D04's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D04"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D20"
+      },
+      "why": "Pool check before assigning loaners at D20 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D20",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02578"
+      },
+      "why": "Gold order CO-02578 (promised 2027-04-03) is inside D20's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D20"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D23"
+      },
+      "why": "Pool check before assigning loaners at D23 (2 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D23",
+        "available": 2
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02579"
+      },
+      "why": "Gold order CO-02579 (promised 2027-04-02) is inside D23's pool of 2. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D23"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D25"
+      },
+      "why": "Pool check before assigning loaners at D25 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D25",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02636"
+      },
+      "why": "Platinum order CO-02636 (promised 2027-04-03) is inside D25's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D25"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D27"
+      },
+      "why": "Pool check before assigning loaners at D27 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D27",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02604"
+      },
+      "why": "Gold order CO-02604 (promised 2027-04-04) is inside D27's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D27"
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D34"
+      },
+      "why": "Pool check before assigning loaners at D34 (1 on the book, 1 entitled).",
+      "ok": true,
+      "error": null,
+      "result": {
+        "dealer_id": "D34",
+        "available": 1
+      }
+    },
+    {
+      "agent": "Dealer & Customer Desk",
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-02605"
+      },
+      "why": "Gold order CO-02605 (promised 2027-04-03) is inside D34's pool of 1. Rule 5.",
+      "ok": true,
+      "error": null,
+      "result": {
+        "ok": true,
+        "dealer_id": "D34"
+      }
+    }
+  ],
+  "incident_reports": [
+    {
+      "kind": "supplier_delay",
+      "label": "Supplier delay",
+      "plant_id": "P_AL",
+      "part_id": "BATT-60",
+      "shipment_id": "SH-0248",
+      "lot_id": null,
+      "start_date": "2027-03-29",
+      "end_date": "2027-04-01",
+      "orders": [
+        "PO-0437",
+        "PO-0440",
+        "PO-0443"
+      ],
+      "models": [
+        "NOVA"
+      ],
+      "narrative": "Walked SH-0248 \u2192 BATT-60 \u2192 NOVA (bill of materials) \u2192 production orders at P_AL from 2027-03-29 up to 2027-04-01. 3 orders need the delayed part. Rule 1 and rule 3. Placed 3 at the same plant and transferred 0."
+    }
+  ],
+  "stats": {
+    "categories": [
+      "Supplier delay"
+    ],
+    "tool_calls": 35,
+    "reschedules": 3,
+    "transfers": 0,
+    "dealer_notices": 18,
+    "loaner_checks": 7,
+    "loaners": 7,
+    "lots": 0,
+    "stop_sales": 0,
+    "customers": 0,
+    "escalations": 0,
+    "write_kinds": [
+      "crm.assign_loaner",
+      "dealer.notify",
+      "mes.reschedule"
+    ]
+  }
+}

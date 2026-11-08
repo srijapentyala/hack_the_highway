@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wacky Wheels Control Tower</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --surface: #ffffff; --sunk: #f1f0ed; --sel: #efeee9;
+    --ink: #18181b; --ink2: #3f3f46; --muted: #71717a; --faint: #a1a1aa;
+    --line: #e7e5e4; --line2: #d6d3d1;
+    --outage: #dc2626; --delay: #b7791f; --quality: #2563eb; --noise: #78716c; --rumor: #7c3aed;
+    --ok: #15803d; --bad: #dc2626;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #0e0e10; --surface: #161618; --sunk: #1c1c1f; --sel: #1f1f23;
+    --ink: #f4f4f5; --ink2: #d4d4d8; --muted: #a1a1aa; --faint: #71717a;
+    --line: #26262a; --line2: #3a3a40;
+    --outage: #f87171; --delay: #facc15; --quality: #60a5fa; --noise: #a8a29e; --rumor: #a78bfa;
+    --ok: #4ade80; --bad: #f87171;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg); color: var(--ink);
+    font: 14px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .hidden { display: none !important; }
+  .mono { font-family: var(--mono); }
+  .muted { color: var(--muted); }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 9px; border: 2px solid var(--bg); }
+
+  /* header */
+  header { display: flex; align-items: center; gap: 28px; height: 56px; padding: 0 24px; border-bottom: 1px solid var(--line); background: var(--surface); flex: none; }
+  .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .brand svg { width: 20px; height: 20px; }
+  .brand b { font-weight: 650; letter-spacing: -0.01em; }
+  .brand span { color: var(--muted); }
+  nav { display: flex; gap: 2px; height: 100%; }
+  nav button { position: relative; border: 0; background: none; padding: 0 12px; height: 100%; cursor: pointer; color: var(--muted); }
+  nav button:hover { color: var(--ink); }
+  nav button.on { color: var(--ink); font-weight: 600; }
+  nav button.on::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--ink); }
+  .hr { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .model { font: 12px var(--mono); color: var(--muted); display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .model::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+  select { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 8px; font-size: 13px; color: var(--ink2); cursor: pointer; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line2); background: var(--surface); border-radius: 8px; padding: 7px 14px; cursor: pointer; font-weight: 550; white-space: nowrap; }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn.primary:hover { opacity: .88; }
+  .btn svg { width: 10px; height: 10px; }
+  .btn.live { background: var(--surface); color: var(--outage); border-color: var(--outage); }
+  .icon { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; display: grid; place-items: center; color: var(--ink2); }
+  .icon svg { width: 16px; height: 16px; }
+  .rec { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.2s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: .2; } }
+
+  /* summary bar */
+  .bar { position: relative; display: flex; align-items: center; gap: 22px; padding: 0 24px; height: 40px; border-bottom: 1px solid var(--line); background: var(--surface); font-size: 13px; color: var(--muted); flex: none; white-space: nowrap; overflow-x: auto; }
+  .bar b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; margin-right: 4px; }
+  .bar button { border: 0; background: none; padding: 0; cursor: pointer; color: inherit; }
+  .bar button:hover b { text-decoration: underline; text-underline-offset: 3px; }
+  .bar .right { margin-left: auto; }
+  .bar .live { color: var(--outage); font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+  .bar .prog { position: absolute; left: 0; bottom: -1px; height: 2px; background: var(--ink); transition: width .5s ease; }
+
+  /* floor */
+  #tower { flex: 1; min-height: 0; display: grid; grid-template-columns: 330px minmax(0, 1fr); }
+  .feed { border-right: 1px solid var(--line); overflow: auto; background: var(--surface); }
+  .filters { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 4px; padding: 12px 14px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .filters button { border: 0; background: none; padding: 4px 9px; border-radius: 6px; cursor: pointer; color: var(--muted); font-size: 12.5px; }
+  .filters button:hover { color: var(--ink); background: var(--sunk); }
+  .filters button.on { color: var(--ink); background: var(--sel); font-weight: 600; }
+  .row { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 13px 16px 13px 18px; cursor: pointer; position: relative; }
+  .row:hover { background: var(--sunk); }
+  .row.on { background: var(--sel); }
+  .row.on::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--ink); }
+  .r1 { display: flex; align-items: baseline; gap: 8px; }
+  .r1 b { font-weight: 650; }
+  .r1 .when { margin-left: auto; font: 12px var(--mono); color: var(--faint); }
+  .r2 { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink2); margin-top: 3px; }
+  .r3 { font-size: 13px; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex: none; display: inline-block; }
+  .row.arrive { animation: arrive .5s ease both; }
+  @keyframes arrive { from { opacity: 0; transform: translateY(-6px); } }
+  .empty { padding: 28px 18px; color: var(--muted); font-size: 13px; }
+
+  /* detail */
+  #detail { overflow: auto; }
+  .wrap { max-width: 960px; padding: 36px 48px 80px; }
+  .eyebrow { font-size: 13px; color: var(--muted); }
+  .eyebrow b { color: var(--ink); font: 600 13px var(--mono); }
+  h1 { margin: 8px 0 0; font-size: 26px; line-height: 1.3; font-weight: 600; letter-spacing: -0.015em; max-width: 30em; }
+  h1.now { color: var(--ink2); font-weight: 500; }
+  .tags { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 13px; color: var(--ink2); }
+  .tags span { display: inline-flex; align-items: center; gap: 7px; }
+  .tags .soft { color: var(--muted); }
+  .ctl { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+  .hint { font-size: 12px; color: var(--faint); }
+  kbd { font: 11px var(--mono); border: 1px solid var(--line2); border-radius: 4px; padding: 0 4px; color: var(--muted); }
+  .rprog { flex: 1; max-width: 360px; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .rprog i { display: block; height: 100%; background: var(--ink); transition: width .4s ease; }
+  .rstep { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+
+  .sec { padding: 30px 0 4px; margin-top: 30px; border-top: 1px solid var(--line); }
+  .sec.first { border-top: 0; margin-top: 26px; padding-top: 0; }
+  h2 { margin: 0 0 16px; font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); display: flex; align-items: baseline; gap: 12px; }
+  h2 small { font-size: 12.5px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--faint); }
+  h2 .end { margin-left: auto; }
+  .two { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 48px; }
+  .in { animation: rise .45s ease both; }
+  #pace { display: none; }
+  .hero { max-width: 1120px; }
+  .hero .eyebrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .hero .eyebrow .pill { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--ink2); padding: 3px 10px 3px 8px; border-radius: 20px; background: var(--sunk); }
+  h1.big { margin: 14px 0 0; font-size: 36px; line-height: 1.15; font-weight: 700; letter-spacing: -0.03em; max-width: 26em; }
+  .subline { margin: 10px 0 0; font-size: 16px; color: var(--muted); }
+  .herofig { margin-top: 18px; }
+  .herofig .simbar { margin-bottom: 10px; }
+  .simnow { display: flex; align-items: center; gap: 10px; min-height: 46px; margin-top: 12px; padding: 12px 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: 15px; }
+  .simnow i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .simnow b { font-weight: 700; white-space: nowrap; }
+  .simnow .arr { color: var(--faint); }
+  .simnow span { color: var(--ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .simnow em { margin-left: auto; font-style: normal; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .simnow .ok { color: var(--ok); font-weight: 700; }
+  .siminspect { margin-top: 10px; }
+  .bignums { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 20px; }
+  .bn { padding: 14px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+  .bn b { display: block; font-size: 38px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .bn span { display: block; margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .detrow { margin-top: 26px; }
+  .details { margin-top: 8px; }
+  .row .r2 span { font-size: 13.5px; color: var(--ink); }
+  @media (max-width: 720px) { h1.big { font-size: 26px; } .bn b { font-size: 34px; } .simnow { font-size: 13px; } .simnow span { display: none; } }
+  .simbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .simprog { flex: 1; min-width: 140px; max-width: 280px; height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; margin-left: auto; }
+  .simprog i { display: block; height: 100%; width: 0; background: var(--ink); }
+  .simwrap { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 12px 14px 6px; }
+  .simwrap svg { display: block; width: 100%; height: auto; }
+  .sim-hd { font: 600 9.5px var(--sans); letter-spacing: .12em; fill: var(--faint); }
+  .sim-e { fill: none; stroke: var(--line2); stroke-width: 1.6; }
+  .sim-e.off { stroke-dasharray: 3 4; opacity: .45; }
+  .sim-card { cursor: pointer; }
+  .sc-bg { fill: var(--surface); stroke: var(--line2); stroke-width: 1.2; transition: stroke .2s, fill .2s; }
+  .sim-card:hover .sc-bg { stroke: var(--ink); }
+  .sim-card.on .sc-bg { stroke: var(--c); stroke-width: 2.2; fill: color-mix(in srgb, var(--c) 7%, var(--surface)); }
+  .sim-card.idle { opacity: .4; }
+  .sim-card.picked .sc-bg { stroke: var(--ink); stroke-width: 2.2; }
+  .sc-t { font: 600 13px var(--sans); fill: var(--ink); }
+  .sc-s { font: 11px var(--sans); fill: var(--muted); }
+  .sc-st { font: 600 11.5px var(--sans); fill: var(--c); }
+  .sc-n { font: 600 21px var(--sans); fill: var(--ink); font-variant-numeric: tabular-nums; }
+  .sc-nl { font: 10px var(--sans); fill: var(--faint); }
+  .sim-ico { fill: none; stroke: #059669; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .sim-pk { stroke: #fff; stroke-width: 1.5; }
+  .sim-badge { font: 600 12.5px var(--sans); fill: #059669; }
+  .simlow { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 18px; margin-top: 16px; }
+  .simlog { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 4px 14px; min-height: 120px; }
+  .lrow { display: grid; grid-template-columns: 8px 128px 132px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+  .lrow:first-child { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+  .lrow:last-of-type { border-bottom: 0; }
+  .lrow i { width: 8px; height: 8px; border-radius: 50%; }
+  .lrow b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lrow code { font: 12px var(--mono); color: var(--ink2); }
+  .lrow span { font: 12px var(--mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lmore { padding: 9px 0; font-size: 12.5px; color: var(--muted); }
+  .siminspect { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 14px 16px; font-size: 13px; line-height: 1.55; color: var(--ink2); min-height: 120px; }
+  .siminspect p { margin: 6px 0 0; }
+  .insrow { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+  .insrow code { font: 12px var(--mono); } .insrow span { font: 12px var(--mono); color: var(--muted); }
+  details.trace { margin-top: 16px; }
+  details.trace summary { cursor: pointer; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  @media (max-width: 980px) { .simlow { grid-template-columns: 1fr; } .lrow { grid-template-columns: 8px minmax(0, 1fr) auto; } .lrow code, .lrow span { display: none; } }
+  .usec h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; text-transform: none; color: var(--ink); align-items: center; }
+  .usec h2 .num { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--bg); display: inline-grid; place-items: center; font-size: 12.5px; font-weight: 700; flex: none; }
+  .usec h2 small { font-weight: 400; }
+  .usec.cur { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--ink); border-radius: 12px; padding: 22px 24px 18px; }
+  .sub { margin: 0 0 12px; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .lead { margin: 0 0 12px; font-size: 16px; line-height: 1.55; font-weight: 600; color: var(--ink); max-width: 46em; }
+  .steps { display: flex; flex-wrap: wrap; gap: 6px 16px; width: 100%; font-size: 12.5px; color: var(--faint); }
+  .ctl { flex-wrap: wrap; }
+  .ctl.sticky { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 12px 0; margin-bottom: -6px; border-bottom: 1px solid var(--line); }
+  .steps .done { color: var(--muted); } .steps .on { color: var(--ink); font-weight: 700; }
+  .btn:disabled { opacity: .35; cursor: default; }
+  .chainrow + .chainrow { margin-top: 22px; }
+  .chainhead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 12px; font-size: 12.5px; }
+  .chainhead .pill { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; color: var(--ink2); }
+  .chainhead code { font: 11.5px var(--mono); color: var(--ink2); }
+  .chain { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding-bottom: 4px; }
+  .cbox { flex: 1 1 0; min-width: 120px; border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; background: var(--surface); }
+  .cbox.root { border-color: var(--ink); }
+  .cbox span { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .cbox b { display: block; font-size: 22px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .cbox em { display: block; font-style: normal; font: 11.5px var(--mono); color: var(--faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .carrow { display: grid; place-items: center; padding: 0 8px; color: var(--faint); font-size: 18px; flex: none; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  .link { border: 0; background: none; padding: 0; cursor: pointer; color: var(--ink2); font-size: 13px; text-decoration: underline; text-decoration-color: var(--line2); text-underline-offset: 3px; }
+  .link:hover { color: var(--ink); text-decoration-color: var(--ink); }
+
+  /* outcome numbers */
+  .nums { display: flex; flex-wrap: wrap; gap: 14px 48px; }
+  .num b { display: block; font-size: 34px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .num span { display: block; font-size: 13px; color: var(--ink2); margin-top: 4px; }
+  .num small { display: block; font-size: 12px; color: var(--faint); }
+
+  /* message */
+  .quote { margin: 0; font-size: 16.5px; line-height: 1.75; color: var(--ink); white-space: pre-wrap; }
+  .tk { position: relative; border-bottom: 2px solid var(--k); cursor: help; }
+  .k-plant { --k: #0891b2; } .k-part { --k: #16a34a; } .k-shipment, .k-lot { --k: #7c3aed; } .k-supplier { --k: #db2777; } .k-date { --k: #ca8a04; }
+  .k-hedge { --k: var(--rumor); } .tk.k-hedge { border-bottom-style: dashed; }
+  .k-off { --k: var(--faint); } .tk.k-off { border-bottom: 0; text-decoration: line-through; text-decoration-color: var(--faint); }
+  .tk:hover::after { content: attr(data-tip); position: absolute; left: 0; bottom: calc(100% + 6px); white-space: nowrap; z-index: 10;
+    font: 500 12px var(--sans); color: var(--bg); background: var(--ink); padding: 4px 8px; border-radius: 6px; pointer-events: none; }
+  sup.n { font: 700 10px var(--sans); color: var(--c); margin-right: 3px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; font-size: 12px; color: var(--muted); }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 2px; background: var(--k); margin-right: 6px; vertical-align: 3px; }
+  .inc + .inc { margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line); }
+  .inct { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+  .inct .muted { margin-left: auto; font-weight: 400; font-size: 12.5px; }
+  dl { display: grid; grid-template-columns: 84px 1fr; gap: 6px 12px; margin: 10px 0 0; font-size: 13px; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-family: var(--mono); font-size: 12.5px; }
+  dd small { font-family: var(--sans); color: var(--muted); margin-left: 6px; font-size: 12px; }
+  .note { margin: 16px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  .note b { color: var(--ink2); font-weight: 600; }
+
+  /* agents */
+  .agents { list-style: none; margin: 0; padding: 0; }
+  .agents li { display: grid; grid-template-columns: 26px 190px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .agents li:last-child { border-bottom: 0; }
+  .agents .ix { font: 12px var(--mono); color: var(--faint); padding-top: 1px; }
+  .agents .who b { display: block; font-weight: 600; }
+  .agents .who span { font-size: 12.5px; color: var(--muted); }
+  .agents .did { font-size: 13.5px; color: var(--ink2); line-height: 1.55; }
+  .agents .tools { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font: 12px var(--mono); color: var(--muted); }
+  .agents .tools b { color: var(--ink); font-weight: 600; }
+  .agents li.idle .who b, .agents li.idle .did { color: var(--faint); }
+  .agents li.now { background: linear-gradient(90deg, var(--sel), transparent); }
+
+  /* graph */
+  .path + .path { margin-top: 30px; }
+  .pathhead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 14px; font-size: 13px; }
+  .pathhead b { font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+  .pathhead .pat { font: 12px var(--mono); color: var(--muted); }
+  .pathhead .cnt { margin-left: auto; font-size: 12.5px; color: var(--faint); }
+  .fan { width: 100%; height: auto; display: block; overflow: visible; }
+  .fan .ch { font: 600 9.5px var(--sans); letter-spacing: .1em; fill: var(--faint); }
+  .fan .cn { font: 500 14px var(--sans); fill: var(--ink); }
+  .fan .node { cursor: pointer; transition: opacity .15s; }
+  .fan .node rect { fill: var(--surface); stroke: var(--line2); }
+  .fan .node.root rect { stroke: var(--c); stroke-width: 1.5; }
+  .fan .node:hover rect { stroke: var(--ink); }
+  .fan .node text { font: 11.5px var(--mono); fill: var(--ink); }
+  .fan .node .w { fill: var(--faint); font-size: 10px; }
+  .fan .node.more rect { fill: none; stroke-dasharray: 3 3; }
+  .fan .node.more text { fill: var(--muted); font-family: var(--sans); }
+  .fan .edge { fill: none; stroke: var(--c); stroke-opacity: .3; transition: stroke-opacity .15s; }
+  .fan.focus .edge { stroke-opacity: .06; }
+  .fan.focus .edge.lit { stroke-opacity: .9; }
+  .fan.focus .node { opacity: .3; }
+  .fan.focus .node.lit { opacity: 1; }
+  .cap { margin-top: 10px; font: 12px var(--mono); color: var(--faint); min-height: 18px; }
+  .cap em { font-style: normal; color: var(--ink2); }
+  .chains { margin-top: 12px; max-height: 220px; overflow: auto; padding: 10px 12px; background: var(--sunk); border-radius: 8px; font: 12px/1.7 var(--mono); color: var(--ink2); }
+
+  /* slots */
+  .slots { width: 100%; height: auto; display: block; }
+  .slots .lane { fill: none; stroke: var(--line); }
+  .slots .lab { font: 600 11px var(--mono); fill: var(--ink); }
+  .slots .lab2 { font: 10px var(--sans); fill: var(--muted); }
+  .slots .ax { font: 10px var(--mono); fill: var(--faint); }
+  .slots .ax.now { fill: var(--ink); font-weight: 700; }
+  .slots .axm { font: 600 9.5px var(--sans); letter-spacing: .1em; fill: var(--muted); }
+  .slots .win { fill: var(--c); fill-opacity: .07; stroke: var(--c); stroke-opacity: .35; stroke-dasharray: 3 3; }
+  .slots .winl { font: 600 9px var(--sans); letter-spacing: .08em; fill: var(--c); }
+  .slots .today { stroke: var(--ink); stroke-opacity: .25; stroke-dasharray: 2 3; }
+  .s-booked { fill: var(--line2); }
+  .s-placed { fill: var(--ok); }
+  .s-in { fill: var(--ink); }
+  .s-free { fill: none; stroke: var(--line2); }
+  .s-out { fill: none; stroke: var(--c); stroke-width: 1.3; }
+  .key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .key i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+  /* quality split */
+  .split { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 18px 0 10px; background: var(--quality); }
+  .split i { display: block; background: var(--delay); }
+
+  /* why not */
+  .checks { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+  .checks li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; font-size: 13.5px; color: var(--ink2); }
+  .checks .y { color: var(--ok); font-weight: 700; }
+  .checks .x { color: var(--bad); font-weight: 700; }
+  .ticket { margin-top: 18px; padding: 12px 14px; border: 1px dashed var(--line2); border-radius: 8px; font-size: 13px; color: var(--ink2); }
+  .ticket .tt { display: flex; justify-content: space-between; font: 600 12px var(--mono); color: var(--ink); margin-bottom: 6px; }
+  .prose { font-size: 14px; line-height: 1.65; color: var(--ink2); margin: 0; max-width: 46em; }
+
+  /* actions & tables */
+  .toollist { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 40px; }
+  .toollist div { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .toollist code { font: 12.5px var(--mono); color: var(--ink2); }
+  .toollist b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tablewrap { margin-top: 16px; max-height: 420px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { position: sticky; top: 0; background: var(--surface); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); z-index: 1; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: var(--sunk); }
+  td.m { font: 12.5px var(--mono); color: var(--ink2); }
+  td.f { color: var(--faint); font: 12px var(--mono); }
+  .ok { color: var(--ok); font-weight: 600; font-size: 12.5px; }
+  .bad { color: var(--bad); font-weight: 600; font-size: 12.5px; }
+
+  /* pages */
+  .page { flex: 1; min-height: 0; overflow: auto; }
+  .page .wrap { max-width: 1080px; }
+  .ptitle { margin: 0; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+  .lede { margin: 10px 0 0; font-size: 15px; line-height: 1.6; color: var(--ink2); max-width: 44em; }
+  .crew4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 32px; border-top: 1px solid var(--line); }
+  .crew4 > div { padding: 22px 22px 22px 0; border-right: 1px solid var(--line); }
+  .crew4 > div + div { padding-left: 22px; }
+  .crew4 > div:last-child { border-right: 0; }
+  .crew4 .ix { font: 12px var(--mono); color: var(--faint); }
+  .crew4 h3 { margin: 6px 0 2px; font-size: 16px; font-weight: 600; }
+  .crew4 .role { font-size: 13px; color: var(--muted); }
+  .crew4 p { font-size: 13px; line-height: 1.6; color: var(--ink2); margin: 14px 0 0; }
+  .crew4 .big { display: flex; gap: 26px; margin-top: 18px; }
+  .crew4 .big b { display: block; font-size: 26px; font-weight: 500; }
+  .crew4 .big span { font-size: 12px; color: var(--muted); }
+  .crew4 .tl { margin-top: 16px; font: 12px var(--mono); color: var(--ink2); }
+  .crew4 .tl div { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--line); }
+  .crew4 .evs { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 14px; }
+  .crew4 .evs button { border: 0; background: none; padding: 0; font: 12px var(--mono); color: var(--muted); cursor: pointer; }
+  .crew4 .evs button:hover { color: var(--ink); text-decoration: underline; }
+  .omap { width: 100%; height: auto; display: block; margin-top: 8px; }
+  .omap .on rect { fill: var(--surface); stroke: var(--line2); }
+  .omap .on .ot { font: 600 9.5px var(--sans); letter-spacing: .08em; fill: var(--muted); }
+  .omap .on .oc { font: 500 17px var(--sans); fill: var(--ink); }
+  .omap .oe .w { fill: none; stroke: var(--line2); stroke-width: 1.4; }
+  .omap .oe text { font: 9.5px var(--mono); fill: var(--faint); }
+  .omap .oe, .omap .on { transition: opacity .2s; }
+  .omap.walking .oe:not(.lit), .omap.walking .on:not(.lit) { opacity: .22; }
+  .omap.walking .oe.lit .w { stroke: var(--c); stroke-width: 2; }
+  .omap.walking .oe.lit text { fill: var(--c); }
+  .omap.walking .on.lit rect { stroke: var(--c); }
+  .walks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .walks button { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: var(--ink2); }
+  .walks button.on { border-color: var(--c); color: var(--ink); background: var(--sel); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .list div { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .list div span { color: var(--ink2); }
+  .list div em { font-style: normal; font-family: var(--mono); color: var(--muted); font-size: 12.5px; }
+  .list div small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .walkrows div { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .walkrows b { width: 120px; flex: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  .walkrows code { font: 12.5px var(--mono); color: var(--ink2); }
+  .tools-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 26px; }
+  .search { flex: 1; min-width: 200px; max-width: 360px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 12px; }
+  .card { margin-top: 32px; }
+  .card h2 { margin-top: 34px; }
+  .gates6 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  .gates6 button { text-align: left; border: 0; border-right: 1px solid var(--line); background: none; padding: 16px 16px 16px 0; cursor: pointer; }
+  .gates6 button + button { padding-left: 16px; }
+  .gates6 button:last-child { border-right: 0; }
+  .gates6 button:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+  .gates6 em { font: 12px var(--mono); font-style: normal; color: var(--faint); }
+  .gates6 strong { display: block; margin-top: 4px; font-size: 14px; font-weight: 600; }
+  .gates6 p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--ink2); }
+  .chipline { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 10px; font: 12.5px var(--mono); }
+  .chipline button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--ok); }
+  .chipline button.k { color: var(--delay); }
+  .chipline button:hover { text-decoration: underline; }
+
+  /* live figures */
+  .fig { width: 100%; height: auto; display: block; overflow: visible; }
+  .fig .ico { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .fig .t1 { font: 600 14px var(--sans); fill: var(--ink); }
+  .fig .t2 { font: 13px var(--sans); fill: var(--muted); }
+  .fig .t3 { font: 12px var(--mono); fill: var(--faint); }
+  .fig .colh { font: 600 10.5px var(--sans); letter-spacing: .1em; fill: var(--faint); }
+  .fig .wire { fill: none; stroke: var(--line2); stroke-width: 1.5; }
+  .fig .wire.dash { stroke-dasharray: 4 5; }
+  .fig .pt circle { fill: var(--c); }
+  .fig .pt .ico { stroke-width: 1.5; }
+  .fig .halo { fill: var(--c); opacity: .09; }
+  .fig .blink { fill: var(--outage); animation: blink 1.1s steps(1) infinite; }
+  .fig .road { stroke: var(--line2); stroke-width: 2; stroke-linecap: round; }
+  .fig .lane { stroke: var(--faint); stroke-width: 1; stroke-dasharray: 5 7; animation: roadmove 1s linear infinite; }
+  @keyframes roadmove { to { stroke-dashoffset: -12; } }
+  .fig .warn { fill: var(--delay); }
+  .fig .stopb { fill: var(--outage); }
+  .fig .stopt { font: 700 7.5px var(--sans); fill: #fff; letter-spacing: .04em; }
+  .fig .xmark { stroke: var(--bad); stroke-width: 2; stroke-linecap: round; }
+  .fig .q { font: 700 15px var(--sans); fill: var(--rumor); }
+  .fig .dim { opacity: .35; }
+  .fig .smoke { fill: var(--line2); }
+  .pipe { margin-top: 24px; max-width: 760px; }
+  .pipe .ln { stroke: var(--line2); stroke-width: 1.5; }
+  .pipe .ln.done { stroke: var(--ink); }
+  .pipe .n { fill: var(--surface); stroke: var(--line2); stroke-width: 1.5; }
+  .pipe .g.done .n { fill: var(--ink); stroke: var(--ink); }
+  .pipe .g.cur .n { fill: var(--surface); stroke: var(--ink); stroke-width: 2.2; }
+  .pipe .g.off .n { stroke-dasharray: 2 2; fill: var(--bg); }
+  .pipe .ring { fill: none; stroke: var(--ink); stroke-width: 1.2; transform-box: fill-box; transform-origin: center; animation: pring 1.4s ease-out infinite; }
+  @keyframes pring { from { transform: scale(1); opacity: .8; } to { transform: scale(2.6); opacity: 0; } }
+  .pipe .gl { font: 600 12.5px var(--sans); fill: var(--ink); }
+  .pipe .gs { font: 12px var(--sans); fill: var(--muted); }
+  .pipe .g.off .gl, .pipe .g.off .gs { fill: var(--faint); }
+  .pipe .pulse { fill: var(--c); }
+
+  @media (max-width: 980px) {
+    header { gap: 14px; padding: 0 14px; overflow-x: auto; }
+    .brand span, .model { display: none; }
+    #tower { grid-template-columns: 260px minmax(0, 1fr); }
+    .wrap { padding: 28px 24px 64px; }
+    .two, .grid2 { grid-template-columns: 1fr; gap: 28px; }
+    .crew4 { grid-template-columns: 1fr 1fr; }
+    .gates6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    body { height: auto; min-height: 100vh; overflow: auto; }
+    header { height: auto; flex-wrap: wrap; padding: 10px 16px; gap: 10px; }
+    nav { order: 3; width: 100%; height: 38px; overflow-x: auto; }
+    .hr { margin-left: auto; }
+    #pace { display: none; }
+    .bar { padding: 0 16px; }
+    #tower { display: block; }
+    .feed { max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
+    #detail { overflow: visible; }
+    .wrap { padding: 24px 16px 56px; }
+    h1 { font-size: 21px; }
+    .agents li { grid-template-columns: 22px minmax(0, 1fr); }
+    .agents .did { grid-column: 2; }
+    .crew4, .gates6 { grid-template-columns: 1fr; }
+    .crew4 > div, .gates6 button { border-right: 0 !important; padding-left: 0 !important; border-bottom: 1px solid var(--line); }
+    .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-factory" viewBox="0 0 32 32"><path d="M3 29V15l7 4v-4l7 4v-4l7 4V5h4v24z"/><path d="M8 24h3M14 24h3M20 24h3"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 34 22"><rect x="1.5" y="3" width="19" height="12" rx="1.5"/><path d="M20.5 7h6.5l5 5v3h-11.5z"/><circle cx="8" cy="17.5" r="2.6"/><circle cx="26" cy="17.5" r="2.6"/></symbol>
+    <symbol id="i-store" viewBox="0 0 32 32"><path d="M4 12l3-7h18l3 7z"/><path d="M6 12v16h20V12"/><path d="M13 28v-8h6v8"/></symbol>
+    <symbol id="i-key" viewBox="0 0 32 32"><circle cx="10" cy="16" r="5.5"/><path d="M15.5 16h13M24 16v4.5M28.5 16v3.5"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="22" rx="2"/><path d="M4 12h24M10 3v6M22 3v6M9 17h3M15 17h3M21 17h2M9 22h3M15 22h3"/></symbol>
+    <symbol id="i-crate" viewBox="0 0 32 32"><rect x="4" y="9" width="24" height="19" rx="1.5"/><path d="M4 15h24M12 9v6M20 9v6"/><rect x="12" y="19.5" width="8" height="6" rx="1"/><path d="M14 19.5v-2a2 2 0 0 1 4 0v2"/></symbol>
+    <symbol id="i-car" viewBox="0 0 32 18"><path d="M2 13.5v-3.5l3.5-1 4-5h11l5 5 4 1v3.5z"/><circle cx="9" cy="14" r="2.5"/><circle cx="23" cy="14" r="2.5"/></symbol>
+    <symbol id="i-env" viewBox="0 0 16 12"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.5 2l6.5 5 6.5-5"/></symbol>
+    <symbol id="i-person" viewBox="0 0 32 32"><circle cx="16" cy="11" r="5"/><path d="M6 28c1-6 5-9 10-9s9 3 10 9"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8z"/><path d="M19 3v6h6M12 15h9M12 19h9M12 23h6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 32 32"><path d="M16 3l10 4v8c0 7-4 12-10 14-6-2-10-7-10-14V7z"/><path d="M11.5 16l3.2 3.2 6-6.4"/></symbol>
+    <symbol id="i-hub" viewBox="0 0 32 32"><circle cx="16" cy="16" r="5"/><circle cx="16" cy="4.5" r="2.5"/><circle cx="5.5" cy="24" r="2.5"/><circle cx="26.5" cy="24" r="2.5"/><path d="M16 11V7M12 19l-4.5 3M20 19l4.5 3"/></symbol>
+  </defs>
+</svg>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="10" r="2.4" fill="currentColor"/><path d="M10 2.8v4.4M10 12.8v4.4M2.8 10h4.4M12.8 10h4.4" stroke="currentColor" stroke-width="1.4"/></svg>
+    <b>Wacky Wheels</b><span>Control tower</span>
+  </div>
+  <nav id="nav">
+    <button class="on" data-view="tower">Floor</button>
+    <button data-view="crewpage">Agents</button>
+    <button data-view="ontology">Ontology</button>
+    <button data-view="audit">Audit</button>
+    <button data-view="design">Design card</button>
+  </nav>
+  <div class="hr">
+    <span class="model" id="model">model</span>
+    <select id="pace" aria-label="Replay pace">
+      <option value="slow">Slow · 6 s a step</option>
+      <option value="normal">Normal · 3.5 s</option>
+      <option value="fast">Fast · 2 s</option>
+    </select>
+    <button class="icon" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+    <button class="btn primary" id="shiftbtn">Play the shift</button>
+  </div>
+</header>
+<div class="bar" id="bar"></div>
+<main id="tower">
+  <aside class="feed"><div class="filters" id="filters"></div><div id="feed"></div></aside>
+  <section id="detail"></section>
+</main>
+<section id="crewpage" class="page hidden"></section>
+<section id="ontology" class="page hidden"></section>
+<section id="audit" class="page hidden"></section>
+<section id="design" class="page hidden"></section>
+<script>
+/* ───────── constants ───────── */
+const FILTERS = [["All", "All"], ["Plant outage", "Outage"], ["Supplier delay", "Delay"], ["Quality hold", "Quality"], ["Noise", "Noise"], ["Unconfirmed report", "Unconfirmed"], ["Compound", "Compound"]];
+const PLANTS = [["P_TX", "San Antonio", "Texas"], ["P_KY", "Lexington", "Kentucky"], ["P_MS", "Jackson", "Mississippi"], ["P_IN", "Princeton", "Indiana"], ["P_AL", "Huntsville", "Alabama"], ["P_NC", "Greensboro", "North Carolina"]];
+const PLANT_CITY = Object.fromEntries(PLANTS.map(p => [p[0], p[1]]));
+const SLOTS_PER_DAY = 5; // data/plants.csv: five build slots a day at every plant
+const KIND_TONE = { plant_outage: "outage", supplier_delay: "delay", quality_hold: "quality", unconfirmed: "rumor" };
+const KIND_LABEL = { plant_outage: "Plant outage", supplier_delay: "Supplier delay", quality_hold: "Quality hold", unconfirmed: "Unconfirmed" };
+const CREW = [
+  { name: "Coordinator", role: "Reads the wire", charter: "Splits a messy message, refuses noise, escalates anything unconfirmed. The only agent allowed to send a tool call.", owns: ["escalate"] },
+  { name: "Supply Chain Planner", role: "Moves the line", charter: "Walks a shipment or a plant through the bill of materials to the production orders, then takes the earliest feasible slot.", owns: ["mes.reschedule", "mes.transfer"] },
+  { name: "Quality Sentinel", role: "Holds the lot", charter: "Walks a lot to the vehicles built with it, stops sale of the unsold ones, and writes to each owner of a sold one.", owns: ["quality.hold_lot", "dealer.stop_sale", "crm.notify_customer"] },
+  { name: "Dealer & Customer Desk", role: "Tells the network", charter: "One notice per dealer, listing only that dealer’s orders. Loaners go Platinum, then Gold, then earlier promise, then lower order id.", owns: ["dealer.notify", "crm.loaner_availability", "crm.assign_loaner"] }
+];
+const CREW_BY = Object.fromEntries(CREW.map(c => [c.name, c]));
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const PACE_MS = { slow: 6000, normal: 3500, fast: 2000 };
+const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PLAY = `<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1v8l7-4z" fill="currentColor"/></svg>`;
+
+const state = { report: null, filter: "All", selected: "E-01", view: "tower", replay: null, shift: null, pace: "slow",
+  showChains: false, showLog: false, showMoves: false, auditQuery: "", auditTool: "", walk: null, arrived: null, lastBeat: null };
+const GRAPHS = {};
+
+/* ───────── helpers ───────── */
+function tone(label) {
+  label = label || "";
+  if (label.includes("outage")) return "outage";
+  if (label.toLowerCase().includes("delay")) return "delay";
+  if (label.includes("Quality")) return "quality";
+  if (label.includes("Noise")) return "noise";
+  return "rumor";
+}
+const cv = t => `var(--${t})`;
+function matches(ev) {
+  if (state.filter === "All") return true;
+  if (state.filter === "Compound") return ev.categories.length > 1;
+  return ev.categories.includes(state.filter);
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function clip(s, n) { s = (s || "").replace(/\s+/g, " "); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+function countPairs(names) { const c = {}; names.forEach(n => { c[n] = (c[n] || 0) + 1; }); return Object.entries(c).sort((a, b) => b[1] - a[1]); }
+function argSummary(a) {
+  const x = a.args || {};
+  if (a.tool === "mes.reschedule") return `${x.production_order_id} → ${x.new_date}`;
+  if (a.tool === "mes.transfer") return `${x.production_order_id} → ${x.to_plant_id} ${x.new_date}`;
+  if (a.tool === "dealer.notify") return `${x.dealer_id} · ${(x.customer_order_ids || []).length} orders`;
+  if (a.tool === "dealer.stop_sale") return `${x.dealer_id} · ${(x.vins || []).length} VINs`;
+  if (a.tool === "crm.assign_loaner") return x.customer_order_id;
+  if (a.tool === "crm.loaner_availability") return x.dealer_id;
+  if (a.tool === "crm.notify_customer") return x.customer_id;
+  if (a.tool === "quality.hold_lot") return x.lot_id;
+  if (a.tool === "escalate") return clip(x.reason, 100);
+  return "";
+}
+function isoAdd(iso, n) { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function weekdays(a, b) { const out = []; let d = a, g = 0; while (d <= b && g++ < 400) { const w = new Date(d + "T00:00:00Z").getUTCDay(); if (w > 0 && w < 6) out.push(d); d = isoAdd(d, 1); } return out; }
+function nextWeekday(iso) { let d = isoAdd(iso, 1); while ([0, 6].includes(new Date(d + "T00:00:00Z").getUTCDay())) d = isoAdd(d, 1); return d; }
+function fmtDate(iso) { if (!iso) return ""; const d = new Date(iso + "T00:00:00Z"); return isNaN(d) ? iso : `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`; }
+function fmtLong(iso) { const d = new Date(iso + "T00:00:00Z"); return isNaN(d) ? "" : `${fmtDate(iso)} ${d.getUTCFullYear()}`; }
+function current() { return state.report ? state.report.events.find(e => e.event_id === state.selected) : null; }
+function time(ev) { return (ev.received_at || "").slice(11, 16); }
+function catDots(ev) { return ev.categories.map(c => `<i class="dot" style="--c:${cv(tone(c))}"></i>`).join(""); }
+
+/* ───────── replay ───────── */
+function beats(ev) {
+  const list = [{ key: "event", label: "Event" }, { key: "summary", label: "Summary and reason" }];
+  if ((ev.paths || []).length) list.push({ key: "graph", label: "Graph path" });
+  list.push({ key: "agents", label: "Agents" }, { key: "actions", label: "Actions taken" }, { key: "audit", label: "Audit trail" });
+  return list;
+}
+function stageCopy(b, ev) {
+  if (!b) return "";
+  const quiet = ev.disposition === "noise" || ev.disposition === "unconfirmed";
+  if (b.key === "event") return "A message arrives. The AI reads it and pulls out the facts.";
+  if (b.key === "summary") return headline(ev);
+  if (b.key === "graph") return "The AI follows the knowledge graph to every build, order, dealer and customer this touches.";
+  if (b.key === "agents") return quiet ? "Only the coordinator is needed. The specialists stand by." : "The coordinator hands the work to the specialist agents.";
+  if (b.key === "actions") return quiet ? (ev.disposition === "noise" ? "No action is taken. That is the correct answer." : "One escalation to a human. Nothing else changes.") : "The actions taken, following the policy handbook.";
+  return "Every tool call is on the audit trail.";
+}
+const beatMs = () => PACE_MS[state.pace] || 6000;
+function replayOn(ev) { return !!(ev && state.replay && state.replay.id === ev.event_id); }
+function stopReplay() { if (!state.replay) return; clearTimeout(state.replay.timer); state.replay = null; }
+function stopShift() { if (state.shift && state.shift.timer) clearTimeout(state.shift.timer); state.shift = null; stopReplay(); if (typeof SIM !== 'undefined') SIM.onDone = null; }
+function schedule() {
+  const r = state.replay;
+  if (!r) return;
+  clearTimeout(r.timer);
+  if (!r.playing) return;
+  const ev = current(), b = ev && beats(ev)[r.step];
+  const ms = b && b.key === "agents" ? Math.max(beatMs(), (simPlan(ev).end / SIM.speed) * 1000 + 1800) : beatMs();
+  r.timer = setTimeout(advance, ms);
+}
+function advance() {
+  const r = state.replay;
+  if (!r) return;
+  clearTimeout(r.timer);
+  if (r.step < r.n - 1) { r.step += 1; renderDetail(); schedule(); return; }
+  if (r.onDone && r.playing) { state.replay = null; r.onDone(); return; }
+  state.replay = null; renderHeader(); renderDetail();
+}
+function stepBack() { const r = state.replay; if (!r || r.step === 0) return; r.step -= 1; renderDetail(); schedule(); }
+function togglePause() {
+  const r = state.replay; if (!r) return;
+  r.playing = !r.playing;
+  const ev = current(), b = ev && beats(ev)[r.step];
+  if (b && b.key === "agents" && SIM.id === r.id) { if (r.playing && SIM.t < SIM.plan.end) simStart(ev, false); else simPause(); }
+  renderDetail(); schedule();
+}
+function startReplay(onDone) {
+  const ev = current();
+  if (!ev) return;
+  stopReplay();
+  state.replay = { id: ev.event_id, step: 0, n: beats(ev).length, onDone, playing: true };
+  renderHeader(); renderDetail(); schedule();
+}
+function startShift() {
+  stopShift();
+  state.shift = { i: 0 };
+  state.filter = "All";
+  state.view = "tower";
+  state.arrived = null;
+  syncNav(); showView();
+  playShiftStep();
+}
+function playShiftStep() {
+  if (!state.shift) return;
+  const events = state.report.events;
+  if (state.shift.i >= events.length) { state.shift = null; render(); return; }
+  state.selected = events[state.shift.i].event_id;
+  state.showDetails = false;
+  render();
+  const next = () => { if (!state.shift) return; state.shift.timer = setTimeout(() => { if (!state.shift) return; state.shift.i += 1; playShiftStep(); }, 2600); };
+  if (REDUCED) next(); else SIM.onDone = next;
+}
+
+/* ───────── message understanding (highlights) ───────── */
+function relResolve(inc, prop, phrase) {
+  if (!inc) return null;
+  const p = phrase.toLowerCase();
+  if (p === "the following working day") return inc.kind === "plant_outage" && inc.end_date ? nextWeekday(inc.end_date) : null;
+  const pairs = [];
+  if (inc.kind === "plant_outage") {
+    const evd = (inc.evidence || []).filter(x => !/^plant /.test(x) && !/^[A-Z]{2,}[-_]/.test(x) && !/^\d{4}-/.test(x));
+    if (evd[0]) pairs.push([evd[0], inc.start_date]);
+    if (evd[1]) pairs.push([evd[1], inc.end_date]);
+  }
+  if (prop && prop.kind === inc.kind) { const ds = prop.dates || []; if (ds[0]) pairs.push([ds[0], inc.start_date]); if (ds[1]) pairs.push([ds[1], inc.end_date]); }
+  const hit = pairs.find(([a]) => (a || "").toLowerCase() === p);
+  return hit ? hit[1] : null;
+}
+function highlight(ev) {
+  const text = ev.text || "", lower = text.toLowerCase();
+  const year = (state.report.meta.today || "2027").slice(0, 4);
+  const incs = ev.incidents || [];
+  const props = ((ev.llm || {}).proposal || {}).incidents || [];
+  const spans = [];
+  if (incs.length > 1) incs.forEach((inc, i) => { const s = (inc.span || "").trim(); if (s.length > 16) { const at = text.indexOf(s); if (at >= 0) spans.push({ start: at, end: at + s.length, i, t: KIND_TONE[inc.kind] || "noise" }); } });
+  const incAt = pos => { const s = spans.find(x => pos >= x.start && pos < x.end); return s ? s.i : (incs.length === 1 ? 0 : -1); };
+  const toks = [];
+  const add = (start, end, type, tip, prio) => toks.push({ start, end, type, tip, prio });
+  const words = (needle, fn) => {
+    if (!needle || needle.length < 3) return;
+    const n = needle.toLowerCase();
+    let i = lower.indexOf(n);
+    while (i >= 0) { const b = i ? lower[i - 1] : " ", a = lower[i + n.length] || " "; if (!/[a-z0-9]/.test(b) && !/[a-z0-9]/.test(a)) fn(i, i + n.length); i = lower.indexOf(n, i + n.length); }
+  };
+  const scan = (rx, fn) => { let m; rx.lastIndex = 0; while ((m = rx.exec(text))) fn(m.index, m.index + m[0].length, m[0]); };
+  scan(/\b(?:SH-\d{3,4}|LOT-\d{3,4}|SUP-\d{2}|P_[A-Z]{2}|[A-Z]{3,5}-[A-Z0-9]{1,4})\b/g, (s, e, t) => {
+    const type = t.startsWith("SH-") ? "shipment" : t.startsWith("LOT-") ? "lot" : t.startsWith("SUP-") ? "supplier" : t.startsWith("P_") ? "plant" : "part";
+    add(s, e, type, type === "plant" ? `Plant ${t} · ${PLANT_CITY[t] || ""}` : `${type[0].toUpperCase() + type.slice(1)} id ${t}`, 5);
+  });
+  scan(/\b\d{4}-\d{2}-\d{2}\b/g, (s, e, t) => add(s, e, "date", `Date · ${fmtDate(t)}`, 4));
+  scan(/\b(?:(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\s+)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}\b/g, (s, e, t) => {
+    const m = t.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})/);
+    add(s, e, "date", `Date · ${fmtDate(`${year}-${String(MONTHS.indexOf(m[1]) + 1).padStart(2, "0")}-${m[2].padStart(2, "0")}`)}`, 4);
+  });
+  scan(/\b(?:(?:next|last|this)\s+(?:(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day|week)|the following working day|tomorrow)\b/gi, (s, e, t) => {
+    const i = incAt(s);
+    const iso = i >= 0 ? relResolve(incs[i], props[i], t) : null;
+    add(s, e, "date", iso ? `“${t.toLowerCase()}” → ${fmtDate(iso)}` : `Relative date`, 3);
+  });
+  if (incs.length) {
+    PLANTS.forEach(([id, city, st]) => { words(city, (s, e) => add(s, e, "plant", `Plant ${id}`, 2)); words(st, (s, e) => add(s, e, "plant", `Plant ${id}`, 2)); });
+    props.forEach((p, i) => {
+      const plant = (p.plant || "").trim();
+      if (plant.length >= 4) words(plant, (s, e) => { const j = incAt(s); const inc = incs[j >= 0 ? j : i] || {}; if (inc.plant_id) add(s, e, "plant", `Plant ${inc.plant_id}`, 2); });
+      const part = (p.part || "").trim();
+      if (part.length >= 6 && /[\s\d-]/.test(part)) words(part, (s, e) => { const j = incAt(s); const inc = incs[j >= 0 ? j : i] || {}; add(s, e, "part", `Part ${inc.part_id || ""}`, 2); });
+    });
+  }
+  if (ev.disposition === "unconfirmed") scan(/\b(?:rumou?r|may|might|possible|possibly|mentioned|someone|something|sometime soon|not confirmed|nothing confirmed|unconfirmed|no dates|no details)\b/gi, (s, e) => add(s, e, "hedge", "Hedge · not confirmed", 1));
+  if (ev.disposition === "noise") scan(/\b(?:brochure|PDF|price list|weather|newsletter)\b/gi, (s, e) => add(s, e, "off", "Off-topic · not operations", 1));
+  toks.sort((a, b) => b.prio - a.prio || (b.end - b.start) - (a.end - a.start) || a.start - b.start);
+  const chosen = [];
+  toks.forEach(t => {
+    if (chosen.some(c => t.start < c.end && c.start < t.end)) return;
+    if (spans.some(s => (t.start < s.start && t.end > s.start) || (t.start < s.end && t.end > s.end))) return;
+    chosen.push(t);
+  });
+  const marks = [];
+  spans.forEach(s => marks.push({ pos: s.start, o: 1, h: `<sup class="n" style="--c:${cv(s.t)}">${s.i + 1}</sup>` }));
+  chosen.forEach(t => { marks.push({ pos: t.start, o: 2, h: `<span class="tk k-${t.type}" data-tip="${esc(t.tip)}">` }); marks.push({ pos: t.end, o: -1, h: `</span>` }); });
+  marks.sort((a, b) => a.pos - b.pos || a.o - b.o);
+  let html = "", at = 0;
+  marks.forEach(m => { html += esc(text.slice(at, m.pos)) + m.h; at = m.pos; });
+  return { html: html + esc(text.slice(at)), types: new Set(chosen.map(t => t.type)) };
+}
+
+/* ───────── sections ───────── */
+function headline(ev) {
+  if (ev.disposition === "noise") return "Not an operations message. No tool was called.";
+  if (ev.disposition === "unconfirmed") return "Too vague to act on. Escalated to a human; nothing else was touched.";
+  return (ev.summary || "").replace(/^E-\d+ is [^.]*\.\s*/, "");
+}
+function outcome(ev) {
+  const s = ev.stats || {};
+  const failed = (ev.actions || []).filter(a => a.ok === false).length;
+  let t;
+  if (ev.disposition === "noise") t = [[0, "tool calls", "stood down"], [0, "records touched", ""], [0, "escalations", "not an ops report"]];
+  else if (ev.disposition === "unconfirmed") t = [[s.escalations || 1, "escalation", "to a human"], [0, "write actions", "no order touched"]];
+  else if (s.lots || s.stop_sales || s.customers) t = [[s.lots || 0, "lot held", ""], [s.stop_sales || 0, "stop-sale calls", "unsold vehicles"], [s.customers || 0, "owners contacted", "sold vehicles"], [s.tool_calls || 0, "tool calls", `${failed} failed`]];
+  else t = [[(s.reschedules || 0) + (s.transfers || 0), "orders moved", `${s.reschedules || 0} same plant · ${s.transfers || 0} transferred`], [s.dealer_notices || 0, "dealers notified", "one notice each"], [s.loaners || 0, "loaners assigned", `${s.loaner_checks || 0} pool checks`], [s.tool_calls || 0, "tool calls", `${failed} failed`]];
+  return `<div class="nums">${t.map(([n, l, sub]) => `<div class="num"><b>${Number(n).toLocaleString()}</b><span>${esc(l)}</span>${sub ? `<small>${esc(sub)}</small>` : ""}</div>`).join("")}</div>`;
+}
+function messageBlock(ev) {
+  const { html, types } = highlight(ev);
+  const names = { plant: "Plant", part: "Part", shipment: "Shipment", lot: "Lot", supplier: "Supplier", date: "Date", hedge: "Hedge word", off: "Off-topic" };
+  return `<h2>Message <small>${esc(ev.source || "")} · ${time(ev)}</small></h2>
+    <p class="quote">${html}</p>
+    <div class="legend">${[...types].map(t => `<span class="k-${t}">${names[t]}</span>`).join("") || "<span class='k-off'>No plant, part, shipment, lot or date found</span>"}</div>`;
+}
+function facts(inc, orders) {
+  const r = [];
+  if (inc.plant_id) r.push(["Plant", `${inc.plant_id}<small>${esc(PLANT_CITY[inc.plant_id] || "")}</small>`]);
+  const win = `${fmtDate(inc.start_date)} → ${fmtDate(inc.end_date)}`;
+  if (inc.kind === "plant_outage") r.push(["Line dark", win]);
+  if (inc.kind === "supplier_delay") r.push(["ETA moved", win]);
+  if (inc.kind === "quality_hold") r.push(["Built", win]);
+  if (inc.shipment_id) r.push(["Shipment", esc(inc.shipment_id)]);
+  if (inc.lot_id) r.push(["Lot", esc(inc.lot_id)]);
+  if (inc.part_id) r.push(["Part", esc(inc.part_id)]);
+  if (inc.supplier_id) r.push(["Supplier", esc(inc.supplier_id)]);
+  if (orders) r.push(["Orders", `${orders}<small>affected</small>`]);
+  return `<dl>${r.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
+}
+function understood(ev) {
+  const llm = ev.llm || {};
+  const reports = ev.incident_reports || [];
+  const many = (ev.incidents || []).length > 1;
+  const incs = (ev.incidents || []).map((inc, i) => `<div class="inc">
+      <div class="inct"><i class="dot" style="--c:${cv(KIND_TONE[inc.kind] || "noise")}"></i>${many ? `${i + 1} · ` : ""}${esc(KIND_LABEL[inc.kind] || inc.kind)}</div>
+      ${facts(inc, reports[i] && reports[i].orders ? reports[i].orders.length : 0)}</div>`).join("");
+  const none = ev.disposition === "noise" ? "No incident. Nothing in the text resolves to a plant, shipment, or lot."
+    : ev.disposition === "unconfirmed" ? "No incident. No plant window, shipment, or lot is named, and nothing is confirmed." : "";
+  const verdict = !llm.used ? "Read by the ontology reader."
+    : llm.agrees ? `<b>${esc(llm.model)}</b> proposed the same reading as the ontology reader.`
+    : `<b>${esc(llm.model)}</b>’s proposal did not bind, so the ontology reader’s reading was kept. Tool arguments are unchanged.`;
+  return `<h2>Understood as</h2>${incs || `<p class="prose">${none}</p>`}<p class="note">${verdict}</p>`;
+}
+function whyNot(ev) {
+  const noise = ev.disposition === "noise";
+  const call = (ev.actions || []).find(a => a.tool === "escalate");
+  const { types } = highlight(ev);
+  const entity = ["plant", "shipment", "lot", "part"].some(t => types.has(t));
+  const checks = noise
+    ? [["About operations", false], ["Names a plant, shipment, or lot", entity], ["Gives a date window", types.has("date")]]
+    : [["About operations", true], ["Names a plant, shipment, or lot", entity], ["Gives a date window", types.has("date")], ["Confirmed", false]];
+  return `<h2>${noise ? "Why no action" : "Why it was escalated"}</h2>
+    <p class="prose">${esc(ev.reasoning || ev.summary)}</p>
+    <ul class="checks">${checks.map(([l, ok]) => `<li><span class="${ok ? "y" : "x"}">${ok ? "✓" : "✕"}</span>${esc(l)}</li>`).join("")}</ul>
+    ${call ? `<div class="ticket"><div class="tt"><span>escalate</span><span class="${call.ok === false ? "bad" : "ok"}">${call.ok === false ? "failed" : "sent"}</span></div>${esc(call.args && call.args.reason)}</div>` : ""}`;
+}
+function agentsBlock(ev, upto) {
+  const hs = ev.handoffs || [];
+  const lastIdx = {};
+  hs.forEach((h, i) => { lastIdx[h.agent] = i; });
+  const items = hs.map((h, i) => {
+    if (upto != null && i > upto) return "";
+    const c = CREW_BY[h.agent] || { role: "" };
+    const tools = lastIdx[h.agent] === i ? countPairs((ev.actions || []).filter(a => a.agent === h.agent).map(a => a.tool)) : [];
+    return `<li data-hand="${i}" class="${upto === i ? "now in" : ""}"><span class="ix">${String(i + 1).padStart(2, "0")}</span>
+      <div class="who"><b>${esc(h.agent)}</b><span>${esc(c.role)}</span></div>
+      <div class="did">${esc(h.did)}${tools.length ? `<div class="tools">${tools.map(([t, n]) => `<span>${esc(t)} <b>${n}</b></span>`).join("")}</div>` : ""}</div></li>`;
+  }).join("");
+  const done = upto == null || upto >= hs.length - 1;
+  const idle = done ? CREW.filter(c => !hs.some(h => h.agent === c.name)).map(c => `<li class="idle"><span class="ix">—</span><div class="who"><b>${esc(c.name)}</b><span>${esc(c.role)}</span></div><div class="did">Stood by. Not needed for this event.</div></li>`).join("") : "";
+  return `<h2>Agents <small>coordinator plus three specialists · ${hs.length} handoff${hs.length === 1 ? "" : "s"}</small></h2><ol class="agents">${items}${idle}</ol>`;
+}
+
+/* fan-out graph of the cited chains */
+function fanGraph(path, pi) {
+  const raw = path.chains || [];
+  const t = tone(path.incident);
+  const chains = raw.map(c => c.split(" → ").map(s => s.replace(" (BOM)", "").trim()));
+  const labels = (path.pattern || "").split("→").map(s => s.trim().replace(" (BOM)", "").replace(/([a-z])([A-Z])/g, "$1 $2"));
+  const ncol = Math.max(...chains.map(c => c.length));
+  const K = 5;
+  const cols = [];
+  for (let i = 0; i < ncol; i++) {
+    const cnt = new Map(), first = new Map();
+    chains.forEach((c, ci) => { const id = c[i]; if (id == null) return; if (!cnt.has(id)) { cnt.set(id, 0); first.set(id, ci); } cnt.set(id, cnt.get(id) + 1); });
+    const ids = [...cnt.keys()];
+    const shown = ids.slice().sort((a, b) => cnt.get(b) - cnt.get(a) || first.get(a) - first.get(b)).slice(0, K);
+    if (i > 0) {
+      const prev = cols[i - 1], idx = new Map(prev.nodes.map((n, k) => [n.id, k])), bary = new Map();
+      shown.forEach(id => { let s = 0, n = 0; chains.forEach(c => { if (c[i] === id) { const k = idx.get(prev.map(c[i - 1])); if (k != null) { s += k; n++; } } }); bary.set(id, n ? s / n : 1e9); });
+      shown.sort((a, b) => bary.get(a) - bary.get(b) || first.get(a) - first.get(b));
+    }
+    const set = new Set(shown);
+    const nodes = shown.map(id => ({ id, w: cnt.get(id) }));
+    if (ids.length > shown.length) nodes.push({ id: "__more", label: `+${ids.length - shown.length} more`, more: true });
+    cols.push({ nodes, total: ids.length, map: id => (set.has(id) ? id : "__more") });
+  }
+  const edges = new Map(), nodeChains = new Map(), chainNodes = [], chainEdges = [];
+  chains.forEach((c, ci) => {
+    const nk = [], ek = [];
+    c.forEach((id, i) => {
+      const key = `${i}:${cols[i].map(id)}`;
+      nk.push(key);
+      if (!nodeChains.has(key)) nodeChains.set(key, []);
+      nodeChains.get(key).push(ci);
+      if (i < c.length - 1) {
+        const ekey = `${key}>${cols[i + 1].map(c[i + 1])}`;
+        ek.push(ekey);
+        const e = edges.get(ekey) || { i, a: cols[i].map(id), b: cols[i + 1].map(c[i + 1]), w: 0 };
+        e.w++; edges.set(ekey, e);
+      }
+    });
+    chainNodes.push(nk); chainEdges.push(ek);
+  });
+  GRAPHS[pi] = { nodeChains, chainNodes, chainEdges, raw };
+  const W = 1000, NH = 28, GAP = 9, TOP = 42;
+  const nw = Math.min(150, (W - (ncol - 1) * 48) / ncol);
+  const xg = ncol > 1 ? (W - ncol * nw) / (ncol - 1) : 0;
+  const maxN = Math.max(...cols.map(c => c.nodes.length));
+  const inner = maxN * (NH + GAP) - GAP;
+  const xy = new Map();
+  cols.forEach((c, i) => { const h = c.nodes.length * (NH + GAP) - GAP, y0 = TOP + (inner - h) / 2; c.nodes.forEach((n, k) => xy.set(`${i}:${n.id}`, [i * (nw + xg), y0 + k * (NH + GAP)])); });
+  let svg = "";
+  cols.forEach((c, i) => { const x = i * (nw + xg); svg += `<text class="ch" x="${x}" y="12">${esc((labels[i] || "").toUpperCase())}</text><text class="cn" x="${x}" y="30">${c.total.toLocaleString()}</text>`; });
+  edges.forEach((e, key) => {
+    const [x1, y1] = xy.get(`${e.i}:${e.a}`), [x2, y2] = xy.get(`${e.i + 1}:${e.b}`);
+    const sx = x1 + nw, sy = y1 + NH / 2, tx = x2, ty = y2 + NH / 2, m = (tx - sx) / 2;
+    svg += `<path class="edge" data-e="${esc(key)}" d="M${sx.toFixed(1)},${sy.toFixed(1)} C${(sx + m).toFixed(1)},${sy.toFixed(1)} ${(tx - m).toFixed(1)},${ty.toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)}" stroke-width="${(1 + Math.min(4, Math.log2(e.w + 1))).toFixed(2)}"/>`;
+  });
+  cols.forEach((c, i) => c.nodes.forEach(n => {
+    const key = `${i}:${n.id}`, [x, y] = xy.get(key);
+    const showW = !n.more && n.w > 1;
+    const chars = Math.max(6, Math.floor((nw - 18 - (showW ? 26 : 0)) / 6.9));
+    const lab = n.more ? n.label : (n.id.length > chars ? n.id.slice(0, chars - 1) + "…" : n.id);
+    svg += `<g class="node${n.more ? " more" : ""}${i === 0 ? " root" : ""}" data-n="${esc(key)}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})"><title>${esc(n.more ? n.label : n.id)}</title>
+      <rect width="${nw.toFixed(1)}" height="${NH}" rx="6"/><text x="10" y="${NH / 2 + 4}">${esc(lab)}</text>${showW ? `<text class="w" x="${(nw - 8).toFixed(1)}" y="${NH / 2 + 4}" text-anchor="end">×${n.w}</text>` : ""}</g>`;
+  }));
+  return `<svg class="fan" data-g="${pi}" style="--c:${cv(t)}" viewBox="0 0 ${W} ${TOP + inner + 4}" role="img" aria-label="${esc(path.incident)} graph path">${svg}</svg>
+    <div class="cap" id="cap-${pi}">Hover a node to trace its chain.</div>`;
+}
+function bindFan(svg) {
+  const g = GRAPHS[svg.dataset.g];
+  const cap = document.getElementById(`cap-${svg.dataset.g}`);
+  if (!g) return;
+  const base = cap ? cap.innerHTML : "";
+  svg.addEventListener("mouseover", e => {
+    const n = e.target.closest("[data-n]");
+    if (!n) return;
+    const cs = g.nodeChains.get(n.dataset.n) || [];
+    const ns = new Set(), es = new Set();
+    cs.forEach(ci => { g.chainNodes[ci].forEach(k => ns.add(k)); g.chainEdges[ci].forEach(k => es.add(k)); });
+    svg.classList.add("focus");
+    svg.querySelectorAll("[data-n]").forEach(el => el.classList.toggle("lit", ns.has(el.dataset.n)));
+    svg.querySelectorAll("[data-e]").forEach(el => el.classList.toggle("lit", es.has(el.dataset.e)));
+    if (cap && cs.length) cap.innerHTML = `<em>${esc(g.raw[cs[0]])}</em>${cs.length > 1 ? ` · ${cs.length} chains through this node` : ""}`;
+  });
+  svg.addEventListener("mouseleave", () => { svg.classList.remove("focus"); svg.querySelectorAll(".lit").forEach(el => el.classList.remove("lit")); if (cap) cap.innerHTML = base; });
+}
+function graphBlock(ev) {
+  const paths = ev.paths || [];
+  return `<h2>Graph path <small>${paths.length > 1 ? "one walk per incident" : "the walk through the ontology"}</small></h2>
+    ${paths.map((p, pi) => `<div class="path"><div class="pathhead"><b><i class="dot" style="--c:${cv(tone(p.incident))}"></i>${esc(p.incident)}</b><span class="pat">${esc(p.pattern)}</span><span class="cnt">${(p.chains || []).length.toLocaleString()} chains</span></div>
+      ${(p.chains || []).length ? fanGraph(p, pi) : `<p class="prose">${esc(p.walk || "")}</p>`}</div>`).join("")}
+    ${paths.some(p => (p.chains || []).length) ? `<p style="margin:14px 0 0"><button class="link" id="chainsbtn">${state.showChains ? "Hide cited chains" : "List every cited chain"}</button></p>` : ""}
+    ${state.showChains ? paths.map(p => `<div class="chains">${(p.chains || []).slice(0, 80).map(c => `<div>${esc(c)}</div>`).join("")}${(p.chains || []).length > 80 ? `<div>… ${(p.chains || []).length - 80} more in the trace file</div>` : ""}</div>`).join("") : ""}`;
+}
+
+/* slot board: capacity-aware rescheduling */
+function slotSvg(ev) {
+  const moves = ev.moves || [];
+  const today = state.report.meta.today;
+  const incs = (ev.incidents || []).filter(i => i.plant_id && (i.kind === "plant_outage" || i.kind === "supplier_delay"));
+  const all = [today];
+  moves.forEach(m => all.push(m.from_date, m.to_date));
+  incs.forEach(i => all.push(i.start_date, i.end_date));
+  const sorted = all.filter(Boolean).sort();
+  const days = weekdays(sorted[0], sorted[sorted.length - 1]);
+  const col = iso => { const i = days.findIndex(d => d >= iso); return i < 0 ? days.length - 1 : i; };
+  const plants = [];
+  const addP = p => { if (p && !plants.includes(p)) plants.push(p); };
+  incs.forEach(i => addP(i.plant_id));
+  moves.forEach(m => { addP(m.from_plant); addP(m.to_plant); });
+  const tgt = new Map(), src = new Map();
+  moves.forEach(m => {
+    const k = `${m.to_plant}|${m.to_date}`, t = tgt.get(k) || { placed: 0, xin: 0, maxFree: 0 };
+    t.placed++; if (m.tool === "mes.transfer") t.xin++; t.maxFree = Math.max(t.maxFree, m.free_before || 0); tgt.set(k, t);
+    const s = `${m.from_plant}|${m.from_date}`; src.set(s, (src.get(s) || 0) + 1);
+  });
+  const laneTone = p => { const i = incs.find(x => x.plant_id === p); return i ? KIND_TONE[i.kind] : "noise"; };
+  const W = 1000, LW = 96, TOP = 34;
+  const colW = (W - LW) / days.length;
+  const sq = Math.max(5, Math.min(10, colW * 0.32)), st = sq + 3;
+  const up = SLOTS_PER_DAY * st;
+  const laneOut = p => Math.max(1, ...[...src.entries()].filter(([k]) => k.startsWith(p + "|")).map(([, v]) => v));
+  const laneHs = plants.map(p => Math.max(up + laneOut(p) * st + 24, 64));
+  const laneYs = laneHs.map((h, i) => TOP + laneHs.slice(0, i).reduce((a, b) => a + b + 8, 0));
+  const laneY = i => laneYs[i], mid = i => laneYs[i] + 12 + up;
+  const H = TOP + laneHs.reduce((a, b) => a + b + 8, 0);
+  const cx = i => LW + i * colW + colW / 2;
+  let s = "";
+  days.forEach((d, i) => {
+    const dt = new Date(d + "T00:00:00Z");
+    if (i === 0 || d.slice(5, 7) !== days[i - 1].slice(5, 7)) s += `<text class="axm" x="${(LW + i * colW + 2).toFixed(1)}" y="10">${MONTHS[dt.getUTCMonth()].toUpperCase()}</text>`;
+    s += `<text class="ax${d === today ? " now" : ""}" x="${cx(i).toFixed(1)}" y="25" text-anchor="middle">${dt.getUTCDate()}</text>`;
+  });
+  plants.forEach((p, pi) => {
+    const y = laneY(pi), m = mid(pi), laneH = laneHs[pi];
+    s += `<rect class="lane" x="0.5" y="${y}" width="${W - 1}" height="${laneH}" rx="6"/>`;
+    s += `<text class="lab" x="12" y="${m - 2}">${p}</text><text class="lab2" x="12" y="${m + 12}">${esc(PLANT_CITY[p] || "")}</text>`;
+    incs.filter(i => i.plant_id === p).forEach(i => {
+      const a = col(i.start_date);
+      let b = col(i.end_date);
+      if (i.kind === "supplier_delay") b = Math.max(a, b - 1);
+      const x = LW + a * colW;
+      s += `<g style="--c:${cv(KIND_TONE[i.kind])}"><rect class="win" x="${(x + 2).toFixed(1)}" y="${y + 4}" width="${((b - a + 1) * colW - 4).toFixed(1)}" height="${laneH - 8}" rx="5"/><text class="winl" x="${(x + 7).toFixed(1)}" y="${y + 15}">${i.kind === "plant_outage" ? "LINE DARK" : "PART LATE"}</text></g>`;
+    });
+    days.forEach((d, i) => {
+      const x = cx(i) - sq / 2;
+      const t = tgt.get(`${p}|${d}`);
+      if (t) {
+        const booked = Math.max(0, SLOTS_PER_DAY - t.maxFree);
+        for (let j = 0; j < SLOTS_PER_DAY; j++) {
+          let cls = "s-free";
+          if (j < booked) cls = "s-booked";
+          else if (j < booked + t.placed) cls = (j - booked) < (t.placed - t.xin) ? "s-placed" : "s-in";
+          s += `<rect class="${cls}" x="${x.toFixed(1)}" y="${(m - 4 - (j + 1) * st + 3).toFixed(1)}" width="${sq.toFixed(1)}" height="${sq.toFixed(1)}" rx="2"/>`;
+        }
+      }
+      const o = src.get(`${p}|${d}`);
+      if (o) for (let j = 0; j < o; j++) s += `<rect class="s-out" style="--c:${cv(laneTone(p))}" x="${(x + 0.6).toFixed(1)}" y="${(m + 4 + j * st).toFixed(1)}" width="${(sq - 1.2).toFixed(1)}" height="${(sq - 1.2).toFixed(1)}" rx="2"/>`;
+    });
+  });
+  const tx = cx(col(today));
+  s += `<line class="today" x1="${tx.toFixed(1)}" x2="${tx.toFixed(1)}" y1="${TOP - 4}" y2="${H}"/>`;
+  return `<svg class="slots" viewBox="0 0 ${W} ${H}" role="img" aria-label="Slot board">${s}</svg>`;
+}
+function slotBlock(ev) {
+  const moves = ev.moves || [];
+  const xfer = moves.filter(m => m.tool === "mes.transfer").length;
+  return `<h2>Slot reasoning <small>${SLOTS_PER_DAY} build slots a day · ${moves.length - xfer} kept at the same plant · ${xfer} transferred</small><span class="end"><button class="link" id="movesbtn">${state.showMoves ? "Hide orders" : "List orders"}</button></span></h2>
+    ${slotSvg(ev)}
+    <div class="key">
+      <span><i style="border:1.3px solid var(--outage)"></i>lifted from its day</span>
+      <span><i style="background:var(--ok)"></i>placed, same plant</span>
+      <span><i style="background:var(--ink)"></i>transferred in</span>
+      <span><i style="background:var(--line2)"></i>already booked</span>
+      <span><i style="border:1px solid var(--line2)"></i>still free</span>
+    </div>
+    ${state.showMoves ? `<div class="tablewrap"><table><thead><tr><th>Order</th><th>Model</th><th>From</th><th>To</th><th>Open slots before</th></tr></thead><tbody>${moves.map(m => `<tr><td class="m">${esc(m.production_order_id)}</td><td>${esc(m.model)}</td><td class="m">${esc(m.from_plant)} · ${fmtDate(m.from_date)}</td><td class="m">${m.tool === "mes.transfer" ? "→ " : ""}${esc(m.to_plant)} · ${fmtDate(m.to_date)}</td><td class="f">${esc(m.free_before)} of ${SLOTS_PER_DAY}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+}
+function qualityBlock(ev) {
+  const p = (ev.paths || []).find(x => tone(x.incident) === "quality");
+  if (!p) return "";
+  const vins = new Map();
+  (p.chains || []).forEach(c => { const parts = c.split(" → "); if (parts[2] && !vins.has(parts[2])) vins.set(parts[2], !/unsold/i.test(parts[parts.length - 1] || "")); });
+  const arr = [...vins.values()], sold = arr.filter(Boolean).length, unsold = arr.length - sold;
+  const s = ev.stats || {};
+  return `<h2>Sold and unsold vehicles <small>${arr.length} vehicles built with the lot</small></h2>
+    <div class="nums">
+      <div class="num"><b style="color:var(--delay)">${unsold}</b><span>unsold · stop sale</span><small>${s.stop_sales || 0} dealer calls</small></div>
+      <div class="num"><b style="color:var(--quality)">${sold}</b><span>sold · owner contacted</span><small>${s.customers || 0} owners</small></div>
+    </div>
+    <div class="split"><i style="width:${arr.length ? (unsold / arr.length) * 100 : 0}%"></i></div>`;
+}
+function actionsBlock(ev) {
+  const acts = ev.actions || [];
+  const failed = acts.filter(a => a.ok === false).length;
+  const pairs = countPairs(acts.map(a => a.tool));
+  return `<h2>Actions <small>${acts.length} call${acts.length === 1 ? "" : "s"} sent by the coordinator · ${failed} failed</small>${acts.length ? `<span class="end"><button class="link" id="logbtn">${state.showLog ? "Hide call log" : "Open call log"}</button></span>` : ""}</h2>
+    ${pairs.length ? `<div class="toollist">${pairs.map(([t, n]) => `<div><code>${esc(t)}</code><b>${n}</b></div>`).join("")}</div>` : `<p class="prose">No tool was called.</p>`}
+    ${state.showLog && acts.length ? `<div class="tablewrap"><table><thead><tr><th>#</th><th>Agent</th><th>Tool</th><th>Arguments</th><th>Result</th></tr></thead><tbody>${acts.map((a, i) => `<tr><td class="f">${i + 1}</td><td>${esc(a.agent)}</td><td class="m">${esc(a.tool)}</td><td class="m">${esc(argSummary(a))}</td><td class="${a.ok === false ? "bad" : "ok"}">${a.ok === false ? "failed" : "ok"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+}
+function reasoningBlock(ev) {
+  return `<h2>Reasoning and guardrails</h2>
+    <p class="prose">${esc(ev.reasoning)}</p>
+    <ul class="checks">${(ev.guardrails || []).map(g => `<li><span class="y">✓</span>${esc(g)}</li>`).join("")}</ul>`;
+}
+
+/* ───────── live figures ───────── */
+let FIGN = 0;
+const pcount = n => (n > 0 ? Math.min(7, Math.max(1, Math.round(Math.log2(n + 1) * 1.4))) : 0);
+/* Things that travel along a wire: dots, cars, envelopes, keys. Spread out with negative begin times. */
+function movers(id, n, dur, glyph, c) {
+  if (REDUCED || !n) return "";
+  const g = { car: ["i-car", 22, 12], env: ["i-env", 14, 10.5], key: ["i-key", 16, 16] }[glyph];
+  let s = "";
+  for (let k = 0; k < n; k++) {
+    const shape = g ? `<use href="#${g[0]}" class="ico" x="${-g[1] / 2}" y="${-g[2] / 2}" width="${g[1]}" height="${g[2]}" style="color:${c}"/>` : `<circle r="2.8"/>`;
+    s += `<g class="pt" style="--c:${c}">${shape}<animateMotion dur="${dur}s" begin="${(-k * dur / n).toFixed(2)}s" repeatCount="indefinite"><mpath href="#${id}"/></animateMotion></g>`;
+  }
+  return s;
+}
+function fnode(x, y, icon, lines, o) {
+  o = o || {};
+  const sz = o.size || 40, c = o.c || "var(--ink2)";
+  let s = `<g class="${o.dim ? "dim" : ""}" style="--c:${c}">`;
+  if (o.halo) s += `<circle class="halo" cx="${x}" cy="${y}" r="31"/>`;
+  s += `<use href="#${icon}" class="ico" x="${x - sz / 2}" y="${y - sz / 2}" width="${sz}" height="${sz}" style="color:${c}"/>${o.extra || ""}`;
+  lines.forEach((t, i) => { if (t) s += `<text class="${["t1", "t2", "t3"][Math.min(i, 2)]}" x="${x}" y="${y + 40 + i * 18}" text-anchor="middle">${esc(t)}</text>`; });
+  return s + "</g>";
+}
+function delayReason(ev) {
+  const t = ev.text || "";
+  const m = t.match(/Reason:\s*([^.\n]+)/i) || t.match(/because of\s+([^.\n]+)/i) || t.match(/\(([^)]{6,60})\)/);
+  return m ? m[1].trim().replace(/^an?\s+/i, "") : "";
+}
+function smoke(x, y) {
+  if (REDUCED) return "";
+  return [0, 1, 2].map(k => `<circle class="smoke" cx="${x}" cy="${y}" r="2.5"><animate attributeName="cy" values="${y};${y - 18}" dur="2.4s" begin="${-k * 0.8}s" repeatCount="indefinite"/><animate attributeName="r" values="2;5" dur="2.4s" begin="${-k * 0.8}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0" dur="2.4s" begin="${-k * 0.8}s" repeatCount="indefinite"/></circle>`).join("");
+}
+/* Outage, delay and quality hold: incident → production → dealers → customers, with real counts. */
+function actScene(ev) {
+  const incs = ev.incidents || [];
+  const s = ev.stats || {};
+  const quality = incs.length && incs.every(i => i.kind === "quality_hold");
+  const P = `f${++FIGN}`;
+  const X0 = 100, X1 = 375, X2 = 650, X3 = 885, RH = 150;
+  const TOP = quality ? 104 : 46;
+  const ys = incs.map((_, i) => TOP + 30 + i * RH);
+  const yS = ys.reduce((a, b) => a + b, 0) / ys.length;
+  const H = TOP + incs.length * RH - 14;
+  const heads = quality ? ["THE LOT", "VEHICLES", "DEALER LOTS", "OWNERS"] : [incs.length > 1 ? "INCIDENTS" : "INCIDENT", "PRODUCTION SLOTS", "DEALERS", "CUSTOMERS"];
+  let wires = "", flow = "", nodes = "";
+  [X0, X1, X2, X3].forEach((x, i) => { nodes += `<text class="colh" x="${x}" y="12" text-anchor="middle">${heads[i]}</text>`; });
+  const used = new Set();
+  const movesOf = incs.map(inc => (ev.moves || []).filter(m => { if (used.has(m) || m.from_plant !== inc.plant_id) return false; used.add(m); return true; }));
+  let unsold = 0, sold = 0;
+  incs.forEach((inc, i) => {
+    const y = ys[i], t = KIND_TONE[inc.kind] || "noise", c = cv(t);
+    const win = `${fmtDate(inc.start_date)} → ${fmtDate(inc.end_date)}`;
+    let x0out = X0 + 34;
+    if (inc.kind === "plant_outage") {
+      nodes += fnode(X0, y, "i-factory", [`${inc.plant_id} · ${PLANT_CITY[inc.plant_id] || ""}`, `line dark ${win}`], { c, halo: true, extra: `<circle class="blink" cx="${X0 + 13}" cy="${y - 15}" r="3.6"/>` });
+    } else if (inc.kind === "supplier_delay") {
+      const reason = delayReason(ev);
+      const road = `M${X0 - 82},${y + 2} L${X0 + 82},${y + 2}`;
+      nodes += `<line class="road" x1="${X0 - 86}" y1="${y + 13}" x2="${X0 + 86}" y2="${y + 13}"/><line class="lane" x1="${X0 - 86}" y1="${y + 13}" x2="${X0 + 86}" y2="${y + 13}" style="animation-play-state:paused"/>`;
+      nodes += `<path class="warn" d="M${X0 + 8},${y - 26} l6,10 h-12z"/>`;
+      nodes += REDUCED ? `<use href="#i-truck" class="ico" x="${X0 - 17}" y="${y - 9}" width="34" height="22" style="color:var(--ink2)"/>`
+        : `<g><use href="#i-truck" class="ico" x="-17" y="-11" width="34" height="22" style="color:var(--ink2)"/><animateMotion dur="7s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0.47;0.47;1" keyTimes="0;0.3;0.75;1" path="${road}"/></g>`;
+      [`${inc.shipment_id || "shipment"} · ${inc.part_id || ""}`, `ETA ${win}`, reason ? `held up: ${reason}` : `from ${inc.supplier_id || "supplier"}`]
+        .forEach((tx, k) => { nodes += `<text class="${["t1", "t2", "t3"][k]}" x="${X0}" y="${y + 40 + k * 18}" text-anchor="middle">${esc(tx)}</text>`; });
+      x0out = X0 + 92;
+    } else if (inc.kind === "quality_hold") {
+      nodes += fnode(X0, y, "i-crate", [`${inc.lot_id || "lot"} held`, `${inc.part_id || ""} · ${inc.plant_id || ""}`, `built ${win}`], { c, halo: true });
+    }
+    let n1 = 0;
+    if (inc.kind === "quality_hold") {
+      const p = (ev.paths || []).find(x => tone(x.incident) === "quality");
+      const vins = new Map();
+      ((p && p.chains) || []).forEach(ch => { const parts = ch.split(" → "); if (parts[2] && !vins.has(parts[2])) vins.set(parts[2], !/unsold/i.test(parts[parts.length - 1] || "")); });
+      sold = [...vins.values()].filter(Boolean).length; unsold = vins.size - sold; n1 = vins.size;
+      nodes += fnode(X1, y, "i-car", [`${n1} vehicles`, `${unsold} unsold · ${sold} sold`], { size: 44 });
+    } else {
+      const mv = movesOf[i];
+      const same = mv.filter(m => m.tool === "mes.reschedule");
+      const xf = mv.filter(m => m.tool === "mes.transfer");
+      const first = same.map(m => m.to_date).sort()[0];
+      n1 = mv.length;
+      nodes += fnode(X1, y, "i-cal", [mv.length ? `${mv.length} orders re-slotted` : "no build affected", `${same.length} same plant · ${xf.length} transferred`, xf.length ? `→ ${[...new Set(xf.map(m => m.to_plant))].join(" · ")}` : (first ? `first slot ${fmtDate(first)}` : "")]);
+    }
+    const a = `${P}a${i}`;
+    wires += `<path id="${a}" class="wire" d="M${x0out},${y} L${X1 - 34},${y}"/>`;
+    flow += movers(a, Math.min(4, pcount(n1)), 2.6, quality ? null : "car", c);
+    const b = `${P}b${i}`;
+    wires += `<path id="${b}" class="wire" d="M${X1 + 34},${y} C${X1 + 140},${y} ${X2 - 140},${yS} ${X2 - 34},${yS}"/>`;
+    flow += quality ? movers(b, pcount(unsold), 2.8, "car", cv("delay")) : movers(b, Math.max(1, Math.round(pcount(s.dealer_notices) / incs.length)), 2.8, "env", "var(--ink2)");
+    if (quality) {
+      const o = `${P}o${i}`;
+      wires += `<path id="${o}" class="wire" d="M${X1 + 26},${y - 18} C${X1 + 170},${y - 120} ${X3 - 170},${yS - 120} ${X3 - 24},${yS - 20}"/>`;
+      flow += movers(o, pcount(sold), 3.6, "env", cv("quality"));
+    }
+  });
+  if (quality) {
+    nodes += fnode(X2, yS, "i-store", [`${s.stop_sales || 0} dealers · stop sale`, `${unsold} unsold vehicles held`], { extra: `<g transform="translate(${X2 + 12},${yS - 26})"><rect class="stopb" width="24" height="12" rx="3"/><text class="stopt" x="12" y="8.6" text-anchor="middle">STOP</text></g>` });
+    nodes += fnode(X3, yS, "i-person", [`${s.customers || 0} owners contacted`, "owners of sold vehicles"], { c: cv("quality") });
+  } else {
+    nodes += fnode(X2, yS, "i-store", [`${s.dealer_notices || 0} dealers notified`, "one notice each", "only their own orders"]);
+    nodes += fnode(X3, yS, "i-key", [`${s.loaners || 0} loaners assigned`, `${s.loaner_checks || 0} pool checks`, "Platinum, then Gold"]);
+    const k = `${P}k`;
+    wires += `<path id="${k}" class="wire" d="M${X2 + 34},${yS} L${X3 - 34},${yS}"/>`;
+    flow += movers(k, pcount(s.loaners), 2.4, "key", "var(--ink2)");
+  }
+  return `<svg class="fig" viewBox="0 0 1000 ${H}" role="img" aria-label="What happened">${wires}${flow}${nodes}</svg>`;
+}
+/* Noise and rumor: the message stops at the coordinator. */
+function quietScene(ev) {
+  const noise = ev.disposition === "noise";
+  const P = `f${++FIGN}`;
+  const y = 52, X0 = 100, X1 = 360, X2 = 620, X3 = 870;
+  const c = cv(noise ? "noise" : "rumor");
+  let s = "";
+  const main = `${P}m`;
+  s += `<path id="${main}" class="wire" d="M${X0 + 30},${y} L${X2 - 34},${y}"/>`;
+  s += `<path class="wire dash" d="M${X2 + 34},${y} L${X3 - 60},${y}"/>`;
+  s += `<path d="M${(X2 + X3) / 2 - 22},${y - 6} l12,12 M${(X2 + X3) / 2 - 10},${y - 6} l-12,12" class="xmark"/>`;
+  if (!REDUCED) s += `<g class="pt" style="--c:${c}"><circle r="3.4"/><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#${main}"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.08;.82;1" dur="3.2s" repeatCount="indefinite"/></g>`;
+  s += fnode(X0, y, "i-doc", [ev.source || "message", `“${clip(ev.text, 30)}”`], { extra: noise ? "" : `<text class="q" x="${X0 + 16}" y="${y - 12}">?</text>` });
+  s += fnode(X1, y, "i-hub", ["Coordinator", noise ? "not about operations" : "nothing confirmed"]);
+  s += noise ? fnode(X2, y, "i-shield", ["Stood down", "no tool called"], { c, halo: true })
+             : fnode(X2, y, "i-person", ["Human review", "escalate · 1 call"], { c, halo: true });
+  s += `<g class="dim">${["i-cal", "i-crate", "i-store"].map((ic, k) => `<use href="#${ic}" class="ico" x="${X3 - 50 + k * 34}" y="${y - 14}" width="28" height="28" style="color:var(--ink2)"/>`).join("")}
+    <text class="t1" x="${X3}" y="${y + 40}" text-anchor="middle">Specialists</text><text class="t2" x="${X3}" y="${y + 58}" text-anchor="middle">${noise ? "not dispatched" : "no write actions"}</text></g>`;
+  return `<svg class="fig" viewBox="0 0 1000 ${y + 72}" role="img" aria-label="What happened">${s}</svg>`;
+}
+function sceneBlock(ev) {
+  const quiet = ev.disposition === "noise" || ev.disposition === "unconfirmed";
+  return `<h2>What happened <small>${quiet ? "the message never reached the specialists" : "orders, dealers and customers in motion"}</small></h2>${quiet ? quietScene(ev) : actScene(ev)}`;
+}
+/* The six gates from the design card, with this event's numbers. */
+function pipeline(ev, playing, story, step) {
+  const quiet = ev.disposition === "noise" ? "noise" : ev.disposition === "unconfirmed" ? "rumor" : "";
+  const llm = ev.llm || {};
+  const chains = (ev.paths || []).reduce((a, p) => a + (p.chains || []).length, 0);
+  const specs = new Set((ev.handoffs || []).map(h => h.agent).filter(a => a !== "Coordinator"));
+  const acts = ev.actions || [], failed = acts.filter(a => a.ok === false).length, ni = (ev.incidents || []).length;
+  const gates = [
+    ["Wire", ev.source || "message"],
+    ["Llama reads", !llm.used ? "reader" : llm.agrees ? "agreed" : "reader kept"],
+    ["Graph binds", chains ? `${chains.toLocaleString()} chains` : "nothing to bind"],
+    ["Coordinator", quiet === "noise" ? "stands down" : quiet === "rumor" ? "escalates" : `${ni} incident${ni > 1 ? "s" : ""}`],
+    ["Specialists", specs.size ? `${specs.size} desk${specs.size > 1 ? "s" : ""}` : "not needed"],
+    ["Gateway", `${acts.length} call${acts.length === 1 ? "" : "s"} · ${failed} failed`]
+  ];
+  const off = i => (quiet && (i === 2 || i === 4)) || (quiet === "noise" && i === 5);
+  const last = quiet === "noise" ? 3 : 5;
+  const gateOf = b => !b ? last : b.key === "event" ? 1 : b.key === "summary" ? 3 : b.key === "graph" ? 2 : b.key === "agents" ? Math.min(4, last) : last;
+  let reach = last, cur = -1;
+  if (playing) { reach = Math.min(last, Math.max(...story.slice(0, step + 1).map(gateOf))); cur = Math.min(last, gateOf(story[step])); }
+  const x = i => 46 + i * 134, y = 12;
+  let s = "";
+  for (let i = 0; i < 5; i++) s += `<line class="ln ${i < reach ? "done" : ""}" x1="${x(i) + 7}" y1="${y}" x2="${x(i + 1) - 7}" y2="${y}"/>`;
+  if (!REDUCED) s += `<circle class="pulse" r="3.5"><animateMotion dur="${(1.2 + reach * 0.45).toFixed(2)}s" repeatCount="indefinite" path="M${x(0)},${y} L${x(reach)},${y}"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.85;1" dur="${(1.2 + reach * 0.45).toFixed(2)}s" repeatCount="indefinite"/></circle>`;
+  gates.forEach(([l, sub], i) => {
+    const cls = off(i) ? "off" : i === cur ? "cur" : i <= reach ? "done" : "";
+    s += `<g class="g ${cls}">${i === cur && !REDUCED ? `<circle class="ring" cx="${x(i)}" cy="${y}" r="6"/>` : ""}<circle class="n" cx="${x(i)}" cy="${y}" r="6"/><text class="gl" x="${x(i)}" y="${y + 28}" text-anchor="middle">${esc(l)}</text><text class="gs" x="${x(i)}" y="${y + 44}" text-anchor="middle">${esc(sub)}</text></g>`;
+  });
+  return `<svg class="fig pipe" viewBox="0 0 760 62" style="--c:${cv(tone(ev.categories[0]))}" role="img" aria-label="Pipeline">${s}</svg>`;
+}
+
+/* ───────── live diagram: the agents doing the work ───────── */
+const SIM_TONE = { "Coordinator": "#7c3aed", "Supply Chain Planner": "#d97706", "Quality Sentinel": "#2563eb", "Dealer & Customer Desk": "#0d9488" };
+const SIM_KEY = { "Coordinator": "coord", "Supply Chain Planner": "sup", "Quality Sentinel": "qs", "Dealer & Customer Desk": "desk" };
+const SYS = [
+  { id: "mes", name: "MES", sub: "production schedule", tools: ["mes.reschedule", "mes.transfer"] },
+  { id: "qms", name: "Quality system", sub: "lot holds", tools: ["quality.hold_lot"] },
+  { id: "dlr", name: "Dealer portal", sub: "notices · stop sale", tools: ["dealer.notify", "dealer.stop_sale"] },
+  { id: "crm", name: "CRM", sub: "customers · loaners", tools: ["crm.loaner_availability", "crm.assign_loaner", "crm.notify_customer"] },
+  { id: "hum", name: "Human operator", sub: "escalation queue", tools: ["escalate"] }
+];
+const SYS_OF = {};
+SYS.forEach(s => s.tools.forEach(t => { SYS_OF[t] = s.id; }));
+const GEO = {
+  wire: [70, 215], coord: [250, 215], gate: [715, 215],
+  spec: { sup: [490, 85], qs: [490, 215], desk: [490, 345] },
+  sys: { mes: [905, 55], qms: [905, 135], dlr: [905, 215], crm: [905, 295], hum: [905, 375] }
+};
+const SIM = { id: null, t: 0, playing: false, speed: 1, raf: 0, last: 0, plan: null, els: null, pick: null };
+
+function simPlan(ev) {
+  const quiet = ev.disposition === "noise" || ev.disposition === "unconfirmed";
+  const acts = ev.actions || [];
+  const order = [];
+  (ev.handoffs || []).forEach(h => { if (h.agent !== "Coordinator" && !order.includes(h.agent)) order.push(h.agent); });
+  const disp = {}, ready = {};
+  order.forEach((a, k) => { disp[a] = 2.6 + k * 0.8; ready[a] = disp[a] + 0.6 + 1.8; });
+  const n = acts.filter(a => a.agent !== "Coordinator").length;
+  const gap = Math.min(0.5, Math.max(0.06, 9 / Math.max(1, n)));
+  let cursor = 0;
+  const launches = acts.map(a => {
+    const own = a.agent === "Coordinator" || !SIM_KEY[a.agent];
+    const t0 = Math.max(cursor, own ? 2.8 : (ready[a.agent] || 3));
+    cursor = t0 + (own ? 0.7 : gap);
+    return { a, t0, from: own ? "coord" : SIM_KEY[a.agent], sys: SYS_OF[a.tool] || "hum", tone: SIM_TONE[a.agent] || "#7c3aed" };
+  });
+  const TRAVEL = 1.0;
+  const lastArr = launches.length ? launches[launches.length - 1].t0 + TRAVEL : 0;
+  const end = Math.max(quiet ? 4.2 : 0, lastArr + 0.8, order.length ? ready[order[order.length - 1]] + 0.6 : 3.6);
+  return { quiet, order, disp, ready, launches, TRAVEL, end };
+}
+function simFinding(name, ev) {
+  if (name === "Supply Chain Planner") return `Found ${(ev.moves || []).length} builds to move`;
+  if (name === "Quality Sentinel") {
+    const qp = (ev.paths || []).find(p => tone(p.incident) === "quality");
+    return `Traced ${new Set(((qp && qp.chains) || []).map(c => c.split(" → ")[2])).size} cars`;
+  }
+  const dn = (ev.actions || []).filter(a => a.tool === "dealer.notify").length;
+  return dn ? `Found ${dn} dealers to tell` : "No customer orders affected";
+}
+function simHTML(ev) {
+  const P = simPlan(ev);
+  const used = new Set(P.launches.map(l => l.sys));
+  const path = (id, d, cls) => `<path id="sim-p-${id}" d="${d}" class="sim-e ${cls || ""}"/>`;
+  let e = "";
+  e += path("wire", "M125 215 L160 215");
+  Object.entries(GEO.spec).forEach(([k, [x, y]]) => {
+    const name = Object.keys(SIM_KEY).find(n => SIM_KEY[n] === k);
+    const on = P.order.includes(name);
+    e += path(`c-${k}`, `M340 215 C 372 215, 362 ${y}, 395 ${y}`, on ? "" : "off");
+    e += path(`g-${k}`, `M585 ${y} C 622 ${y}, 618 215, 655 215`, on ? "" : "off");
+  });
+  Object.entries(GEO.sys).forEach(([k, [x, y]]) => { e += path(`s-${k}`, `M775 215 C 805 215, 795 ${y}, 825 ${y}`, used.has(k) ? "" : "off"); });
+  e += path("cg", "M250 273 C 250 432, 715 432, 715 280", P.launches.some(l => l.from === "coord") ? "" : "off");
+  const hd = [[70, "MESSAGE"], [250, "COORDINATOR"], [490, "SPECIALIST AGENTS"], [715, "GATEWAY"], [905, "COMPANY SYSTEMS"]].map(([x, t]) => `<text x="${x}" y="12" text-anchor="middle" class="sim-hd">${t}</text>`).join("");
+  const card = (cx, cy, w, h, color, title, sub, key, unit) => `<g class="sim-card" data-pick="${key}" style="--c:${color}" transform="translate(${cx - w / 2} ${cy - h / 2})">
+      <rect class="sc-bg" width="${w}" height="${h}" rx="12"/><rect x="0" y="10" width="4" height="${h - 20}" rx="2" fill="${color}"/>
+      <text x="16" y="24" class="sc-t">${esc(title)}</text><text x="16" y="40" class="sc-s">${esc(sub)}</text>
+      <text x="16" y="${h - 13}" class="sc-st" id="sim-st-${key}"></text>
+      ${unit ? `<text x="${w - 12}" y="26" text-anchor="end" class="sc-n" id="sim-n-${key}">0</text><text x="${w - 12}" y="40" text-anchor="end" class="sc-nl">${unit}</text>` : ""}</g>`;
+  let cards = card(GEO.wire[0], GEO.wire[1], 110, 84, "#64748b", "Message", `${ev.event_id} · ${time(ev)}`, "wire", "");
+  cards += card(GEO.coord[0], GEO.coord[1], 180, 116, SIM_TONE.Coordinator, "Coordinator", "reads, splits, dispatches", "coord", "");
+  Object.entries(GEO.spec).forEach(([k, [x, y]]) => {
+    const name = Object.keys(SIM_KEY).find(n => SIM_KEY[n] === k);
+    const c = CREW.find(c => c.name === name) || {};
+    cards += card(x, y, 190, 92, SIM_TONE[name], name, c.role || "", k, "");
+  });
+  cards += `<g class="sim-card" data-pick="gate" style="--c:#059669" transform="translate(655 150)"><rect class="sc-bg" width="120" height="130" rx="12"/>
+      <use href="#i-shield" x="42" y="12" width="36" height="36" class="sim-ico"/><text x="60" y="66" text-anchor="middle" class="sc-t">Gateway</text>
+      <text x="60" y="82" text-anchor="middle" class="sc-s">checks every call</text><text x="60" y="106" text-anchor="middle" class="sc-n" id="sim-n-gate">0</text><text x="60" y="121" text-anchor="middle" class="sc-nl" id="sim-f-gate">checked · 0 failed</text></g>`;
+  SYS.forEach(s => {
+    const [x, y] = GEO.sys[s.id];
+    cards += `<g class="sim-card sys" data-pick="sys-${s.id}" style="--c:#0f172a" transform="translate(${x - 80} ${y - 29})"><rect class="sc-bg" width="160" height="58" rx="10"/>
+      <text x="14" y="24" class="sc-t">${s.name}</text><text x="14" y="41" class="sc-s">${s.sub}</text><text x="146" y="35" text-anchor="end" class="sc-n" id="sim-n-${s.id}">0</text></g>`;
+  });
+  const pool = Array.from({ length: 36 }, () => `<circle r="5" class="sim-pk" style="display:none"/>`).join("");
+  const disp = P.order.map(n => `<circle r="6" class="sim-pk" data-disp="${SIM_KEY[n]}" style="display:none;fill:${SIM_TONE.Coordinator}"/>`).join("");
+  const msg = `<g id="sim-msg" style="display:none"><rect x="-9" y="-7" width="18" height="14" rx="2.5" fill="#fff" stroke="#0f172a" stroke-width="1.6"/><path d="M-8-6 0 1l8-7" fill="none" stroke="#0f172a" stroke-width="1.6"/></g>`;
+  const badge = ev.disposition === "noise" ? `<g id="sim-badge" style="display:none"><rect x="640" y="296" width="150" height="30" rx="15" fill="#ecfdf5" stroke="#059669"/><text x="715" y="316" text-anchor="middle" class="sim-badge">No action needed</text></g>` : "";
+  return `<div class="simbar">
+      <button class="btn" id="sim-play"></button><button class="btn" id="sim-restart">↺ Restart</button>
+      <label class="muted" style="font-size:12.5px">Speed <select id="sim-speed"><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select></label>
+      <div class="simprog"><i id="sim-bar"></i></div><span class="muted" id="sim-time" style="font-size:12.5px"></span></div>
+    <div class="simwrap" id="sim"><svg viewBox="0 0 1000 440" role="img" aria-label="Agents doing the work">${hd}${e}${cards}${badge}${disp}${pool}${msg}</svg></div>
+    <div class="simnow" id="sim-now"></div><div id="sim-inspect" class="siminspect" style="display:none"></div>`;
+}
+function simMount(ev) {
+  const root = document.getElementById("sim");
+  if (!root) { SIM.els = null; return; }
+  if (SIM.id !== ev.event_id) { SIM.id = ev.event_id; SIM.plan = simPlan(ev); SIM.t = SIM.plan.end; SIM.playing = false; SIM.pick = null; }
+  const svg = root.querySelector("svg");
+  const paths = {}, len = {};
+  svg.querySelectorAll("path[id^='sim-p-']").forEach(p => { const k = p.id.slice(6); paths[k] = p; len[k] = p.getTotalLength(); });
+  const q = id => document.getElementById(id);
+  SIM.els = {
+    paths, len, pool: [...svg.querySelectorAll("circle.sim-pk:not([data-disp])")],
+    disp: Object.fromEntries([...svg.querySelectorAll("[data-disp]")].map(c => [c.dataset.disp, c])),
+    msg: q("sim-msg"), badge: q("sim-badge"), log: q("sim-log"), bar: q("sim-bar"), time: q("sim-time"), inspect: q("sim-inspect"),
+    cards: Object.fromEntries([...svg.querySelectorAll("[data-pick]")].map(g => [g.dataset.pick, g])), shown: -1
+  };
+  q("sim-play").onclick = () => { if (SIM.playing) simPause(); else simStart(ev, SIM.t >= SIM.plan.end); };
+  q("sim-restart").onclick = () => simStart(ev, true);
+  q("sim-speed").value = String(SIM.speed);
+  q("sim-speed").onchange = e => { SIM.speed = Number(e.target.value); };
+  Object.entries(SIM.els.cards).forEach(([k, g]) => { g.onclick = () => { SIM.pick = SIM.pick === k ? null : k; simInspect(ev); simDraw(true); }; });
+  simInspect(ev);
+  simDraw(true);
+  if (SIM.playing) { cancelAnimationFrame(SIM.raf); SIM.last = 0; SIM.raf = requestAnimationFrame(simFrame); }
+}
+function simStart(ev, fromZero) {
+  if (SIM.id !== ev.event_id) { SIM.id = ev.event_id; SIM.plan = simPlan(ev); SIM.pick = null; }
+  if (fromZero) { SIM.t = 0; if (SIM.els) SIM.els.shown = -1; }
+  SIM.playing = !REDUCED;
+  if (REDUCED) SIM.t = SIM.plan.end;
+  cancelAnimationFrame(SIM.raf);
+  SIM.last = 0;
+  if (SIM.els) simDraw(true);
+  if (SIM.playing) SIM.raf = requestAnimationFrame(simFrame);
+}
+function simPause() { SIM.playing = false; cancelAnimationFrame(SIM.raf); simDraw(true); }
+function simFrame(now) {
+  if (!SIM.playing) return;
+  const dt = SIM.last ? Math.min(0.1, (now - SIM.last) / 1000) : 0;
+  SIM.last = now;
+  SIM.t = Math.min(SIM.plan.end, SIM.t + dt * SIM.speed);
+  if (SIM.t >= SIM.plan.end) SIM.playing = false;
+  simDraw(!SIM.playing);
+  if (!SIM.playing && SIM.onDone) { const f = SIM.onDone; SIM.onDone = null; f(); }
+  if (SIM.playing) SIM.raf = requestAnimationFrame(simFrame);
+}
+function simInspect(ev) {
+  const E = SIM.els;
+  if (!E || !E.inspect) return;
+  const k = SIM.pick;
+  const acts = ev.actions || [];
+  if (!k) { E.inspect.style.display = "none"; return; }
+  E.inspect.style.display = "";
+  if (k === "wire") { E.inspect.innerHTML = `<b>Message · ${esc(ev.source || "")} · ${time(ev)}</b><p>“${esc(ev.text)}”</p>`; return; }
+  if (k === "gate") { const f = acts.filter(a => a.ok === false).length; E.inspect.innerHTML = `<b>Gateway (run by the Coordinator)</b><p>Before any call reaches the company systems, every id and argument is checked against the knowledge graph and the policy handbook. A rejected call is logged and not retried.</p><p><b>${acts.length}</b> checked · <b>${f}</b> failed</p>`; return; }
+  if (k.startsWith("sys-")) {
+    const s = SYS.find(x => x.id === k.slice(4));
+    const mine = acts.filter(a => (SYS_OF[a.tool] || "hum") === s.id);
+    E.inspect.innerHTML = `<b>${s.name} · ${s.sub}</b><p>${mine.length ? `${mine.length} call${mine.length === 1 ? "" : "s"} received:` : "No calls for this message."}</p>${mine.slice(0, 8).map(a => `<div class="insrow"><code>${esc(a.tool)}</code><span>${esc(argSummary(a))}</span></div>`).join("")}${mine.length > 8 ? `<p class="muted">+ ${mine.length - 8} more in the audit trail</p>` : ""}`;
+    return;
+  }
+  const name = Object.keys(SIM_KEY).find(n => SIM_KEY[n] === k);
+  const hand = (ev.handoffs || []).filter(h => h.agent === name);
+  const mine = acts.filter(a => a.agent === name);
+  E.inspect.innerHTML = `<b style="color:${SIM_TONE[name]}">${esc(name)}</b>${hand.length ? hand.map(h => `<p>${esc(h.did)}</p>`).join("") : `<p class="muted">Not needed for this message. It stood by.</p>`}
+    ${mine.length ? countPairs(mine.map(a => a.tool)).map(([t, n]) => `<div class="insrow"><code>${esc(t)}</code><span>${n}</span></div>`).join("") : ""}`;
+}
+function simDraw(full) {
+  const E = SIM.els, P = SIM.plan, ev = current();
+  if (!E || !P || !ev || ev.event_id !== SIM.id) return;
+  const t = SIM.t;
+  const at = (k, f) => E.paths[k].getPointAtLength(Math.max(0, Math.min(1, f)) * E.len[k]);
+  const put = (el, pt) => { if (!el) return; if (!pt) { el.style.display = "none"; return; } el.style.display = ""; if (el.tagName === "g") el.setAttribute("transform", `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`); else { el.setAttribute("cx", pt.x.toFixed(1)); el.setAttribute("cy", pt.y.toFixed(1)); } };
+  put(E.msg, t < 0.8 ? at("wire", t / 0.8) : null);
+  P.order.forEach(name => { const k = SIM_KEY[name], d = P.disp[name]; put(E.disp[k], t >= d && t < d + 0.6 ? at(`c-${k}`, (t - d) / 0.6) : null); });
+  let pi = 0;
+  const half = P.TRAVEL / 2;
+  const sysN = {}, agN = {};
+  let gated = 0, arrived = 0, failed = 0;
+  for (const l of P.launches) {
+    const u = t - l.t0;
+    if (u < 0) break;
+    if (u >= half) gated++;
+    if (u >= P.TRAVEL) { arrived++; sysN[l.sys] = (sysN[l.sys] || 0) + 1; agN[l.from] = (agN[l.from] || 0) + 1; if (l.a.ok === false) failed++; continue; }
+    const c = E.pool[pi++];
+    if (!c) continue;
+    c.style.fill = l.tone;
+    put(c, u < half ? at(l.from === "coord" ? "cg" : `g-${l.from}`, u / half) : at(`s-${l.sys}`, (u - half) / half));
+  }
+  for (; pi < E.pool.length; pi++) E.pool[pi].style.display = "none";
+  const setT = (id, v) => { const el = document.getElementById(id); if (el && el.textContent !== String(v)) el.textContent = v; };
+  SYS.forEach(s => setT(`sim-n-${s.id}`, sysN[s.id] || 0));
+  ["sup", "qs", "desk"].forEach(k => setT(`sim-n-${k}`, agN[k] || 0));
+  setT("sim-n-coord", arrived);
+  setT("sim-n-gate", gated);
+  setT("sim-f-gate", `checked · ${failed} failed`);
+  const total = P.launches.length;
+  let cs, coordOn = true;
+  if (t < 0.8) cs = "Message incoming…";
+  else if (t < 1.7) cs = "Reading the message…";
+  else if (P.quiet) cs = ev.disposition === "noise" ? (t < 2.6 ? "Is this about operations?" : "No · standing down") : (t < 2.6 ? "Is anything confirmed?" : arrived ? "Escalated to a human ✓" : "No · escalating");
+  else if (t < 2.6) cs = `Understood: ${(ev.incidents || []).length > 1 ? `${(ev.incidents || []).length} incidents` : (ev.categories[0] || "").toLowerCase()}`;
+  else if (arrived < total) cs = arrived ? `Checking & sending ${arrived}/${total}` : "Dispatching to specialists";
+  else { cs = `Done ✓ ${total} sent`; coordOn = false; }
+  if (P.quiet && t >= 2.6 && (ev.disposition === "noise" || arrived)) coordOn = false;
+  setT("sim-st-coord", cs);
+  setT("sim-st-wire", t < 0.8 ? "arriving…" : "delivered ✓");
+  const cls = (k, on, idle) => { const g = E.cards[k]; if (!g) return; g.classList.toggle("on", !!on); g.classList.toggle("idle", !!idle); g.classList.toggle("picked", SIM.pick === k); };
+  cls("wire", t < 0.8, false);
+  cls("coord", coordOn && t >= 0.8, false);
+  Object.keys(SIM_KEY).filter(n => n !== "Coordinator").forEach(name => {
+    const k = SIM_KEY[name];
+    let st, on = false, idle = false;
+    if (!P.order.includes(name)) { st = "Standing by"; idle = true; }
+    else {
+      const d = P.disp[name], mine = P.launches.filter(l => l.from === k), done = mine.filter(l => t - l.t0 >= P.TRAVEL).length;
+      if (t < d) st = "Waiting for a handoff";
+      else if (t < d + 0.6) { st = "Handoff received"; on = true; }
+      else if (t < d + 1.5) { st = "Walking the graph…"; on = true; }
+      else if (t < P.ready[name]) { st = simFinding(name, ev); on = true; }
+      else if (done < mine.length) { st = `Sending ${done}/${mine.length}`; on = true; }
+      else st = `Done ✓ ${mine.length} planned`;
+    }
+    setT(`sim-st-${k}`, st);
+    cls(k, on, idle);
+  });
+  cls("gate", P.launches.some(l => t - l.t0 >= 0 && t - l.t0 < P.TRAVEL), false);
+  SYS.forEach(s => cls(`sys-${s.id}`, P.launches.some(l => l.sys === s.id && t - l.t0 >= P.TRAVEL / 2 && t - l.t0 < P.TRAVEL + 0.25), !P.launches.some(l => l.sys === s.id)));
+  if (E.badge) E.badge.style.display = t >= 2.6 ? "" : "none";
+  if (E.bar) E.bar.style.width = `${(t / P.end) * 100}%`;
+  if (E.time) E.time.textContent = `${t.toFixed(1)} s of ${P.end.toFixed(1)} s`;
+  const play = document.getElementById("sim-play");
+  if (play && full !== false) play.innerHTML = SIM.playing ? "❚❚ Pause" : t >= P.end && t > 0 ? `${PLAY}Watch again` : `${PLAY}Watch the agents work`;
+  const nowEl = document.getElementById("sim-now");
+  if (nowEl) {
+    let html;
+    if (P.quiet && ev.disposition === "noise" && t >= 2.6) html = `<span class="ok">✓</span> Not about operations. No agent needed, nothing sent.`;
+    else if (P.quiet && arrived) html = `<span class="ok">✓</span> Escalated to a human operator. Nothing else changed.`;
+    else if (total && arrived === total && !SIM.playing) html = `<span class="ok">✓</span> Done. ${total} actions sent, ${failed} failed.`;
+    else if (arrived) { const l = P.launches[arrived - 1]; html = `<i style="background:${l.tone}"></i><b style="color:${l.tone}">${esc(l.a.agent)}</b><span class="arr">→</span><b>${esc((SYS.find(x => x.id === l.sys) || {}).name || "")}</b><span>${esc(plainCall(l.a))}</span><em>${arrived} / ${total}</em>`; }
+    else html = `<span class="muted">${esc(cs)}</span>`;
+    if (E.nowHtml !== html) { E.nowHtml = html; nowEl.innerHTML = html; }
+  }
+  const tally = {};
+  P.launches.slice(0, arrived).forEach(l => { tally[l.a.tool] = (tally[l.a.tool] || 0) + 1; });
+  document.querySelectorAll(".bn[data-tools]").forEach(el => {
+    const keys = el.dataset.tools.split(",");
+    let n = 0;
+    Object.entries(tally).forEach(([tool, c]) => { if (keys.includes("*") || keys.includes(tool) || (keys.includes("write") && !["crm.loaner_availability", "escalate"].includes(tool))) n += c; });
+    const b = el.querySelector("b");
+    if (b && b.textContent !== n.toLocaleString()) b.textContent = n.toLocaleString();
+  });
+}
+
+
+function plainCall(a) {
+  const x = a.args || {};
+  const n = (x.customer_order_ids || []).length;
+  switch (a.tool) {
+    case "mes.reschedule": return `move ${x.production_order_id} to ${fmtDate(x.new_date)}`;
+    case "mes.transfer": return `move ${x.production_order_id} to ${PLANT_CITY[x.to_plant_id] || x.to_plant_id} on ${fmtDate(x.new_date)}`;
+    case "dealer.notify": return `notify dealer ${x.dealer_id} about ${n} order${n === 1 ? "" : "s"}`;
+    case "dealer.stop_sale": return `stop sale of ${(x.vins || []).length} cars at dealer ${x.dealer_id}`;
+    case "crm.loaner_availability": return `check the loaner pool at dealer ${x.dealer_id}`;
+    case "crm.assign_loaner": return `give a loaner car to order ${x.customer_order_id}`;
+    case "crm.notify_customer": return `write to owner ${x.customer_id}`;
+    case "quality.hold_lot": return `put lot ${x.lot_id} on hold`;
+    case "escalate": return "send it to a human for review";
+  }
+  return a.tool;
+}
+function shortTitle(ev) {
+  const incs = ev.incidents || [];
+  if (ev.disposition === "noise") return "Not an operations message";
+  if (ev.disposition === "unconfirmed") return "Unconfirmed rumor";
+  return incs.map(i => i.kind === "plant_outage" ? `${PLANT_CITY[i.plant_id] || i.plant_id} plant down`
+    : i.kind === "supplier_delay" ? `Late parts for ${PLANT_CITY[i.plant_id] || i.plant_id}`
+    : `Bad part lot at ${PLANT_CITY[i.plant_id] || i.plant_id}`).join(" + ") || ev.categories[0];
+}
+function impact(ev) {
+  const acts = ev.actions || [], failed = acts.filter(a => a.ok === false).length;
+  const incs = ev.incidents || [];
+  const count = tools => acts.filter(a => tools.includes(a.tool)).length;
+  if (ev.disposition === "noise") return { title: "Not an operations message", sub: "Correctly ignored. No agent was needed and nothing changed.", nums: [[0, "actions sent", "*"], [0, "records changed", "write"]] };
+  if (ev.disposition === "unconfirmed") return { title: "An unconfirmed rumor", sub: "Nothing in it can be confirmed, so it goes to a human. Nothing changes on a guess.", nums: [[1, "escalation to a human", "escalate"], [0, "records changed", "write"]] };
+  const phrase = i => i.kind === "plant_outage" ? `${PLANT_CITY[i.plant_id] || i.plant_id} plant down ${fmtDate(i.start_date)} – ${fmtDate(i.end_date)}`
+    : i.kind === "supplier_delay" ? `Parts for ${PLANT_CITY[i.plant_id] || i.plant_id} late until ${fmtDate(i.end_date)}`
+    : `Bad part lot ${i.lot_id} at ${PLANT_CITY[i.plant_id] || i.plant_id}`;
+  const title = incs.length > 1 ? incs.map((i, k) => { const t = phrase(i); return k && i.kind !== "plant_outage" ? t[0].toLowerCase() + t.slice(1) : t; }).join(", and ") : phrase(incs[0] || {});
+  const quality = incs.some(i => i.kind === "quality_hold");
+  const nums = quality
+    ? [[count(["quality.hold_lot"]), "lot on hold", "quality.hold_lot"], [count(["dealer.stop_sale"]), "dealers stopped sale", "dealer.stop_sale"], [count(["crm.notify_customer"]), "owners contacted", "crm.notify_customer"], [acts.length, `actions · ${failed} failed`, "*"]]
+    : [[count(["mes.reschedule", "mes.transfer"]), "builds moved", "mes.reschedule,mes.transfer"], [count(["dealer.notify"]), "dealers told", "dealer.notify"], [count(["crm.assign_loaner"]), "loaner cars", "crm.assign_loaner"], [acts.length, `actions · ${failed} failed`, "*"]];
+  return { title, sub: "Four AI agents handled it in seconds, following the policy handbook.", nums };
+}
+function detailsHTML(ev) {
+  const blocks = { event: eventBlock, summary: summaryBlock, graph: chainBlock, agents: e => noHead(agentsBlock(e, null)), actions: actionsTaken, audit: auditBlock };
+  const titles = { event: "Message", summary: "Summary and reason", graph: "Graph path", agents: "What each agent did", actions: "Actions taken", audit: "Audit trail" };
+  return `<div class="details">${beats(ev).map((b, i) => `<section class="sec usec" data-beat="${b.key}"><h2><span class="num">${i + 1}</span>${titles[b.key]}</h2>${blocks[b.key](ev)}</section>`).join("")}</div>`;
+}
+
+/* ───────── the six use-case sections ───────── */
+const noHead = html => html.replace(/^\s*<h2>[\s\S]*?<\/h2>/, "");
+function eventBlock(ev) {
+  const { html, types } = highlight(ev);
+  const names = { plant: "Plant", part: "Part", shipment: "Shipment", lot: "Lot", supplier: "Supplier", date: "Date", hedge: "Unsure wording", off: "Off-topic" };
+  return `<div class="two"><div><h3 class="sub">Message · ${esc(ev.source || "")} · ${time(ev)}</h3><p class="quote">${html}</p>
+      <div class="legend">${[...types].map(t => `<span class="k-${t}">${names[t]}</span>`).join("") || "<span class='k-off'>No plant, part, shipment, lot or date found</span>"}</div></div>
+    <div>${understood(ev).replace("<h2>Understood as</h2>", `<h3 class="sub">What the AI understood</h3>`)}</div></div>`;
+}
+function summaryBlock(ev) {
+  const quiet = ev.disposition === "noise" || ev.disposition === "unconfirmed";
+  if (quiet) return `<p class="lead">${esc(ev.summary)}</p>` + noHead(whyNot(ev)).replace(/<p class="prose">[\s\S]*?<\/p>/, "");
+  return `<p class="lead">${esc(ev.summary)}</p><p class="prose">${esc(ev.reasoning)}</p>
+    <ul class="checks">${(ev.guardrails || []).map(g => `<li><span class="y">✓</span>${esc(g)}</li>`).join("")}</ul>`;
+}
+function chainBlock(ev) {
+  const paths = ev.paths || [];
+  const rows = paths.map(p => {
+    const chains = (p.chains || []).map(c => c.split(" → ").map(x => x.replace(" (BOM)", "").trim()));
+    const labels = (p.pattern || "").split("→").map(x => x.trim());
+    const n = Math.max(0, ...chains.map(c => c.length));
+    const boxes = [];
+    for (let i = 0; i < n; i++) {
+      const ids = [...new Set(chains.map(c => c[i]).filter(Boolean))];
+      const last = i === n - 1;
+      let count = ids.length.toLocaleString(), sample = ids[0] || "";
+      if (last) {
+        const d = new Set(), cu = new Set();
+        ids.forEach(x => { const [a, b] = x.split("/").map(y => y.trim()); if (a) d.add(a); if (b && !/unsold/i.test(b)) cu.add(b); });
+        count = `${d.size} / ${cu.size}`;
+      }
+      boxes.push(`<div class="cbox${i === 0 ? " root" : ""}"><span>${esc(labels[i] || "")}</span><b>${count}</b><em>${esc(sample)}${ids.length > 1 ? " …" : ""}</em></div>`);
+    }
+    return `<div class="chainrow"><div class="chainhead"><span class="pill" style="--c:${cv(tone(p.incident))}"><i class="dot" style="--c:${cv(tone(p.incident))}"></i>${esc(p.incident)}</span><span class="muted">${(p.chains || []).length.toLocaleString()} cited paths, e.g. <code>${esc((p.chains || [])[0] || "")}</code></span></div>
+      <div class="chain">${boxes.join('<span class="carrow">→</span>')}</div></div>`;
+  }).join("");
+  return rows + `<p style="margin:14px 0 0"><button class="link" id="chainsbtn">${state.showChains ? "Hide the cited paths" : "Show every cited path"}</button></p>
+    ${state.showChains ? paths.map(p => `<div class="chains">${(p.chains || []).slice(0, 80).map(c => `<div>${esc(c)}</div>`).join("")}${(p.chains || []).length > 80 ? `<div>… ${(p.chains || []).length - 80} more in the trace file</div>` : ""}</div>`).join("") : ""}`;
+}
+function actionsTaken(ev) {
+  const acts = ev.actions || [];
+  const pairs = countPairs(acts.map(a => a.tool));
+  let out = pairs.length ? `<div class="toollist">${pairs.map(([t, n]) => `<div><code>${esc(t)}</code><b>${n}</b></div>`).join("")}</div>` : `<p class="prose">No tool was called.</p>`;
+  if ((ev.moves || []).length) out += `<h3 class="sub" style="margin-top:22px">Slot reasoning · new build dates, checked against plant capacity</h3>` + noHead(slotBlock(ev));
+  else if ((ev.paths || []).some(p => tone(p.incident) === "quality")) out += `<h3 class="sub" style="margin-top:22px">Sold and unsold vehicles</h3>` + noHead(qualityBlock(ev));
+  return out;
+}
+function auditBlock(ev) {
+  const acts = ev.actions || [];
+  if (!acts.length) return `<p class="prose">No tool was called, so the audit trail for this message is empty.</p>`;
+  return `<div class="tablewrap" style="margin-top:0"><table><thead><tr><th>#</th><th>Planned by</th><th>Tool</th><th>Arguments</th><th>Result</th></tr></thead><tbody>${acts.map((a, i) => `<tr><td class="f">${i + 1}</td><td>${esc(a.agent)}</td><td class="m">${esc(a.tool)}</td><td class="m">${esc(argSummary(a))}</td><td class="${a.ok === false ? "bad" : "ok"}">${a.ok === false ? "failed" : "ok"}</td></tr>`).join("")}</tbody></table></div>
+    <p class="muted" style="font-size:12.5px;margin:10px 0 0">${acts.length} calls · ${acts.filter(a => a.ok === false).length} failed · the full log for all messages is on the Audit page.</p>`;
+}
+
+/* ───────── renderers ───────── */
+function syncNav() { document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.view === state.view)); }
+function showView() { ["tower", "crewpage", "ontology", "audit", "design"].forEach(id => document.getElementById(id).classList.toggle("hidden", state.view !== id)); }
+function renderHeader() {
+  const r = state.report;
+  document.getElementById("model").textContent = `${(r.meta.model || "").split(" ")[0]} · local`;
+  document.getElementById("model").title = r.meta.model || "";
+  const b = document.getElementById("shiftbtn");
+  b.innerHTML = state.shift ? `<span class="rec"></span>Stop the shift` : `${PLAY}Play the shift`;
+  b.className = state.shift ? "btn live" : "btn primary";
+  document.getElementById("pace").value = state.pace;
+  renderBar();
+}
+function renderBar() {
+  const r = state.report, ev = current();
+  const agreed = r.events.filter(e => e.llm && e.llm.agrees === true).length;
+  const bar = document.getElementById("bar");
+  if (state.shift) {
+    const n = r.events.length, i = state.shift.i;
+    const calls = r.events.slice(0, i + 1).reduce((s, e) => s + (e.actions || []).length, 0);
+    bar.innerHTML = `<span class="live"><span class="rec"></span>Live</span><span><b>${ev ? time(ev) : ""}</b>tower time</span><span><b>${i + 1}</b>of ${n} messages</span><span><b>${calls.toLocaleString()}</b>tool calls so far</span><span class="right">${fmtLong(r.meta.today)}</span><i class="prog" style="width:${((i + 1) / n) * 100}%"></i>`;
+    return;
+  }
+  bar.innerHTML = `
+    <button data-go="tower" data-filter="All"><b>${r.events.length}</b>events</button>
+    <button data-go="audit"><b>${Number(r.meta.n_tool_calls).toLocaleString()}</b>tool calls</button>
+    <button data-go="audit"><b>${r.meta.n_failed}</b>failed</button>
+    <button data-go="tower" data-filter="Noise"><b>${r.events.filter(e => e.disposition === "noise").length}</b>noise held</button>
+    <button data-go="tower" data-filter="Unconfirmed report"><b>${r.events.filter(e => e.disposition === "unconfirmed").length}</b>escalated</button>
+    <button data-go="design"><b>${agreed}/${r.events.length}</b>readings agreed with the model</button>
+    <span class="right">${fmtLong(r.meta.today)}</span>`;
+  bindGo(bar);
+}
+function renderFeed() {
+  const all = state.report.events;
+  let events = all.filter(matches);
+  if (state.shift) events = events.filter(e => all.indexOf(e) <= state.shift.i);
+  const newcomer = state.shift && state.arrived !== state.selected ? state.selected : null;
+  if (newcomer) state.arrived = newcomer;
+  document.getElementById("feed").innerHTML = events.map(ev => `
+    <button class="row ${ev.event_id === state.selected ? "on" : ""} ${ev.event_id === newcomer ? "arrive" : ""}" data-id="${ev.event_id}">
+      <div class="r1"><b>${ev.event_id}</b><span class="when">${time(ev)}</span></div>
+      <div class="r2">${catDots(ev)}<span>${esc(shortTitle(ev))}</span></div>
+    </button>`).join("") || `<div class="empty">${state.shift ? "Waiting for the first message…" : "No events match this filter."}</div>`;
+  document.querySelectorAll("#feed .row").forEach(b => b.onclick = () => { stopShift(); selectEvent(b.dataset.id); });
+  document.getElementById("filters").innerHTML = FILTERS.map(([k, l]) => `<button class="${k === state.filter ? "on" : ""}" data-f="${esc(k)}">${l}</button>`).join("");
+  document.querySelectorAll("#filters button").forEach(b => b.onclick = () => {
+    stopShift();
+    state.filter = b.dataset.f;
+    const vis = all.filter(matches);
+    if (!vis.some(e => e.event_id === state.selected) && vis[0]) state.selected = vis[0].event_id;
+    render();
+  });
+  const on = document.querySelector("#feed .row.on");
+  if (on && state.shift) on.scrollIntoView({ block: "nearest", behavior: REDUCED ? "auto" : "smooth" });
+}
+function renderDetail() {
+  const ev = current();
+  const root = document.getElementById("detail");
+  if (!ev) { root.innerHTML = ""; return; }
+  const im = impact(ev);
+  const t = tone(ev.categories[0]);
+  root.innerHTML = `<div class="wrap hero">
+    <div class="eyebrow"><span class="pill" style="--c:${cv(t)}"><i class="dot" style="--c:${cv(t)}"></i>${esc(ev.categories.join(" + "))}</span><span>${esc(ev.event_id)} · ${esc(ev.source || "")} · ${time(ev)}</span></div>
+    <h1 class="big">${esc(im.title)}</h1>
+    <p class="subline">${esc(im.sub)}</p>
+    <div class="bignums">${im.nums.map(([n, l, tools]) => `<div class="bn" data-tools="${tools}"><b>${Number(n || 0).toLocaleString()}</b><span>${esc(l)}</span></div>`).join("")}</div>
+    <div class="herofig">${simHTML(ev)}</div>
+    <div class="detrow"><button class="link" id="detbtn">${state.showDetails ? "Hide the details" : "Show the details · message, graph path, agents, audit trail"}</button></div>
+    ${state.showDetails ? detailsHTML(ev) : ""}
+  </div>`;
+  const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+  on("detbtn", () => { state.showDetails = !state.showDetails; const top = root.scrollTop; renderDetail(); root.scrollTop = top; });
+  on("chainsbtn", () => { state.showChains = !state.showChains; const top = root.scrollTop; renderDetail(); root.scrollTop = top; });
+  on("movesbtn", () => { state.showMoves = !state.showMoves; const top = root.scrollTop; renderDetail(); root.scrollTop = top; });
+  simMount(ev);
+  if (state.autoKey !== ev.event_id) { state.autoKey = ev.event_id; root.scrollTop = 0; simStart(ev, true); }
+  renderBar();
+}
+function selectEvent(id, opts) {
+  opts = opts || {};
+  state.selected = id;
+  state.showChains = state.showLog = state.showMoves = false;
+  if (opts.view && state.view !== opts.view) { state.view = opts.view; syncNav(); showView(); }
+  if (!state.report.events.filter(matches).some(e => e.event_id === id)) state.filter = "All";
+  render();
+  const row = document.querySelector(`#feed .row[data-id="${id}"]`);
+  if (row) row.scrollIntoView({ block: "nearest" });
+}
+
+/* ───────── pages ───────── */
+function renderCrewPage() {
+  const tot = {};
+  CREW.forEach(c => { tot[c.name] = { calls: 0, events: new Set(), tools: {} }; });
+  state.report.events.forEach(ev => {
+    (ev.handoffs || []).forEach(h => tot[h.agent] && tot[h.agent].events.add(ev.event_id));
+    (ev.actions || []).forEach(a => { const t = tot[a.agent]; if (!t) return; t.calls++; t.tools[a.tool] = (t.tools[a.tool] || 0) + 1; });
+  });
+  document.getElementById("crewpage").innerHTML = `<div class="wrap">
+    <h1 class="ptitle">Agents</h1>
+    <p class="lede">One coordinator and three specialists. Specialists walk the ontology and return plans. Only the coordinator sends tool calls, after every argument has been checked.</p>
+    <div class="crew4">${CREW.map((c, i) => {
+      const t = tot[c.name];
+      return `<div><span class="ix">0${i + 1}</span><h3>${esc(c.name)}</h3><div class="role">${esc(c.role)}</div><p>${esc(c.charter)}</p>
+        <div class="big"><div><b>${t.calls.toLocaleString()}</b><span>calls</span></div><div><b>${t.events.size}</b><span>events</span></div></div>
+        <div class="tl">${c.owns.map(tool => `<div><span>${esc(tool)}</span><span>${t.tools[tool] || 0}</span></div>`).join("")}</div>
+        <div class="evs">${[...t.events].sort().map(id => `<button data-go="tower" data-id="${id}">${id}</button>`).join("")}</div></div>`;
+    }).join("")}</div></div>`;
+  bindGo(document.getElementById("crewpage"));
+}
+function ontologySvg(o) {
+  const count = Object.fromEntries(o.entities.map(e => [e.type, e.count]));
+  const rel = (a, e, b) => { const h = o.relations.find(r => r.from === a && r.edge === e && r.to === b); return h ? h.count.toLocaleString() : ""; };
+  const W = 136, H = 50;
+  const place = { Supplier: [12, 16], Shipment: [220, 16], Part: [428, 16], Model: [636, 16], Plant: [220, 176], Lot: [428, 176], ProductionOrder: [636, 176], Vehicle: [428, 360], CustomerOrder: [636, 360], Dealer: [860, 300], Customer: [860, 430] };
+  const port = (id, s) => { const [x, y] = place[id]; return s === "e" ? [x + W, y + H / 2] : s === "w" ? [x, y + H / 2] : s === "n" ? [x + W / 2, y] : [x + W / 2, y + H]; };
+  const walk = { delay: "d", outage: "o", quality: "q" }[state.walk] || "";
+  const lit = w => walk && w.includes(walk);
+  const lab = (x, y, t) => `<text x="${x}" y="${y}" text-anchor="middle">${esc(t)}</text>`;
+  const edge = (w, inner) => `<g class="oe${lit(w) ? " lit" : ""}">${inner}</g>`;
+  const straight = [
+    ["Supplier", "e", "Shipment", "w", "SHIPS", 0, -8, "d"], ["Shipment", "e", "Part", "w", "CONTAINS", 0, -8, "d"], ["Part", "e", "Model", "w", "USED_IN", 0, -8, "dq"],
+    ["ProductionOrder", "n", "Model", "s", "OF_MODEL", 46, 0, "dq"], ["Shipment", "s", "Plant", "n", "DELIVERED_TO", 52, 0, "d"], ["Lot", "n", "Part", "s", "OF_PART", 40, 0, "q"],
+    ["Lot", "w", "Plant", "e", "AT_PLANT", 0, -8, "q"], ["CustomerOrder", "n", "ProductionOrder", "s", "FROM_BUILD", 48, 0, "do"], ["CustomerOrder", "e", "Dealer", "w", "AT_DEALER", 0, -12, "doq"]
+  ];
+  let g = straight.map(([a, sa, b, sb, n, dx, dy, w]) => { const [x1, y1] = port(a, sa), [x2, y2] = port(b, sb); return edge(w, `<line class="w" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>` + lab((x1 + x2) / 2 + dx, (y1 + y2) / 2 + dy, `${n} ${rel(a, n, b)}`)); }).join("");
+  const [px, py] = port("Plant", "s"), [ox, oy] = port("ProductionOrder", "s"), bus = py + 36;
+  g += edge("oq", `<path class="w" d="M ${px} ${py} V ${bus} H ${ox} V ${oy}"/>` + lab((px + ox) / 2, bus - 6, `BUILT_AT ${rel("ProductionOrder", "BUILT_AT", "Plant")}`));
+  const [vx, vy] = port("Vehicle", "n"), [pwx, pwy] = port("ProductionOrder", "w");
+  g += edge("q", `<path class="w" d="M ${vx} ${vy} V ${vy - 28} H ${pwx} V ${pwy}"/>` + lab((vx + pwx) / 2, vy - 36, `FROM_BUILD ${rel("Vehicle", "FROM_BUILD", "ProductionOrder")}`));
+  const [csx, csy] = port("CustomerOrder", "s"), [cwx, cwy] = port("Customer", "w");
+  g += edge("do", `<path class="w" d="M ${csx} ${csy} V ${cwy} H ${cwx}"/>` + lab(csx + 70, cwy - 8, `FOR_CUSTOMER ${rel("CustomerOrder", "FOR_CUSTOMER", "Customer")}`));
+  const [vsx, vsy] = port("Vehicle", "s");
+  g += edge("q", `<path class="w" d="M ${vsx} ${vsy} V ${cwy + 28} H ${cwx} V ${cwy}"/>` + lab((vsx + cwx) / 2, cwy + 42, `OWNED_BY ${rel("Vehicle", "OWNED_BY", "Customer")}`));
+  const nodeWalk = { Supplier: "d", Shipment: "d", Part: "dq", Model: "dq", Plant: "oq", Lot: "q", ProductionOrder: "doq", Vehicle: "q", CustomerOrder: "do", Dealer: "doq", Customer: "doq" };
+  const title = { ProductionOrder: "Production order", CustomerOrder: "Customer order" };
+  g += Object.entries(place).map(([id, [x, y]]) => `<g class="on${lit(nodeWalk[id]) ? " lit" : ""}"><rect x="${x}" y="${y}" width="${W}" height="${H}" rx="8"/><text class="ot" x="${x + 12}" y="${y + 19}">${esc((title[id] || id).toUpperCase())}</text><text class="oc" x="${x + 12}" y="${y + 40}">${(count[id] || 0).toLocaleString()}</text></g>`).join("");
+  const c = { delay: "delay", outage: "outage", quality: "quality" }[state.walk];
+  return `<svg class="omap${walk ? " walking" : ""}" style="--c:${c ? cv(c) : "var(--ink)"}" viewBox="0 0 1010 530" role="img" aria-label="Ontology">${g}</svg>`;
+}
+function renderOntology() {
+  const o = state.report.ontology;
+  const kt = k => k.includes("delay") ? "delay" : k.includes("outage") ? "outage" : "quality";
+  document.getElementById("ontology").innerHTML = `<div class="wrap">
+    <h1 class="ptitle">Ontology</h1>
+    <p class="lede">One knowledge graph over the company data. A delay walks in from the shipment, an outage from the plant, and a quality hold from the lot. All three meet on the production order.</p>
+    <div class="walks">${[["delay", "Supplier delay"], ["outage", "Plant outage"], ["quality", "Quality hold"]].map(([k, l]) => `<button data-walk="${k}" class="${state.walk === k ? "on" : ""}" style="--c:${cv(k)}"><i class="dot" style="--c:${cv(k)}"></i>${l} walk</button>`).join("")}</div>
+    ${ontologySvg(o)}
+    <section class="sec"><h2>Required graph paths</h2><div class="walkrows">${Object.entries(o.paths).map(([k, v]) => `<div><b><i class="dot" style="--c:${cv(kt(k))}"></i>${esc(k.replaceAll("_", " ").replace(/^./, m => m.toUpperCase()))}</b><code>${esc(v)}</code></div>`).join("")}</div></section>
+    <section class="sec grid2">
+      <div><h2>Entities</h2><div class="list">${o.entities.map(e => `<div><span>${esc(e.type)}</span><em>${e.count.toLocaleString()}</em></div>`).join("")}</div></div>
+      <div><h2>Relationships</h2><div class="list">${o.relations.map(r => `<div><span>${esc(r.from)} → ${esc(r.to)} <em>${esc(r.edge)}</em><small>${esc(r.meaning)}</small></span><em>${r.count.toLocaleString()}</em></div>`).join("")}</div></div>
+    </section></div>`;
+  document.querySelectorAll("#ontology [data-walk]").forEach(b => b.onclick = () => { state.walk = state.walk === b.dataset.walk ? null : b.dataset.walk; renderOntology(); });
+}
+function auditRows() {
+  const q = state.auditQuery.trim().toLowerCase();
+  const rows = [];
+  state.report.events.forEach(ev => ev.actions.forEach(a => rows.push({ ev, a })));
+  return rows.filter(({ ev, a }) => (!state.auditTool || a.tool === state.auditTool) && (!q || `${ev.event_id} ${a.agent} ${a.tool} ${argSummary(a)}`.toLowerCase().includes(q)));
+}
+function renderAuditRows() {
+  const rows = auditRows();
+  document.getElementById("auditcount").textContent = `${rows.length.toLocaleString()} shown`;
+  const body = document.getElementById("auditbody");
+  body.innerHTML = rows.map(({ ev, a }, i) => `<tr><td class="f">${i + 1}</td><td><button class="link" data-jump="${ev.event_id}">${ev.event_id}</button></td><td>${esc(a.agent)}</td><td class="m">${esc(a.tool)}</td><td class="m">${esc(argSummary(a))}</td><td class="${a.ok === false ? "bad" : "ok"}">${a.ok === false ? "failed" : "ok"}</td></tr>`).join("") || `<tr><td colspan="6" class="muted" style="padding:24px">No calls match.</td></tr>`;
+  body.querySelectorAll("[data-jump]").forEach(b => b.onclick = () => selectEvent(b.dataset.jump, { view: "tower" }));
+}
+function renderAudit() {
+  const all = [];
+  state.report.events.forEach(ev => ev.actions.forEach(a => all.push(a)));
+  const tools = countPairs(all.map(a => a.tool));
+  document.getElementById("audit").innerHTML = `<div class="wrap">
+    <h1 class="ptitle">Audit trail</h1>
+    <p class="lede">${all.length.toLocaleString()} calls recorded by the enterprise server, ${all.filter(a => a.ok === false).length} failed. Every call shows which agent planned it and the arguments that passed validation.</p>
+    <div class="tools-row">
+      <input class="search" id="auditq" placeholder="Search event, agent, tool, or id" value="${esc(state.auditQuery)}" />
+      <select id="audittool"><option value="">All tools · ${all.length}</option>${tools.map(([t, n]) => `<option value="${esc(t)}" ${state.auditTool === t ? "selected" : ""}>${esc(t)} · ${n}</option>`).join("")}</select>
+      <span class="muted" id="auditcount" style="font-size:13px;margin-left:auto"></span>
+    </div>
+    <div class="tablewrap" style="max-height:none"><table><thead><tr><th>#</th><th>Event</th><th>Agent</th><th>Tool</th><th>Arguments</th><th>Result</th></tr></thead><tbody id="auditbody"></tbody></table></div></div>`;
+  const q = document.getElementById("auditq");
+  q.oninput = () => { state.auditQuery = q.value; renderAuditRows(); };
+  document.getElementById("audittool").onchange = e => { state.auditTool = e.target.value; renderAuditRows(); };
+  renderAuditRows();
+}
+function renderDesign() {
+  const m = state.report.meta, events = state.report.events;
+  const agreed = events.filter(e => e.llm && e.llm.agrees === true), kept = events.filter(e => e.llm && e.llm.agrees === false);
+  const model = (m.model || "").split(" ")[0];
+  const gates = [
+    ["The wire", "One message. It may hold two incidents, a rumor, or nothing.", "tower", "E-01"],
+    ["Llama reads", "The model proposes the kind, the names, and the date phrases.", "tower", "E-08"],
+    ["The graph binds", "Aliases, the calendar, and exactly one shipment or lot.", "ontology", ""],
+    ["Coordinator", "Dispatch the desks, stand down for noise, or escalate.", "tower", "E-02"],
+    ["Specialists", "They walk the ontology and return a plan, not a tool call.", "crewpage", ""],
+    ["The gateway", "Every argument is checked. Then the enterprise tools run.", "audit", ""]
+  ];
+  document.getElementById("design").innerHTML = `<div class="wrap">
+    <h1 class="ptitle">How the tower decides</h1>
+    <p class="lede">${esc(fmtLong(m.today))}. One fresh world per event. ${events.length} events, ${m.n_tool_calls} tool calls, ${m.n_failed} failures. Model: ${esc(model)} running locally, no API key.</p>
+    <div class="card">
+      <h2>Architecture · six gates</h2>
+      <div class="gates6">${gates.map(([t, p, v, id], i) => `<button data-go="${v}" ${id ? `data-id="${id}"` : ""}><em>0${i + 1}</em><strong>${t}</strong><p>${p}</p></button>`).join("")}</div>
+      <h2>Agents</h2>
+      <div class="tablewrap" style="margin-top:0"><table><thead><tr><th>Agent</th><th>Job</th><th>Tools</th></tr></thead><tbody>${CREW.map(c => `<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.charter)}</td><td class="m">${c.owns.join(", ")}</td></tr>`).join("")}</tbody></table></div>
+      <div class="grid2">
+        <div><h2>Language model versus code</h2><p class="prose">Llama proposes the incident. It agreed on ${agreed.length} of ${events.length} readings. Where it did not bind, the ontology reader stayed in force and the tool arguments did not change. The model never chooses an order, a VIN, or a slot. Code owns policy, the calendar, capacity, loaner priority, and every tool argument.</p>
+          <div class="chipline">${agreed.map(e => `<button data-go="tower" data-id="${e.event_id}">${e.event_id}</button>`).join("")}${kept.map(e => `<button class="k" data-go="tower" data-id="${e.event_id}">${e.event_id} reader kept</button>`).join("")}</div></div>
+        <div><h2>Guardrails</h2><ul class="checks" style="margin-top:0">
+          <li><span class="y">✓</span>Noise: no call at all.</li>
+          <li><span class="y">✓</span>Rumor: escalate only. No order, dealer, or customer is touched.</li>
+          <li><span class="y">✓</span>Check, then send. A rejected call is kept in the log and not retried.</li>
+          <li><span class="y">✓</span>One board per event, so a compound message never double-books slots or loaners.</li>
+          <li><span class="y">✓</span>One dealer notice per dealer, listing only that dealer’s orders.</li></ul></div>
+      </div>
+      <div class="grid2">
+        <div><h2>Evaluation</h2><p class="prose">The plan is replayed on a private copy of the enterprise systems before anything is logged. It checks locations, capacity, notices, loaners, held lots, stopped VINs, owner contacts, escalation, and that unaffected orders did not move. The scored file is runs/run1/action_log.jsonl.</p></div>
+        <div><h2>What we would improve</h2><p class="prose">A larger local model would close ${kept.map(e => e.event_id).join(", ") || "the remaining readings"} without being allowed to pick a slot. The handbook should publish the plant tie-break so every team lands the same transfer.</p></div>
+      </div>
+      <h2>Model cited</h2><p class="prose mono" style="font-size:13px">${esc(m.model)}</p>
+    </div></div>`;
+  bindGo(document.getElementById("design"));
+}
+
+/* ───────── routing ───────── */
+function bindGo(root) {
+  root.querySelectorAll("[data-go]").forEach(el => el.onclick = () => {
+    stopShift();
+    if (el.dataset.filter) state.filter = el.dataset.filter;
+    if (el.dataset.id) { selectEvent(el.dataset.id, { view: el.dataset.go }); return; }
+    state.view = el.dataset.go;
+    if (state.view === "tower" && !state.report.events.filter(matches).some(e => e.event_id === state.selected)) state.selected = state.report.events.filter(matches)[0].event_id;
+    syncNav(); showView(); render();
+  });
+}
+function render() {
+  renderHeader();
+  renderFeed();
+  renderDetail();
+  if (state.view === "crewpage") renderCrewPage();
+  if (state.view === "ontology") renderOntology();
+  if (state.view === "audit") renderAudit();
+  if (state.view === "design") renderDesign();
+}
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => { state.view = b.dataset.view; syncNav(); showView(); render(); });
+document.getElementById("shiftbtn").onclick = () => { if (state.shift) { stopShift(); render(); } else startShift(); };
+document.getElementById("pace").onchange = e => { state.pace = e.target.value; };
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("tower-theme", t); } catch (e) {}
+}
+try { setTheme(localStorage.getItem("tower-theme") || "light"); } catch (e) { setTheme("light"); }
+document.getElementById("theme").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+document.addEventListener("keydown", e => {
+  if (!state.report || state.view !== "tower") return;
+  if (e.target.closest("input, select, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
+  const list = state.report.events.filter(matches), i = list.findIndex(x => x.event_id === state.selected);
+  if (e.key === "ArrowDown" || e.key === "j") { e.preventDefault(); if (list[i + 1]) { stopShift(); selectEvent(list[i + 1].event_id); } }
+  else if (e.key === "ArrowUp" || e.key === "k") { e.preventDefault(); if (i > 0) { stopShift(); selectEvent(list[i - 1].event_id); } }
+  else if (e.key === " " && !e.target.closest("button")) { e.preventDefault(); if (SIM.playing) simPause(); else simStart(current(), SIM.t >= SIM.plan.end); }
+});
+/* Deep links: #E-03 · #E-03/play · #E-03/step/4 · #audit · #ontology · #crewpage · #design · #shift */
+function applyHash() {
+  const [head, a, b] = decodeURIComponent(location.hash.slice(1)).split("/");
+  if (!head || !state.report) return;
+  if (head === "shift") { startShift(); return; }
+  if (["tower", "crewpage", "ontology", "audit", "design"].includes(head)) { stopShift(); state.view = head; syncNav(); showView(); render(); return; }
+  if (!state.report.events.some(e => e.event_id === head)) return;
+  stopShift(); state.filter = "All";
+  selectEvent(head, { view: "tower" });
+  if (a === "play") startReplay();
+  if (a === "step") { const n = beats(current()).length; state.replay = { id: head, step: Math.max(0, Math.min(n - 1, Number(b) || 0)), n, playing: false }; renderDetail(); }
+}
+window.addEventListener("hashchange", applyHash);
+fetch("/api/report").then(r => r.json()).then(report => {
+  state.report = report;
+  if (!report.events.some(e => e.event_id === state.selected)) state.selected = report.events[0].event_id;
+  render();
+  applyHash();
+}).catch(err => { document.getElementById("detail").innerHTML = `<div class="wrap"><p>Could not load the run. ${esc(err)}</p></div>`; });
+</script>
+</body>
+</html>
