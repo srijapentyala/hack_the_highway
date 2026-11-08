@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design Card · Hack the Highway</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --surface: #ffffff; --sunk: #f1f0ed;
+    --ink: #18181b; --ink2: #3f3f46; --muted: #71717a; --line: #e7e5e4;
+    --navy: #1e2433; --navy2: #2a3245;
+    --outage: #dc2626; --delay: #b7791f; --quality: #2563eb; --noise: #78716c; --rumor: #7c3aed; --ok: #15803d;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @page { size: 11in 8.5in; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 9.6px/1.42 var(--sans); -webkit-font-smoothing: antialiased; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card { width: 11in; height: 8.5in; padding: 0.28in; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+
+  /* header band */
+  .top { background: var(--navy); color: #fff; border-radius: 12px; padding: 13px 18px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .kicker { font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; color: #a5b4cf; font-weight: 600; }
+  .top h1 { margin: 2px 0 2px; font-size: 21px; letter-spacing: -.02em; line-height: 1.1; }
+  .top .sub { color: #cbd5e1; font-size: 10px; }
+  .stats { display: flex; gap: 6px; }
+  .stat { background: var(--navy2); border-radius: 8px; padding: 6px 11px; text-align: center; min-width: 66px; }
+  .stat b { display: block; font-size: 18px; line-height: 1.1; letter-spacing: -.02em; }
+  .stat span { font-size: 7.5px; letter-spacing: .1em; text-transform: uppercase; color: #a5b4cf; }
+  .stat.good b { color: #4ade80; }
+
+  /* panels */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  h2 { margin: 0 0 7px; font-size: 8.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  h2 i { font-style: normal; display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 4px; background: var(--navy); color: #fff; font-size: 8px; letter-spacing: 0; }
+  p { margin: 0 0 5px; color: var(--ink2); }
+  code, .mono { font-family: var(--mono); font-size: 8.4px; }
+  code { background: var(--sunk); border-radius: 3px; padding: 0 3px; color: var(--ink); }
+
+  /* gates */
+  .gates { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; align-items: stretch; }
+  .gate { position: relative; background: var(--sunk); border-radius: 8px; padding: 7px 9px 7px 9px; margin-right: 13px; }
+  .gate:last-child { margin-right: 0; }
+  .gate:not(:last-child)::after { content: ""; position: absolute; right: -11px; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-left: 7px solid var(--muted); }
+  .gate .n { font: 700 8px var(--mono); color: var(--muted); }
+  .gate b { display: block; font-size: 10.5px; margin: 1px 0 2px; }
+  .gate span { color: var(--ink2); font-size: 8.8px; line-height: 1.32; display: block; }
+  .gate.llm { background: #f3efff; } .gate.llm .n { color: var(--rumor); }
+  .gate.tools { background: #ecfdf3; } .gate.tools .n { color: var(--ok); }
+  .lanes { display: flex; gap: 14px; margin-top: 7px; font-size: 8.8px; color: var(--ink2); }
+  .pill { display: inline-block; border-radius: 99px; padding: 0 7px; font-weight: 600; font-size: 8.4px; line-height: 15px; }
+  .p-out { background: #fde8e8; color: var(--outage); } .p-del { background: #fdf3e1; color: var(--delay); }
+  .p-q { background: #e5edfd; color: var(--quality); } .p-noise { background: #efeeec; color: var(--noise); }
+  .p-rum { background: #efe9fe; color: var(--rumor); } .p-ok { background: #e3f5ea; color: var(--ok); }
+
+  .row { display: grid; gap: 9px; }
+  .r2 { grid-template-columns: 1.25fr 1fr 1fr; flex: 1; min-height: 0; }
+  .r3 { grid-template-columns: 1.25fr 1fr 1fr; }
+
+  /* agents */
+  .agents { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .agent { border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; }
+  .agent b { font-size: 10.2px; display: block; }
+  .agent .role { color: var(--ink2); font-size: 8.8px; margin: 2px 0 4px; line-height: 1.32; }
+  .agent .tools code { display: inline-block; margin: 0 2px 2px 0; font-size: 7.8px; }
+  .agent.lead { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .agent.lead .role { color: #cbd5e1; } .agent.lead code { background: var(--navy2); color: #fff; }
+  .note { margin-top: 6px; font-size: 8.8px; color: var(--ink2); background: var(--sunk); border-radius: 6px; padding: 5px 8px; }
+
+  /* llm vs code */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .side { border-radius: 8px; padding: 7px 8px; }
+  .side.l { background: #f3efff; } .side.c { background: #eef3fb; }
+  .side h3 { margin: 0 0 4px; font-size: 9.6px; }
+  .side ul { margin: 0; padding-left: 12px; color: var(--ink2); font-size: 8.8px; }
+  .side li { margin-bottom: 2px; }
+  .agree { display: flex; gap: 2px; margin: 7px 0 3px; }
+  .agree span { flex: 1; text-align: center; font: 600 7.2px var(--mono); border-radius: 3px; padding: 3px 0; background: #e3f5ea; color: var(--ok); }
+  .agree span.k { background: #fdf3e1; color: var(--delay); }
+  .legend { font-size: 8.4px; color: var(--muted); }
+
+  /* guardrails */
+  .rails { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+  .rails li { display: grid; grid-template-columns: 84px 1fr; gap: 7px; align-items: start; color: var(--ink2); font-size: 8.9px; line-height: 1.34; }
+  .rails .pill { text-align: center; white-space: nowrap; }
+
+  /* bottom */
+  .paths div { font: 8.3px/1.5 var(--mono); color: var(--ink2); white-space: nowrap; }
+  .paths div b { font-family: var(--sans); color: var(--ink); font-size: 8.6px; display: inline-block; width: 68px; }
+  ul.tight { margin: 0; padding-left: 13px; color: var(--ink2); font-size: 8.9px; }
+  ul.tight li { margin-bottom: 2px; }
+
+  .foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 8.2px; padding: 0 3px; }
+  .foot b { color: var(--ink2); }
+
+  @media screen {
+    body { padding: 24px 0; }
+    .card { margin: 0 auto; box-shadow: 0 6px 28px rgba(0,0,0,.08); border-radius: 14px; background: var(--bg); }
+  }
+  @media screen and (max-width: 1100px) { body { padding: 0; } .card { box-shadow: none; border-radius: 0; } }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="top">
+    <div>
+      <div class="kicker">Design card · Hack the Highway · TAMU Datathon 2026</div>
+      <h1>Wacky Wheels Control Tower</h1>
+      <div class="sub">One coordinator + three specialist agents turn a messy operations feed into policy-checked actions. Monday 8 March 2027 · one fresh world per event.</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>15</b><span>events</span></div>
+      <div class="stat"><b>909</b><span>tool calls</span></div>
+      <div class="stat good"><b>0</b><span>failed</span></div>
+      <div class="stat"><b>12/15</b><span>LLM agreed</span></div>
+      <div class="stat"><b>3B</b><span>Llama 3.2</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><i>1</i> Architecture: six gates per message</h2>
+    <div class="gates">
+      <div class="gate"><div class="n">01</div><b>The wire</b><span>One message. It may hold two incidents, a rumor, or nothing at all.</span></div>
+      <div class="gate llm"><div class="n">02 · LLM</div><b>Llama reads</b><span>Proposes the incident kind, the names and the date phrases as one JSON object.</span></div>
+      <div class="gate"><div class="n">03</div><b>The graph binds</b><span>Aliases, the working calendar, and exactly one shipment or lot.</span></div>
+      <div class="gate"><div class="n">04</div><b>Coordinator</b><span>Dispatches the desks, stands down for noise, or escalates.</span></div>
+      <div class="gate"><div class="n">05</div><b>Specialists</b><span>Walk the ontology and return a <em>plan</em>, never a tool call.</span></div>
+      <div class="gate tools"><div class="n">06 · TOOLS</div><b>The gateway</b><span>Every argument is checked, then the enterprise tools run.</span></div>
+    </div>
+    <div class="lanes">
+      <span><span class="pill p-out">Plant outage</span> <span class="pill p-del">Supplier delay</span> <span class="pill p-q">Quality hold</span> → full dispatch</span>
+      <span><span class="pill p-noise">Noise</span> → stand down, no call</span>
+      <span><span class="pill p-rum">Unconfirmed</span> → <code>escalate</code> only</span>
+      <span>Compound → one shared slot board + loaner pool per event</span>
+    </div>
+  </div>
+
+  <div class="row r2">
+    <div class="panel">
+      <h2><i>2</i> Agents and their tools</h2>
+      <div class="agents">
+        <div class="agent lead"><b>Coordinator</b><div class="role">Splits the message into incidents. The only component that sends tool calls.</div><div class="tools"><code>escalate</code></div></div>
+        <div class="agent"><b>Supply Chain Planner</b><div class="role">Earliest open slot. Transfers only when the home plant is full; ties follow handbook order.</div><div class="tools"><code>mes.reschedule</code><code>mes.transfer</code></div></div>
+        <div class="agent"><b>Quality Sentinel</b><div class="role">Holds the lot, stops sale of unsold vehicles, contacts owners of sold ones.</div><div class="tools"><code>quality.hold_lot</code><code>dealer.stop_sale</code><code>crm.notify_customer</code></div></div>
+        <div class="agent"><b>Dealer &amp; Customer Desk</b><div class="role">One notice per dealer. Loaners: Platinum → Gold → earlier promise → lower order id.</div><div class="tools"><code>dealer.notify</code><code>crm.loaner_availability</code><code>crm.assign_loaner</code></div></div>
+      </div>
+      <div class="note">Specialists return dictionaries. <code>Coordinator.handle</code> assembles the action list; only the gateway in <code>run.py</code> calls the server.</div>
+    </div>
+
+    <div class="panel">
+      <h2><i>3</i> Language model vs. code</h2>
+      <div class="split">
+        <div class="side l"><h3>Llama 3.2 3B proposes</h3><ul><li>Incident kind &amp; disposition</li><li>Plant, part, supplier names</li><li>Ids only if written in the text</li><li>Raw date phrases</li></ul></div>
+        <div class="side c"><h3>Code decides</h3><ul><li>Policy rules &amp; calendar</li><li>Capacity, slots, transfers</li><li>Loaner priority &amp; caps</li><li><b>Every</b> tool argument</li></ul></div>
+      </div>
+      <div class="agree">
+        <span class="k">01</span><span>02</span><span class="k">03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span class="k">09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span>
+      </div>
+      <div class="legend"><span class="pill p-ok">agreed</span> 12 events &nbsp; <span class="pill p-del">ontology reader kept</span> E-01, E-03, E-09. Tool arguments are identical either way: the model never chooses an order, a VIN or a slot.</div>
+    </div>
+
+    <div class="panel">
+      <h2><i>4</i> Guardrails</h2>
+      <ul class="rails">
+        <li><span class="pill p-noise">Noise</span><span>No call at all. The trace cites the rule and why the text is out of scope.</span></li>
+        <li><span class="pill p-rum">Rumor</span><span><code>escalate</code> only. No order, dealer, loaner, lot or customer is touched.</span></li>
+        <li><span class="pill p-ok">Check → send</span><span>Plan rehearsed on a private <code>Enterprise</code> first. A rejected call is logged, not retried.</span></li>
+        <li><span class="pill p-del">One board</span><span>Compound events share slots and loaners, so nothing is booked twice.</span></li>
+        <li><span class="pill p-q">Precision</span><span>One <code>dealer.notify</code> per dealer listing only its orders. Standard tier gets no loaner. Loaner response caps assignments.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row r3">
+    <div class="panel paths">
+      <h2><i>5</i> Ontology paths cited per incident</h2>
+      <div><b>Supplier delay</b>Shipment → Part → Model (BOM) → ProductionOrder → CustomerOrder → Dealer / Customer</div>
+      <div><b>Plant outage</b>Plant → ProductionOrder → CustomerOrder → Dealer / Customer</div>
+      <div><b>Quality hold</b>Lot → ProductionOrder → Vehicle → Dealer / Customer</div>
+      <p style="margin:5px 0 0">13 entity types · ~17k nodes (540 production orders, 3,263 customer orders, 7,000 customers, 5,348 vehicles).</p>
+    </div>
+    <div class="panel">
+      <h2><i>6</i> Evaluation</h2>
+      <p><code>run.py</code> replays the full plan on a private <code>Enterprise</code> before the server starts, checking locations, capacity, notices, loaners, held lots, stopped VINs, owner contacts, escalation, and that unaffected orders did not move.</p>
+      <p style="margin:0">Scored file: <code>runs/run1/action_log.jsonl</code> (909 lines, 0 failures).</p>
+    </div>
+    <div class="panel">
+      <h2><i>7</i> What we would improve</h2>
+      <ul class="tight">
+        <li>A larger local model to close E-01, E-03 and E-09, still never allowed to pick a slot.</li>
+        <li>A published plant tie-break in the handbook so every team lands the same transfer.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span><b>Model:</b> Llama 3.2 3B (<span class="mono">llama3.2:3b</span>, Meta) via Ollama on a Mac, no API key, no cloud inference.</span>
+    <span>github.com/srijapentyala/hack_the_highway</span>
+  </div>
+</div>
+</body>
+</html>

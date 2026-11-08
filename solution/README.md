@@ -11,7 +11,7 @@ python3 solution/run.py
 python3 solution/control_tower.py
 ```
 
-Open http://127.0.0.1:8090 . The official log is `runs/run1/action_log.jsonl`. Per-event traces are `runs/run1/traces/`. The ontology export is `runs/run1/ontology.json`. The one-page design card is `solution/DESIGN.md`.
+Open http://127.0.0.1:8090 . The official log is `runs/run1/action_log.jsonl`. Per-event traces are `runs/run1/traces/`. The ontology export is `runs/run1/ontology.json`. The one-page design card is `solution/design_card.pdf` (PNG and HTML source alongside).
 
 MongoDB Atlas mirrors that finished run. It does not call enterprise tools and does not rewrite the action log.
 

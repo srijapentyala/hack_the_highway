@@ -195,7 +195,7 @@ The Atlas mirror is read-only with respect to the run. It never calls enterprise
 │   ├── control_tower.py    # serves the control-tower UI
 │   ├── showcase.py         # optional Streamlit board
 │   ├── load_atlas.py       # optional MongoDB Atlas mirror
-│   ├── DESIGN.md           # one-page design card
+│   ├── design_card.pdf     # one-page design card (also .png, source .html)
 │   ├── static/index.html   # control-tower front end
 │   └── tower/
 │       ├── agents.py       # Coordinator + 3 specialists
@@ -217,6 +217,12 @@ The Atlas mirror is read-only with respect to the run. It never calls enterprise
 └── submission/             # Devpost write-up and article drafts
 ```
 
+## Design card
+
+<img src="solution/design_card.png" alt="One-page design card: architecture, agents, LLM vs code, guardrails, ontology paths, evaluation, improvements" width="900" />
+
+Download: [`solution/design_card.pdf`](solution/design_card.pdf)
+
 ## Submission checklist
 
 Every deliverable from the challenge brief, and where to find it:
@@ -230,7 +236,7 @@ Every deliverable from the challenge brief, and where to find it:
 | Graph path per incident (one per incident for compound E-01) | `paths` field in each trace; E-01 has two |
 | Summary + reason for every event, including what it did **not** do | `summary` and `reasoning` fields in each trace (noise and rumors cite the handbook rule) |
 | Demo screenshots: events arriving, graph path, agents acting, audit trail | [`runs/run1/demo/`](runs/run1/demo/) |
-| One-page design card (architecture, LLM vs code, guardrails, evaluation, improvements) | [`solution/DESIGN.md`](solution/DESIGN.md) |
+| One-page design card (architecture, LLM vs code, guardrails, evaluation, improvements) | [`solution/design_card.pdf`](solution/design_card.pdf) · [PNG](solution/design_card.png) |
 | Model cited | Llama 3.2 3B — see below |
 
 ## Model citation
