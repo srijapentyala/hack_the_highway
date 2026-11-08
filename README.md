@@ -12,6 +12,8 @@
 ![Tool calls](https://img.shields.io/badge/tool%20calls-909-2563EB)
 ![Failures](https://img.shields.io/badge/failed%20calls-0-16A34A)
 ![API key](https://img.shields.io/badge/API%20key-not%20needed-6B7280)
+![Cursor](https://img.shields.io/badge/built%20with-Cursor-000000)
+![Grok Bot](https://img.shields.io/badge/workflow-Grok%20Bot-111827)
 
 *Built at TAMU Datathon 2026 for the **Hack the Highway** challenge.*
 
@@ -253,6 +255,15 @@ Every deliverable from the challenge brief, and where to find it:
 | Demo screenshots: events arriving, graph path, agents acting, audit trail | [`runs/run1/demo/`](runs/run1/demo/) |
 | One-page design card (architecture, LLM vs code, guardrails, evaluation, improvements) | [`solution/design_card.pdf`](solution/design_card.pdf) · [PNG](solution/design_card.png) |
 | Model cited | Llama 3.2 3B — see below |
+
+## Built with
+
+| Tool | Role |
+|---|---|
+| <img src="https://github.com/cursoragent.png" width="18" /> **Cursor** | AI coding agent used to build the control tower |
+| <img src="https://github.com/grokbot.png" width="18" /> **Grok Bot** ("Highway Desk") | Workflow automation that checked the submission write-up against the run's evidence |
+| 🦙 **Llama 3.2 3B** via Ollama | Event reader at runtime (see below) |
+| 🐍 **Python** standard library | Agents, ontology, policy, gateway, UI server |
 
 ## Model citation
 
